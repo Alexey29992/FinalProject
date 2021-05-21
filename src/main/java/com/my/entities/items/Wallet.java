@@ -10,7 +10,6 @@ import org.apache.logging.log4j.Logger;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-import java.util.Date;
 import java.util.List;
 
 public class Wallet implements Serializable {
@@ -34,8 +33,7 @@ public class Wallet implements Serializable {
     public void addMoney(int amount) {
         logger.debug("Adding {}$ to Wallet#{}", amount, id);
         balance += amount;
-        paymentHistory.add(new PaymentRecord(
-                new Date(), amount, TextConstants.PAYMENT_RECORD_ADD_MONEY));
+        paymentHistory.add(new PaymentRecord(amount, TextConstants.PAYMENT_RECORD_ADD_MONEY));
     }
 
     public void makePayment(int amount, int requestId)
@@ -46,8 +44,7 @@ public class Wallet implements Serializable {
             throw new InvalidOperationException(ExceptionMessages.NOT_ENOUGH_MONEY);
         }
         balance -= amount;
-        paymentHistory.add(new PaymentRecord(
-                new Date(), amount, TextConstants.PAYMENT_RECORD_PAY_MONEY + requestId));
+        paymentHistory.add(new PaymentRecord(amount, TextConstants.PAYMENT_RECORD_PAY_MONEY + requestId));
     }
 
     public int getId() {

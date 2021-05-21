@@ -9,7 +9,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 public class Request implements Serializable {
 
@@ -17,11 +17,11 @@ public class Request implements Serializable {
 
     private int id;
     private final int clientId;
-    private final Date creationDate;
+    private final LocalDateTime creationDate;
     private Status status;
     private String description;
 
-    private Date completionDate;
+    private LocalDateTime completionDate;
     private String userReview;
     private String cancelReason;
     private int masterId;
@@ -62,7 +62,7 @@ public class Request implements Serializable {
         this.description = description;
         this.clientId = client.getId();
         status = Status.NEW;
-        creationDate = new Date();
+        creationDate = LocalDateTime.now();
     }
 
     public static Request newRequest(String description, Client client)
@@ -79,7 +79,7 @@ public class Request implements Serializable {
         validateMutability();
         this.status = status;
         if (isClosed()) {
-            completionDate = new Date();
+            completionDate = LocalDateTime.now();
         }
     }
 
@@ -123,7 +123,7 @@ public class Request implements Serializable {
         return status;
     }
 
-    public Date getCreationDate() {
+    public LocalDateTime getCreationDate() {
         return creationDate;
     }
 
@@ -135,7 +135,7 @@ public class Request implements Serializable {
         return description;
     }
 
-    public Date getCompletionDate() {
+    public LocalDateTime getCompletionDate() {
         return completionDate;
     }
 

@@ -1,21 +1,21 @@
 package com.my.entities.items;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 public class PaymentRecord implements Serializable {
 
-    private final Date date;
+    private final LocalDateTime date;
     private final int sum;
     private final String destination;
 
-    public PaymentRecord(Date date, int sum, String destination) {
-        this.date = date;
+    public PaymentRecord(int sum, String destination) {
         this.sum = sum;
         this.destination = destination;
+        date = LocalDateTime.now();
     }
 
-    public Date getDate() {
+    public LocalDateTime getDate() {
         return date;
     }
 
