@@ -29,7 +29,7 @@ public class Request implements Serializable {
 
     public enum Status {
         NEW(Type.OPEN),
-        WAITING_FOR_PAYMENT(Type.OPEN),
+        WAIT_FOR_PAYMENT(Type.OPEN),
         PAID(Type.OPEN),
         CANCELLED(Type.CLOSED),
         IN_PROCESS(Type.OPEN),
