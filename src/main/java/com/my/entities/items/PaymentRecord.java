@@ -29,7 +29,7 @@ public class PaymentRecord implements Serializable {
 
     @Override
     public String toString() {
-        return date.toString() + sum + destination;
+        return date.toString() + " " + sum + " " + destination;
     }
 
 }
