@@ -1,7 +1,7 @@
 package com.my.utils;
 
 import com.my.entities.users.User;
-import com.my.entities.users.Role;
+import com.my.entities.users.Visitor;
 import com.my.exceptions.DBException;
 
 import java.util.List;
@@ -35,7 +35,7 @@ public class UserManager {
         return false;
     }
 
-    public static List<User> getUserList(Role role)
+    public static List<User> getUserList(Visitor.Role role)
             throws DBException {
         return null;
     }

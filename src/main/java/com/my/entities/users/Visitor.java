@@ -8,6 +8,14 @@ public abstract class Visitor implements Serializable {
     // add some
     private Role role;
 
+    public enum Role {
+        GUEST(),
+        CLIENT(),
+        MASTER(),
+        MANAGER(),
+        ADMIN()
+    }
+
     protected Visitor(Role role) {
         this.role = role;
     }
