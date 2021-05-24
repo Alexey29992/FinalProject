@@ -57,9 +57,15 @@ public class Manager extends User {
         req.submitChanges();
     }
 
-    public void applyRequestFroPayment(Request req) {
+    public void applyRequestForPayment(Request req) {
         logger.debug("Applying Request#{} for payment by Manager#{}", req.getId(), getId());
         req.setStatus(Request.Status.WAITING_FOR_PAYMENT);
+        req.submitChanges();
+    }
+
+    public void confirmPaymentForRequest(Request req) {
+        logger.debug("Confirming payment for Request#{} by Manager#{}", req.getId(), getId());
+        req.setStatus(Request.Status.PAID);
         req.submitChanges();
     }
 
