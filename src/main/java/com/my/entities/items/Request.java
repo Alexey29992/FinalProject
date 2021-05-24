@@ -28,29 +28,22 @@ public class Request implements Serializable {
     private int price;
 
     public enum Status {
-        NEW("NEW", Type.OPEN),
-        WAITING_FOR_PAYMENT("WAITING_FOR_PAYMENT", Type.OPEN),
-        PAID("PAID", Type.OPEN),
-        CANCELLED("CANCELLED", Type.CLOSED),
-        IN_PROCESS("IN_PROCESS", Type.OPEN),
-        DONE("DONE", Type.CLOSED);
+        NEW(Type.OPEN),
+        WAITING_FOR_PAYMENT(Type.OPEN),
+        PAID(Type.OPEN),
+        CANCELLED(Type.CLOSED),
+        IN_PROCESS(Type.OPEN),
+        DONE(Type.CLOSED);
 
         public enum Type {
             OPEN,
             CLOSED
         }
 
-        private final String literal;
         private final Type type;
 
-        Status(String literal, Type type) {
+        Status(Type type) {
             this.type = type;
-            this.literal = literal;
-        }
-
-        @Override
-        public String toString() {
-            return literal;
         }
 
         public Type getType() {
