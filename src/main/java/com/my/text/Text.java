@@ -1,8 +1,8 @@
-package com.my.constants;
+package com.my.text;
 
-public class TextConstants {
+public class Text {
 
-    private TextConstants() {
+    private Text() {
     }
 
     public static final String PAYMENT_RECORD_ADD_MONEY = "$ was added to your balance";

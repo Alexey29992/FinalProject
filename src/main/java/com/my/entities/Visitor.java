@@ -1,4 +1,4 @@
-package com.my.entities.users;
+package com.my.entities;
 
 import java.io.Serializable;
 
@@ -8,12 +8,7 @@ public abstract class Visitor implements Serializable {
     // add some
     private Role role;
 
-    public enum Role {
-        GUEST(),
-        CLIENT(),
-        MASTER(),
-        MANAGER(),
-        ADMIN()
+    protected Visitor() {
     }
 
     protected Visitor(Role role) {

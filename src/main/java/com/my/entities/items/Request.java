@@ -1,21 +1,16 @@
 package com.my.entities.items;
 
-import com.my.entities.users.Client;
-import com.my.entities.users.Master;
-import com.my.exceptions.ExceptionMessages;
+import com.my.entities.Item;
 import com.my.exceptions.InvalidOperationException;
-import com.my.utils.RequestManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.Serializable;
 import java.time.LocalDateTime;
 
-public class Request implements Serializable {
+public class Request extends Item {
 
     private static final Logger logger = LogManager.getLogger();
 
-    private int id;
     private final int clientId;
     private final LocalDateTime creationDate;
     private Status status;
@@ -51,24 +46,29 @@ public class Request implements Serializable {
         }
     }
 
-    private Request(String description, Client client) {
+    public Request(String description, int clientId) {
         this.description = description;
-        this.clientId = client.getId();
+        this.clientId = clientId;
         status = Status.NEW;
         creationDate = LocalDateTime.now();
     }
 
-    public static Request newRequest(String description, Client client)
-            throws InvalidOperationException {
-        validateDescription(description);
-        logger.debug("Creating new request from Client#{}", client.getId());
-        Request req = new Request(description, client);
-        req.id = RequestManager.addRequest(req);
-        return req;
+    public Request(int id, int clientId, LocalDateTime creationDate, Status status,
+                   String description, LocalDateTime completionDate, String userReview,
+                   String cancelReason, int masterId, int price) {
+        this.id = id;
+        this.clientId = clientId;
+        this.creationDate = creationDate;
+        this.status = status;
+        this.description = description;
+        this.completionDate = completionDate;
+        this.userReview = userReview;
+        this.cancelReason = cancelReason;
+        this.masterId = masterId;
+        this.price = price;
     }
 
-    public void setStatus(Status status) {
-        logger.debug("Setting status of Request#{} to {}", id, status);
+    public void setStatus(Status status) throws InvalidOperationException {
         validateMutability();
         this.status = status;
         if (isClosed()) {
@@ -77,35 +77,27 @@ public class Request implements Serializable {
     }
 
     public void setCancelReason(String cancelReason) {
-        logger.debug("Setting rejection reason of Request#{} to '{}'", id, cancelReason);
         this.cancelReason = cancelReason;
     }
 
     public void setDescription(String description)
             throws InvalidOperationException {
-        logger.debug("Setting description to Request#{} to '{}'", id, description);
-        validateDescription(description);
         validateMutability();
         this.description = description;
     }
 
     public void setUserReview(String userReview) {
-        logger.debug("Setting user review to Request#{} to '{}'", id, userReview);
         this.userReview = userReview;
     }
 
-    public void setMaster(Master master) {
-        logger.debug("Setting Master#{} to Request#{}", master.getId(), id);
+    public void setMaster(int masterId)
+            throws InvalidOperationException {
         validateMutability();
-        masterId = master.getId();
+        this.masterId = masterId;
     }
 
     public void setPrice(int price) {
         this.price = price;
-    }
-
-    public void submitChanges() {
-        RequestManager.updateRequest(this);
     }
 
     public int getClientId() {
@@ -118,10 +110,6 @@ public class Request implements Serializable {
 
     public LocalDateTime getCreationDate() {
         return creationDate;
-    }
-
-    public int getId() {
-        return id;
     }
 
     public String getDescription() {
@@ -148,22 +136,15 @@ public class Request implements Serializable {
         return price;
     }
 
+    private void validateMutability() throws InvalidOperationException {
+        if (isClosed()) {
+            logger.error("Request#{} is closed. Unable to modify closed Request", id);
+            throw new InvalidOperationException("Request is closed");
+        }
+    }
+
     private boolean isClosed() {
         return this.status.type == Status.Type.CLOSED;
     }
 
-    private static void validateDescription(String description)
-            throws InvalidOperationException {
-        if (description.length() == 0) {
-            logger.fatal("Description cannot be zero-length");
-            throw new InvalidOperationException(ExceptionMessages.INVALID_DESCRIPTION);
-        }
-    }
-
-    private void validateMutability() {
-        if (isClosed()) {
-            logger.fatal("Request#{} is closed. Unable to modify closed Request", id);
-            throw new IllegalStateException();
-        }
-    }
 }

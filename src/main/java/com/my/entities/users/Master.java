@@ -1,10 +1,11 @@
 package com.my.entities.users;
 
+import com.my.entities.EntityUtils;
+import com.my.entities.Role;
+import com.my.entities.User;
 import com.my.entities.items.Request;
 import com.my.exceptions.DBException;
 import com.my.exceptions.InvalidOperationException;
-import com.my.utils.RequestManager;
-import com.my.utils.UserManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -14,34 +15,34 @@ public class Master extends User {
 
     private static final Logger logger = LogManager.getLogger();
 
-    private Master(String login, String password)
+    public Master(String login, String password)
             throws InvalidOperationException {
         super(login, password, Role.MASTER);
     }
 
-    public static User newMaster(String login, String password)
+    public Master(int id, String login, String password) {
+        this.id = id;
+        this.login = login;
+        this.password = password;
+    }
+
+    public void processRequest(Request request)
             throws InvalidOperationException, DBException {
-        logger.debug("Creating new Master with login '{}'", login);
-        Master master = new Master(login, password);
-        int id = UserManager.addUser(master);
-        master.setId(id);
-        return master;
+        logger.debug("Master#{} starting to process Request#{}", getId(), request.getId());
+        request.setStatus(Request.Status.IN_PROCESS);
+        EntityUtils.updateRequest(request);
     }
 
-    public void processRequest(Request req) {
-        logger.debug("Master#{} starting to process Request#{}", getId(), req.getId());
-        req.setStatus(Request.Status.IN_PROCESS);
-        req.submitChanges();
+    public void closeRequest(Request request)
+            throws InvalidOperationException, DBException {
+        logger.debug("Master#{} closing Request#{}", getId(), request.getId());
+        request.setStatus(Request.Status.DONE);
+        EntityUtils.updateRequest(request);
     }
 
-    public void closeRequest(Request req) {
-        logger.debug("Master#{} closing Request#{}", getId(), req.getId());
-        req.setStatus(Request.Status.DONE);
-        req.submitChanges();
-    }
-
-    public List<Request> getRequestList() {
-        return RequestManager.getRequestList(this);
+    public List<Request> getRequestList(int chunkSize, int chunkNumber, String sortingFactor)
+            throws DBException {
+        return EntityUtils.requestGetAll(chunkSize, chunkNumber, sortingFactor);
     }
 
 }
