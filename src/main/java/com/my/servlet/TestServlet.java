@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+
 @WebServlet("/main")
 public class TestServlet extends HttpServlet {
 
@@ -17,14 +18,8 @@ public class TestServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        resp.getWriter().println("Hello from Servlet!!");
-        logger.debug("434545");
-
-        logger.trace("434545");
-        logger.warn("434545");
-        logger.fatal("434545");
-        logger.error(TestServlet.class);
-
+        logger.debug("Servlet 'main' receives get request");
+        resp.getWriter().println("Hello, visitor");
     }
 
 }

@@ -1,7 +1,6 @@
 package com.my.database;
 
 import com.my.database.dao.DaoFactory;
-import com.my.database.dao.mysql.DaoFactoryMysql;
 import com.my.exceptions.DBException;
 import com.my.exceptions.ExceptionMessages;
 import org.apache.logging.log4j.LogManager;
@@ -24,14 +23,26 @@ public class DBManager {
     private DBManager() {
     }
 
-    public static void init() {
+    public static void initDataSource() {
+        logger.debug("Initializing DataSource");
         try {
             Context initContext = new InitialContext();
+            logger.trace("init context : {}", initContext);
             Context envContext = (Context) initContext.lookup("java:/comp/env");
-            dataSource = (DataSource) envContext.lookup("jdbc/myDB");
+            logger.trace("env context : {}", envContext);
+            dataSource = (DataSource) envContext.lookup("jdbc/radb");
+            logger.trace("data source : {}", dataSource);
         } catch (NamingException ex) {
-            logger.error("DataSource cannot be initialized");
-            throw new IllegalStateException(ExceptionMessages.DB_FATAL);
+            logger.fatal("DataSource cannot be initialized", ex);
+            throw new IllegalStateException(ExceptionMessages.DB_UNEXPECTED);
+        }
+        try {
+            Connection conn = getConnection();
+            logger.trace("connection : {}", conn);
+            closeConnection(conn);
+        } catch (DBException ex) {
+            logger.fatal("Unable to get connection from DataSource", ex);
+            throw new IllegalStateException(ExceptionMessages.DB_NO_CONNECTION);
         }
     }
 
@@ -47,13 +58,17 @@ public class DBManager {
         if (dataSource == null) {
             throw new DBException(ExceptionMessages.DB_NO_CONNECTION);
         }
+        Connection conn = null;
         try {
-            Connection conn = dataSource.getConnection();
+            conn = dataSource.getConnection();
             conn.setAutoCommit(false);
             conn.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
             return conn;
         } catch (SQLException ex) {
             logger.error("Cannot get Connection", ex);
+            if (conn != null) {
+                closeConnection(conn);
+            }
             throw new DBException(ExceptionMessages.DB_NO_CONNECTION);
         }
     }
