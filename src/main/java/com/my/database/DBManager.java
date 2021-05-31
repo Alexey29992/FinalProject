@@ -36,14 +36,12 @@ public class DBManager {
             logger.fatal("DataSource cannot be initialized", ex);
             throw new IllegalStateException(ExceptionMessages.DB_UNEXPECTED);
         }
-        try {
-            Connection conn = getConnection();
-            logger.trace("connection : {}", conn);
-            closeConnection(conn);
-        } catch (DBException ex) {
-            logger.fatal("Unable to get connection from DataSource", ex);
-            throw new IllegalStateException(ExceptionMessages.DB_NO_CONNECTION);
-        }
+//        try (Connection conn = dataSource.getConnection()) {
+//            logger.trace("connection : {}", conn);
+//        } catch (SQLException ex) {
+//            logger.fatal("Unable to get connection from DataSource", ex);
+//            throw new IllegalStateException(ExceptionMessages.DB_NO_CONNECTION);
+//        }
     }
 
     public static DaoFactory getDaoFactory() {
@@ -66,16 +64,16 @@ public class DBManager {
             return conn;
         } catch (SQLException ex) {
             logger.error("Cannot get Connection", ex);
-            if (conn != null) {
-                closeConnection(conn);
-            }
+            closeConnection(conn);
             throw new DBException(ExceptionMessages.DB_NO_CONNECTION);
         }
     }
 
     public static void commit(Connection connection) throws DBException {
         try {
-            connection.commit();
+            if (connection != null) {
+                connection.commit();
+            }
         } catch (SQLException ex) {
             logger.error("Cannot commit Transaction", ex);
             throw new DBException(ExceptionMessages.DB_UNEXPECTED);
@@ -84,7 +82,9 @@ public class DBManager {
 
     public static void rollback(Connection connection) {
         try {
-            connection.rollback();
+            if (connection != null) {
+                connection.rollback();
+            }
         } catch (SQLException ex) {
             logger.error("Cannot rollback Transaction", ex);
         }
@@ -92,7 +92,9 @@ public class DBManager {
 
     public static void closeConnection(Connection connection) {
         try {
-            connection.close();
+            if (connection != null) {
+                connection.close();
+            }
         } catch (SQLException ex) {
             logger.error("Cannot close Connection", ex);
         }
