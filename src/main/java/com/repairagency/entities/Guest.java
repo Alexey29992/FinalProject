@@ -14,7 +14,7 @@ public class Guest extends Visitor {
         super(Role.GUEST);
     }
 
-    public User register(String login, String password)
+    public User signUp(String login, String password)
             throws InvalidOperationException, DBException {
         logger.debug("Registering new User with login '{}'", login);
         return EntityUtils.newUser(login, password, Role.CLIENT);
