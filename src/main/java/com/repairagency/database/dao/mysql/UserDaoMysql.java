@@ -227,12 +227,14 @@ public class UserDaoMysql extends AbstractDao implements UserDao {
     }
 
     private static final String QUERY_ADD_ID_CLIENT = String.format(
-            "INSERT INTO ? (%s) VALUE (?)",
+            "INSERT INTO %s (%s) VALUE (?)",
+            DbNames.TABLE_CLIENTS,
             DbNames.ID
     );
 
     private static final String QUERY_ADD_ID_MASTER = String.format(
-            "INSERT INTO ? (%s) VALUE (?)",
+            "INSERT INTO %s (%s) VALUE (?)",
+            DbNames.TABLE_MASTERS,
             DbNames.ID
     );
 
