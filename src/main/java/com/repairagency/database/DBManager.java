@@ -34,8 +34,9 @@ public class DBManager {
             dataSource = (DataSource) envContext.lookup("jdbc/radb");
             logger.trace("data source : {}", dataSource);
         } catch (NamingException ex) {
-            logger.fatal("DataSource cannot be initialized", ex);
-            throw new IllegalStateException(ExceptionMessages.DB_INTERNAL);
+            String message = "DataSource cannot be initialized";
+            logger.fatal(message, ex);
+            throw new IllegalStateException(message);
         }
 //        try (Connection conn = dataSource.getConnection()) {
 //            logger.trace("connection : {}", conn);
@@ -47,8 +48,9 @@ public class DBManager {
 
     public static DaoFactory getDaoFactory() throws DBException {
         if (daoFactory == null) {
-            logger.error("DAO factory is null");
-            throw new DBException(ExceptionMessages.DB_NO_FACTORY);
+            String message = "DAOFactory is not initialized";
+            logger.error(message);
+            throw new DBException(message, ExceptionMessages.DB_INTERNAL);
         }
         return daoFactory;
     }
@@ -56,13 +58,16 @@ public class DBManager {
     public static void setDaoFactory(DaoFactory factory) {
         daoFactory = factory;
     }
+
     public static void defaultDaoFactory() {
         daoFactory = new DaoFactoryMysql();
     }
 
     public static Connection getConnection() throws DBException {
         if (dataSource == null) {
-            throw new DBException(ExceptionMessages.DB_NO_CONNECTION);
+            String message = "DataSource is not initialized";
+            logger.error(message);
+            throw new DBException(message, ExceptionMessages.DB_INTERNAL);
         }
         Connection conn = null;
         try {
@@ -71,9 +76,10 @@ public class DBManager {
             conn.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
             return conn;
         } catch (SQLException ex) {
-            logger.error("Cannot get Connection", ex);
+            String message = "Cannot get Connection";
+            logger.error(message, ex);
             closeConnection(conn);
-            throw new DBException(ExceptionMessages.DB_NO_CONNECTION);
+            throw new DBException(message, ExceptionMessages.DB_INTERNAL);
         }
     }
 
@@ -83,8 +89,9 @@ public class DBManager {
                 connection.commit();
             }
         } catch (SQLException ex) {
-            logger.error("Cannot commit Transaction", ex);
-            throw new DBException(ExceptionMessages.DB_INTERNAL);
+            String message = "Cannot commit Transaction";
+            logger.error(message, ex);
+            throw new DBException(message, ExceptionMessages.DB_INTERNAL);
         }
     }
 
