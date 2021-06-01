@@ -14,13 +14,13 @@ public class Guest extends Visitor {
         super(Role.GUEST);
     }
 
-    public User signUp(String login, String password)
+    public static User signUp(String login, String password)
             throws InvalidOperationException, DBException {
         logger.debug("Registering new User with login '{}'", login);
         return EntityUtils.newUser(login, password, Role.CLIENT);
     }
 
-    public User signIn(String login, String password)
+    public static User signIn(String login, String password)
             throws DBException, InvalidOperationException {
         logger.debug("Signing in with login '{}'", login);
         User user = EntityUtils.userGetByLogin(login);

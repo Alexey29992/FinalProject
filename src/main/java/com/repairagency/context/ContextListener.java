@@ -17,6 +17,7 @@ public class ContextListener implements ServletContextListener {
     public void contextInitialized(ServletContextEvent sce) {
         logger.debug("Initializing context");
         DBManager.initDataSource();
+        DBManager.defaultDaoFactory();
     }
 
 }

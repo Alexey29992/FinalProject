@@ -27,18 +27,24 @@ public class EntityUtils {
 
     public static User newUser(String login, String password, Role role)
             throws DBException, InvalidOperationException {
-        logger.debug("Creating new {} with login {}", role.toString(), login);
+        logger.debug("Creating new {} with login '{}'", role, login);
+        User user;
         switch (role) {
             case CLIENT:
-                return createClient(login, password);
+                user = createClient(login, password);
+                break;
             case MASTER:
-                return createMaster(login, password);
+                user = createMaster(login, password);
+                break;
             case MANAGER:
-                return createManager(login, password);
+                user = createManager(login, password);
+                break;
             default:
-                logger.error("");
+                logger.error("User role not valid");
                 throw new InvalidOperationException(ExceptionMessages.USER_CREATE_INVALID_ROLE);
         }
+        logger.trace("Successfully created {} with id = {}", role, user.getId());
+        return user;
     }
 
     public static Request newRequest(String description, int clientId)
