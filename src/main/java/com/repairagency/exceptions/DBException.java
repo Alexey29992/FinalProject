@@ -2,12 +2,20 @@ package com.repairagency.exceptions;
 
 public class DBException extends Exception {
 
-    public DBException(String message) {
+    private final String publicMessage;
+
+    public DBException(String message, String publicMessage) {
         super(message);
+        this.publicMessage = publicMessage;
     }
 
-    public DBException(String message, Throwable ex) {
+    public DBException(String message, String publicMessage, Throwable ex) {
         super(message, ex);
+        this.publicMessage = publicMessage;
+    }
+
+    public String getPublicMessage() {
+        return publicMessage;
     }
 
 }

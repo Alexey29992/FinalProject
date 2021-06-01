@@ -1,7 +1,7 @@
 package com.repairagency.database.dao.mysql;
 
 import com.repairagency.database.DBManager;
-import com.repairagency.database.DbFieldNames;
+import com.repairagency.database.DbNames;
 import com.repairagency.database.dao.AbstractDao;
 import com.repairagency.database.dao.UserDao;
 import com.repairagency.entities.Role;
@@ -38,8 +38,9 @@ public class UserDaoMysql extends AbstractDao implements UserDao {
         if (user instanceof Manager) {
             return addManager((Manager) user);
         }
-        logger.error("Only Client, Master or Manager can be added to DB");
-        throw new DBException(ExceptionMessages.USER_ADD_INVALID_ROLE);
+        String message = "User with this role cannot be added to DB";
+        logger.error(message);
+        throw new DBException(message, ExceptionMessages.DB_INTERNAL);
     }
 
     @Override
@@ -48,33 +49,9 @@ public class UserDaoMysql extends AbstractDao implements UserDao {
         updateEntity(user, roleId);
     }
 
-    private static final String QUERY_UPDATE = String.format(
-            "UPDATE %s SET %s = ?, %s = ? %s = ? WHERE %s = ?",
-            DbFieldNames.TABLE_USERS,
-            DbFieldNames.USERS_LOGIN,
-            DbFieldNames.USERS_PASSWORD,
-            DbFieldNames.USERS_ROLE_ID,
-            DbFieldNames.ID);
-
-    private void updateEntity(User user, int roleId) throws DBException {
-        try (PreparedStatement statement = connection.prepareStatement(QUERY_UPDATE)) {
-            int k = 0;
-            statement.setString(++k, user.getLogin());
-            statement.setString(++k, user.getPassword());
-            statement.setInt(++k, roleId);
-            statement.setInt(++k, user.getId());
-            statement.executeUpdate();
-        } catch (SQLException ex) {
-            logger.error("User cannot be updated", ex);
-            DBManager.rollbackTransaction(connection);
-            DBManager.closeConnection(connection);
-            throw new DBException(ExceptionMessages.DB_INVALID_QUERY, ex);
-        }
-    }
-
     private static final String QUERY_DELETE = String.format("DELETE FROM %s WHERE %s = ?",
-            DbFieldNames.TABLE_USERS,
-            DbFieldNames.ID);
+            DbNames.TABLE_USERS,
+            DbNames.ID);
 
     @Override
     public void removeEntity(User user) throws DBException {
@@ -82,20 +59,21 @@ public class UserDaoMysql extends AbstractDao implements UserDao {
             statement.setInt(1, user.getId());
             statement.executeUpdate();
         } catch (SQLException ex) {
-            logger.error("User cannot be deleted", ex);
+            String message = "User#" + user.getId() + " cannot be deleted";
+            logger.error(message, ex);
             DBManager.rollbackTransaction(connection);
             DBManager.closeConnection(connection);
-            throw new DBException(ExceptionMessages.DB_INVALID_QUERY, ex);
+            throw new DBException(message, ExceptionMessages.DB_NOT_FOUND, ex);
         }
     }
 
     private static final String QUERY_GET_BY_ID = String.format(
             "SELECT %1$s.*, %2$s.%3$s FROM %1$s JOIN %2$s ON %4$s = %2$s.%5$s WHERE %5$s = ?",
-            DbFieldNames.TABLE_USERS,
-            DbFieldNames.TABLE_ROLES,
-            DbFieldNames.ROLE_NAME,
-            DbFieldNames.USERS_ROLE_ID,
-            DbFieldNames.ID);
+            DbNames.TABLE_USERS,
+            DbNames.TABLE_ROLES,
+            DbNames.ROLE_NAME,
+            DbNames.USERS_ROLE_ID,
+            DbNames.ID);
 
     @Override
     public User getEntityById(int id) throws DBException {
@@ -104,17 +82,19 @@ public class UserDaoMysql extends AbstractDao implements UserDao {
             statement.setInt(1, id);
             resultSet = statement.executeQuery();
             if (!resultSet.next()) {
-                logger.error("ResultSet is empty. Cannot get User");
+                logger.error("Cannot get User#{}", id);
                 DBManager.rollbackTransaction(connection);
                 DBManager.closeConnection(connection);
-                throw new DBException(ExceptionMessages.DB_UNEXPECTED);
+                throw new DBException(ExceptionMessages.DB_EMPTY_RESULT_SET,
+                        ExceptionMessages.DB_NOT_FOUND);
             }
             return getUserInstance(resultSet);
         } catch (SQLException ex) {
-            logger.error("Cannot get User with given id", ex);
+            String message = "Cannot get User#" + id;
+            logger.error(message, ex);
             DBManager.rollbackTransaction(connection);
             DBManager.closeConnection(connection);
-            throw new DBException(ExceptionMessages.DB_INVALID_QUERY, ex);
+            throw new DBException(message, ExceptionMessages.DB_NOT_FOUND, ex);
         } finally {
             closeResultSet(resultSet);
         }
@@ -122,12 +102,12 @@ public class UserDaoMysql extends AbstractDao implements UserDao {
 
     private static final String QUERY_GET_BY_LOGIN = String.format(
             "SELECT %1$s.*, %2$s.%3$s FROM %1$s JOIN %2$s ON %4$s = %2$s.%5$s WHERE %6$s = ?",
-            DbFieldNames.TABLE_USERS,
-            DbFieldNames.TABLE_ROLES,
-            DbFieldNames.ROLE_NAME,
-            DbFieldNames.USERS_ROLE_ID,
-            DbFieldNames.ID,
-            DbFieldNames.USERS_LOGIN);
+            DbNames.TABLE_USERS,
+            DbNames.TABLE_ROLES,
+            DbNames.ROLE_NAME,
+            DbNames.USERS_ROLE_ID,
+            DbNames.ID,
+            DbNames.USERS_LOGIN);
 
     @Override
     public User getEntityByLogin(String login) throws DBException {
@@ -136,17 +116,19 @@ public class UserDaoMysql extends AbstractDao implements UserDao {
             statement.setString(1, login);
             resultSet = statement.executeQuery();
             if (!resultSet.next()) {
-                logger.error("ResultSet is empty. Cannot get User");
+                logger.error("Cannot get User with login '{}'", login);
                 DBManager.rollbackTransaction(connection);
                 DBManager.closeConnection(connection);
-                throw new DBException(ExceptionMessages.DB_UNEXPECTED);
+                throw new DBException(ExceptionMessages.DB_EMPTY_RESULT_SET,
+                        ExceptionMessages.DB_INTERNAL);
             }
             return getUserInstance(resultSet);
         } catch (SQLException ex) {
-            logger.error("Cannot get User with given id", ex);
+            String message = "Cannot get User with login '" + login + "'";
+            logger.error(message, ex);
             DBManager.rollbackTransaction(connection);
             DBManager.closeConnection(connection);
-            throw new DBException(ExceptionMessages.DB_INVALID_QUERY, ex);
+            throw new DBException(message, ExceptionMessages.DB_NOT_FOUND, ex);
         } finally {
             closeResultSet(resultSet);
         }
@@ -155,11 +137,11 @@ public class UserDaoMysql extends AbstractDao implements UserDao {
     private static final String QUERY_GET_ALL = String.format(
             "SELECT %1$s.*, %2$s.%3$s FROM %1$s JOIN %2$s ON %4$s = %2$s.%5$s" +
                     " ORDER BY ? LIMIT ?, ?",
-            DbFieldNames.TABLE_USERS,
-            DbFieldNames.TABLE_ROLES,
-            DbFieldNames.ROLE_NAME,
-            DbFieldNames.USERS_ROLE_ID,
-            DbFieldNames.ID);
+            DbNames.TABLE_USERS,
+            DbNames.TABLE_ROLES,
+            DbNames.ROLE_NAME,
+            DbNames.USERS_ROLE_ID,
+            DbNames.ID);
 
     @Override
     public List<User> getEntityListAll(int chunkSize, int chunkNumber, String sortingFactor)
@@ -179,10 +161,11 @@ public class UserDaoMysql extends AbstractDao implements UserDao {
             }
             return users;
         } catch (SQLException ex) {
-            logger.error("Cannot get Request list", ex);
+            String message = "Cannot get User List";
+            logger.error(message, ex);
             DBManager.rollbackTransaction(connection);
             DBManager.closeConnection(connection);
-            throw new DBException(ExceptionMessages.DB_INVALID_QUERY, ex);
+            throw new DBException(message, ExceptionMessages.DB_NOT_FOUND, ex);
         } finally {
             closeResultSet(resultSet);
         }
@@ -191,12 +174,12 @@ public class UserDaoMysql extends AbstractDao implements UserDao {
     private static final String QUERY_GET_BY_ROLE = String.format(
             "SELECT %1$s.*, %2$s.%3$s FROM %1$s JOIN %2$s ON %4$s = %2$s.%5$s" +
                     " WHERE %6$s = ? ORDER BY ? LIMIT ?, ?",
-            DbFieldNames.TABLE_USERS,
-            DbFieldNames.TABLE_ROLES,
-            DbFieldNames.ROLE_NAME,
-            DbFieldNames.USERS_ROLE_ID,
-            DbFieldNames.ID,
-            DbFieldNames.ROLE_NAME);
+            DbNames.TABLE_USERS,
+            DbNames.TABLE_ROLES,
+            DbNames.ROLE_NAME,
+            DbNames.USERS_ROLE_ID,
+            DbNames.ID,
+            DbNames.ROLE_NAME);
 
     @Override
     public List<User> getEntityListByRole(Role role, int chunkSize, int chunkNumber, String sortingFactor)
@@ -217,10 +200,11 @@ public class UserDaoMysql extends AbstractDao implements UserDao {
             }
             return users;
         } catch (SQLException ex) {
-            logger.error("Cannot get Request list", ex);
+            String message = "Cannot get User List for Role " + role;
+            logger.error(message, ex);
             DBManager.rollbackTransaction(connection);
             DBManager.closeConnection(connection);
-            throw new DBException(ExceptionMessages.DB_INVALID_QUERY, ex);
+            throw new DBException(message, ExceptionMessages.DB_NOT_FOUND, ex);
         } finally {
             closeResultSet(resultSet);
         }
@@ -232,52 +216,34 @@ public class UserDaoMysql extends AbstractDao implements UserDao {
 
     private int addMaster(Master master) throws DBException {
         int id = addUser(master);
-        addMasterId(id);
+        addId(id, DbNames.TABLE_MASTERS);
         return id;
     }
 
-    private static final String QUERY_ADD_MASTER = String.format(
-            "INSERT INTO %s (%s) VALUES (?)",
-            DbFieldNames.TABLE_MASTERS,
-            DbFieldNames.ID
+    private static final String QUERY_ADD_ID = String.format(
+            "INSERT INTO ? (%s) VALUES (?)",
+            DbNames.ID
     );
 
-    private void addMasterId(int id) throws DBException {
+    private void addId(int id, String tableName) throws DBException {
         try (PreparedStatement statement = connection.
-                prepareStatement(QUERY_ADD_MASTER)) {
-            statement.setInt(1, id);
+                prepareStatement(QUERY_ADD_ID)) {
+            statement.setString(1, tableName);
+            statement.setInt(2, id);
             statement.executeUpdate();
         } catch (SQLException ex) {
-            logger.error("Master cannot be added to database", ex);
+            String message = "Id#" + id + " cannot be inserted into " + tableName;
+            logger.error(message, ex);
             DBManager.rollbackTransaction(connection);
             DBManager.closeConnection(connection);
-            throw new DBException(ExceptionMessages.DB_UNEXPECTED, ex);
+            throw new DBException(message, ExceptionMessages.DB_INTERNAL, ex);
         }
     }
 
     private int addClient(Client client) throws DBException {
         int id = addUser(client);
-        addClientId(id);
+        addId(id, DbNames.TABLE_USERS);
         return id;
-    }
-
-    private static final String QUERY_ADD_CLIENT = String.format(
-            "INSERT INTO %s (%s) VALUES (?)",
-            DbFieldNames.TABLE_CLIENTS,
-            DbFieldNames.ID
-    );
-
-    private void addClientId(int id) throws DBException {
-        try (PreparedStatement statement = connection.
-                prepareStatement(QUERY_ADD_CLIENT)) {
-            statement.setInt(1, id);
-            statement.executeUpdate();
-        } catch (SQLException ex) {
-            logger.error("Master cannot be added to database", ex);
-            DBManager.rollbackTransaction(connection);
-            DBManager.closeConnection(connection);
-            throw new DBException(ExceptionMessages.DB_UNEXPECTED, ex);
-        }
     }
 
     private int addUser(User user) throws DBException {
@@ -287,10 +253,10 @@ public class UserDaoMysql extends AbstractDao implements UserDao {
 
     private static final String QUERY_ADD_USER = String.format(
             "INSERT INTO %s (%s, %s, %s) VALUES (?, ?, ?)",
-            DbFieldNames.TABLE_USERS,
-            DbFieldNames.USERS_LOGIN,
-            DbFieldNames.USERS_PASSWORD,
-            DbFieldNames.USERS_ROLE_ID
+            DbNames.TABLE_USERS,
+            DbNames.USERS_LOGIN,
+            DbNames.USERS_PASSWORD,
+            DbNames.USERS_ROLE_ID
     );
 
     private int addUser(User user, int roleId) throws DBException {
@@ -304,26 +270,52 @@ public class UserDaoMysql extends AbstractDao implements UserDao {
             statement.executeUpdate();
             resultSet = statement.getGeneratedKeys();
             if (!resultSet.next()) {
-                logger.error("ResultSet is empty. Cannot get User id");
+                logger.error("Cannot receive User id");
                 DBManager.rollbackTransaction(connection);
                 DBManager.closeConnection(connection);
-                throw new DBException(ExceptionMessages.DB_UNEXPECTED);
+                throw new DBException(ExceptionMessages.DB_NO_KEY, ExceptionMessages.DB_INTERNAL);
             }
             return resultSet.getInt(1);
         } catch (SQLException ex) {
-            logger.error("User cannot be added to database", ex);
+            String message = "User cannot be added to database";
+            logger.error(message, ex);
             DBManager.rollbackTransaction(connection);
             DBManager.closeConnection(connection);
-            throw new DBException(ExceptionMessages.DB_UNEXPECTED, ex);
+            throw new DBException(message, ExceptionMessages.DB_INTERNAL, ex);
         } finally {
             closeResultSet(resultSet);
         }
     }
 
+    private static final String QUERY_UPDATE = String.format(
+            "UPDATE %s SET %s = ?, %s = ? %s = ? WHERE %s = ?",
+            DbNames.TABLE_USERS,
+            DbNames.USERS_LOGIN,
+            DbNames.USERS_PASSWORD,
+            DbNames.USERS_ROLE_ID,
+            DbNames.ID);
+
+    private void updateEntity(User user, int roleId) throws DBException {
+        try (PreparedStatement statement = connection.prepareStatement(QUERY_UPDATE)) {
+            int k = 0;
+            statement.setString(++k, user.getLogin());
+            statement.setString(++k, user.getPassword());
+            statement.setInt(++k, roleId);
+            statement.setInt(++k, user.getId());
+            statement.executeUpdate();
+        } catch (SQLException ex) {
+            String message = "User#" + user.getId() + " cannot be updated";
+            logger.error(message, ex);
+            DBManager.rollbackTransaction(connection);
+            DBManager.closeConnection(connection);
+            throw new DBException(message, ExceptionMessages.DB_INTERNAL, ex);
+        }
+    }
+
     private static final String QUERY_GET_ROLE_ID = String.format("SELECT %s FROM %s WHERE %s = ?",
-            DbFieldNames.ID,
-            DbFieldNames.TABLE_ROLES,
-            DbFieldNames.ROLE_NAME);
+            DbNames.ID,
+            DbNames.TABLE_ROLES,
+            DbNames.ROLE_NAME);
 
     private int getRoleId(Role role) throws DBException {
         ResultSet resultSet = null;
@@ -331,27 +323,29 @@ public class UserDaoMysql extends AbstractDao implements UserDao {
             statement.setString(1, role.name());
             resultSet = statement.executeQuery();
             if (!resultSet.next()) {
-                logger.error("ResultSet is empty. Cannot get id of queried Role");
+                logger.error("Cannot get id of Role {}", role);
                 DBManager.rollbackTransaction(connection);
                 DBManager.closeConnection(connection);
-                throw new DBException(ExceptionMessages.DB_UNEXPECTED);
+                throw new DBException(ExceptionMessages.DB_EMPTY_RESULT_SET,
+                        ExceptionMessages.DB_INTERNAL);
             }
-            return resultSet.getInt(DbFieldNames.ID);
+            return resultSet.getInt(DbNames.ID);
         } catch (SQLException ex) {
-            logger.error("Cannot get id of the queried Role", ex);
+            String message = "Cannot get id of Role " + role;
+            logger.error(message, ex);
             DBManager.rollbackTransaction(connection);
             DBManager.closeConnection(connection);
-            throw new DBException(ExceptionMessages.DB_INVALID_QUERY, ex);
+            throw new DBException(message, ExceptionMessages.DB_INTERNAL, ex);
         } finally {
             closeResultSet(resultSet);
         }
     }
 
     private User getUserInstance(ResultSet resultSet) throws SQLException {
-        int id = resultSet.getInt(DbFieldNames.ID);
-        String login = resultSet.getString(DbFieldNames.USERS_LOGIN);
-        String password = resultSet.getString(DbFieldNames.USERS_PASSWORD);
-        Role role = Role.valueOf(resultSet.getString(DbFieldNames.ROLE_NAME));
+        int id = resultSet.getInt(DbNames.ID);
+        String login = resultSet.getString(DbNames.USERS_LOGIN);
+        String password = resultSet.getString(DbNames.USERS_PASSWORD);
+        Role role = Role.valueOf(resultSet.getString(DbNames.ROLE_NAME));
         switch (role) {
             case CLIENT:
                 return new Client(id, login, password);

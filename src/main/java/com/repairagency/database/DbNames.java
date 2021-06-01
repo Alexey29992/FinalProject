@@ -1,8 +1,8 @@
 package com.repairagency.database;
 
-public class DbFieldNames {
+public class DbNames {
 
-    private DbFieldNames() {
+    private DbNames() {
     }
 
     public static final String TABLE_USERS = "user";
@@ -18,7 +18,7 @@ public class DbFieldNames {
 
     public static final String USERS_LOGIN = "login";
     public static final String USERS_PASSWORD = "password";
-    public static final String USERS_ROLE_ID = "role";
+    public static final String USERS_ROLE_ID = "role_id";
 
     public static final String REQUEST_CREATION_DATE = "creation_date";
     public static final String REQUEST_STATUS_ID = "status_id";
@@ -31,7 +31,7 @@ public class DbFieldNames {
     public static final String REQUEST_CLIENT_ID = "client_id";
 
     public static final String WALLET_BALANCE = "balance";
-    public static final String WALLET_USER_ID = "client_id";
+    public static final String WALLET_USER_ID = "id";
 
     public static final String PAYMENT_RECORD_DATE = "date";
     public static final String PAYMENT_RECORD_SUM = "sum";

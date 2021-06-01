@@ -1,6 +1,7 @@
 package com.repairagency.database;
 
 import com.repairagency.database.dao.DaoFactory;
+import com.repairagency.database.dao.mysql.DaoFactoryMysql;
 import com.repairagency.exceptions.DBException;
 import com.repairagency.exceptions.ExceptionMessages;
 import org.apache.logging.log4j.LogManager;
@@ -34,7 +35,7 @@ public class DBManager {
             logger.trace("data source : {}", dataSource);
         } catch (NamingException ex) {
             logger.fatal("DataSource cannot be initialized", ex);
-            throw new IllegalStateException(ExceptionMessages.DB_UNEXPECTED);
+            throw new IllegalStateException(ExceptionMessages.DB_INTERNAL);
         }
 //        try (Connection conn = dataSource.getConnection()) {
 //            logger.trace("connection : {}", conn);
@@ -44,12 +45,19 @@ public class DBManager {
 //        }
     }
 
-    public static DaoFactory getDaoFactory() {
+    public static DaoFactory getDaoFactory() throws DBException {
+        if (daoFactory == null) {
+            logger.error("DAO factory is null");
+            throw new DBException(ExceptionMessages.DB_NO_FACTORY);
+        }
         return daoFactory;
     }
 
     public static void setDaoFactory(DaoFactory factory) {
         daoFactory = factory;
+    }
+    public static void defaultDaoFactory() {
+        daoFactory = new DaoFactoryMysql();
     }
 
     public static Connection getConnection() throws DBException {
@@ -76,7 +84,7 @@ public class DBManager {
             }
         } catch (SQLException ex) {
             logger.error("Cannot commit Transaction", ex);
-            throw new DBException(ExceptionMessages.DB_UNEXPECTED);
+            throw new DBException(ExceptionMessages.DB_INTERNAL);
         }
     }
 
