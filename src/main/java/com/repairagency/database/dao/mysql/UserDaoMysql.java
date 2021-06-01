@@ -216,34 +216,38 @@ public class UserDaoMysql extends AbstractDao implements UserDao {
 
     private int addMaster(Master master) throws DBException {
         int id = addUser(master);
-        addId(id, DbNames.TABLE_MASTERS);
+        addId(id, QUERY_ADD_ID_MASTER);
         return id;
     }
 
-    private static final String QUERY_ADD_ID = String.format(
-            "INSERT INTO ? (%s) VALUES (?)",
+    private int addClient(Client client) throws DBException {
+        int id = addUser(client);
+        addId(id, QUERY_ADD_ID_CLIENT);
+        return id;
+    }
+
+    private static final String QUERY_ADD_ID_CLIENT = String.format(
+            "INSERT INTO ? (%s) VALUE (?)",
             DbNames.ID
     );
 
-    private void addId(int id, String tableName) throws DBException {
+    private static final String QUERY_ADD_ID_MASTER = String.format(
+            "INSERT INTO ? (%s) VALUE (?)",
+            DbNames.ID
+    );
+
+    private void addId(int id, String query) throws DBException {
         try (PreparedStatement statement = connection.
-                prepareStatement(QUERY_ADD_ID)) {
-            statement.setString(1, tableName);
-            statement.setInt(2, id);
+                prepareStatement(query)) {
+            statement.setInt(1, id);
             statement.executeUpdate();
         } catch (SQLException ex) {
-            String message = "Id#" + id + " cannot be inserted into " + tableName;
+            String message = "Id#" + id + " cannot be inserted into 'master'/'client' table";
             logger.error(message, ex);
             DBManager.rollbackTransaction(connection);
             DBManager.closeConnection(connection);
             throw new DBException(message, ExceptionMessages.DB_INTERNAL, ex);
         }
-    }
-
-    private int addClient(Client client) throws DBException {
-        int id = addUser(client);
-        addId(id, DbNames.TABLE_USERS);
-        return id;
     }
 
     private int addUser(User user) throws DBException {
