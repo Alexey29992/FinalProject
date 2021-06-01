@@ -1,9 +1,13 @@
 package com.repairagency.exceptions;
 
-public class InvalidOperationException extends Exception {
+public class InvalidOperationException extends AbstractException {
 
     public InvalidOperationException(String message) {
-        super(message);
+        this(message, "");
+    }
+
+    public InvalidOperationException(String message, String publicMessage) {
+        super(message, publicMessage);
     }
 
 }
