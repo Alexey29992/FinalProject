@@ -3,7 +3,7 @@ package com.repairagency.entities.users;
 import com.repairagency.entities.EntityUtils;
 import com.repairagency.entities.Role;
 import com.repairagency.entities.User;
-import com.repairagency.entities.items.Request;
+import com.repairagency.entities.beans.Request;
 import com.repairagency.exceptions.DBException;
 import com.repairagency.exceptions.InvalidOperationException;
 import org.apache.logging.log4j.LogManager;
@@ -15,15 +15,13 @@ public class Master extends User {
 
     private static final Logger logger = LogManager.getLogger();
 
-    public Master(String login, String password)
-            throws InvalidOperationException {
+    public Master(String login, String password) {
         super(login, password, Role.MASTER);
     }
 
     public Master(int id, String login, String password) {
-        this.id = id;
-        this.login = login;
-        this.password = password;
+        this(login, password);
+        setId(id);
     }
 
     public void processRequest(Request request)

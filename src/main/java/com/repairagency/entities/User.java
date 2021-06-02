@@ -1,48 +1,44 @@
 package com.repairagency.entities;
 
-import com.repairagency.exceptions.InvalidOperationException;
-import com.repairagency.validators.Validator;
+public abstract class User extends PersistentEntity {
 
-public abstract class User extends Visitor implements PersistentEntity {
+    private Role role;
+    private String login;
+    private String password;
 
-    protected int id;
-    protected String login;
-    protected String password;
-
-    protected User() {
-    }
-
-    protected User(String login, String password, Role role)
-            throws InvalidOperationException {
-        super(role);
-        Validator.validateLogin(login);
+    protected User(String login, String password, Role role) {
+        this.role = role;
         this.login = login;
-        Validator.validatePassword(password);
         this.password = password;
     }
 
-    @Override
-    public int getId() {
-        return id;
+    public Role getRole() {
+        return role;
     }
 
-    @Override
-    public void setId(int id) {
-        this.id = id;
+    public void setRole(Role role) {
+        this.role = role;
     }
 
     public String getLogin() {
         return login;
     }
 
+    public void setLogin(String login) {
+        this.login = login;
+    }
+
     public String getPassword() {
         return password;
     }
 
-    public void setPassword(String password)
-            throws InvalidOperationException {
-        Validator.validatePassword(password);
+    public void setPassword(String password) {
         this.password = password;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" + super.toString() + ", role=" + role + ", login='" + login + "'}";
     }
 
 }

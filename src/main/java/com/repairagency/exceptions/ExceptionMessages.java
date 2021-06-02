@@ -9,12 +9,11 @@ public class ExceptionMessages {
 
     public static final String DESCRIPTION_INVALID = "Entered description is not correct";
 
-    public static final String PASSWORD_INCORRECT = "Entered password is not correct";
-    public static final String PASSWORD_INVALID = "Invalid password. Follow restrictions, please";
+    public static final String PASSWORD_INCORRECT = "Password not correct";
     public static final String PASSWORD_INVALID_LENGTH = "Invalid password. Password should contain from "
             + Config.PASSWORD_LENGTH_MIN + " to " + Config.PASSWORD_LENGTH_MAX + " characters";
 
-    public static final String LOGIN_INVALID = "Invalid login. Follow restrictions, please";
+    public static final String LOGIN_NOT_FOUND = "Login not registered";
     public static final String LOGIN_INVALID_LENGTH = "Invalid login. Login should contain from "
             + Config.LOGIN_LENGTH_MIN + " to " + Config.LOGIN_LENGTH_MAX + " characters";
 
@@ -25,6 +24,7 @@ public class ExceptionMessages {
     public static final String PAYMENT_NOT_ENOUGH_MONEY = "Not enough money to proceed payment";
 
     public static final String USER_CREATE_INVALID_ROLE = "User with given role cannot be created";
+    public static final String USER_CREATE_LOGIN_REGISTERED = "Entered login is already registered";
 
     ////////////////////////////////
 

@@ -17,4 +17,7 @@ public interface UserDao extends Dao<User> {
     List<User> getEntityListByRole(Role role, int chunkSize, int chunkNumber, String sortingFactor)
             throws DBException;
 
+    boolean isLoginRegistered(String login)
+            throws DBException;
+
 }

@@ -4,7 +4,7 @@ import com.repairagency.database.DbNames;
 import com.repairagency.database.dao.AbstractDao;
 import com.repairagency.database.DBManager;
 import com.repairagency.database.dao.WalletDao;
-import com.repairagency.entities.items.Wallet;
+import com.repairagency.entities.beans.Wallet;
 import com.repairagency.exceptions.DBException;
 import com.repairagency.exceptions.ExceptionMessages;
 import org.apache.logging.log4j.LogManager;

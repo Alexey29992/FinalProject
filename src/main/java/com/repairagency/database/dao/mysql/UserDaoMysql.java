@@ -63,7 +63,7 @@ public class UserDaoMysql extends AbstractDao implements UserDao {
             logger.error(message, ex);
             DBManager.rollbackTransaction(connection);
             DBManager.closeConnection(connection);
-            throw new DBException(message, ExceptionMessages.DB_NOT_FOUND, ex);
+            throw new DBException(message, ExceptionMessages.DB_INTERNAL, ex);
         }
     }
 
@@ -94,7 +94,7 @@ public class UserDaoMysql extends AbstractDao implements UserDao {
             logger.error(message, ex);
             DBManager.rollbackTransaction(connection);
             DBManager.closeConnection(connection);
-            throw new DBException(message, ExceptionMessages.DB_NOT_FOUND, ex);
+            throw new DBException(message, ExceptionMessages.DB_INTERNAL, ex);
         } finally {
             closeResultSet(resultSet);
         }
@@ -120,9 +120,11 @@ public class UserDaoMysql extends AbstractDao implements UserDao {
                 DBManager.rollbackTransaction(connection);
                 DBManager.closeConnection(connection);
                 throw new DBException(ExceptionMessages.DB_EMPTY_RESULT_SET,
-                        ExceptionMessages.DB_INTERNAL);
+                        ExceptionMessages.LOGIN_NOT_FOUND);
             }
-            return getUserInstance(resultSet);
+            User user = getUserInstance(resultSet);
+            logger.trace("Role : {}", user.getRole());
+            return user;
         } catch (SQLException ex) {
             String message = "Cannot get User with login '" + login + "'";
             logger.error(message, ex);
@@ -165,7 +167,7 @@ public class UserDaoMysql extends AbstractDao implements UserDao {
             logger.error(message, ex);
             DBManager.rollbackTransaction(connection);
             DBManager.closeConnection(connection);
-            throw new DBException(message, ExceptionMessages.DB_NOT_FOUND, ex);
+            throw new DBException(message, ExceptionMessages.DB_INTERNAL, ex);
         } finally {
             closeResultSet(resultSet);
         }
@@ -204,7 +206,32 @@ public class UserDaoMysql extends AbstractDao implements UserDao {
             logger.error(message, ex);
             DBManager.rollbackTransaction(connection);
             DBManager.closeConnection(connection);
-            throw new DBException(message, ExceptionMessages.DB_NOT_FOUND, ex);
+            throw new DBException(message, ExceptionMessages.DB_INTERNAL, ex);
+        } finally {
+            closeResultSet(resultSet);
+        }
+    }
+
+    private static final String QUERY_CHECK_LOGIN = String.format(
+            "SELECT %s FROM %s WHERE %s = ?",
+            DbNames.ID,
+            DbNames.TABLE_USERS,
+            DbNames.USERS_LOGIN
+    );
+
+    @Override
+    public boolean isLoginRegistered(String login) throws DBException {
+        ResultSet resultSet = null;
+        try (PreparedStatement statement = connection.prepareStatement(QUERY_CHECK_LOGIN)) {
+            statement.setString(1, login);
+            resultSet = statement.executeQuery();
+            return resultSet.next();
+        } catch (SQLException ex) {
+            String message = "Cannot check presence User#" + login;
+            logger.error(message, ex);
+            DBManager.rollbackTransaction(connection);
+            DBManager.closeConnection(connection);
+            throw new DBException(message, ExceptionMessages.DB_INTERNAL, ex);
         } finally {
             closeResultSet(resultSet);
         }
@@ -276,7 +303,7 @@ public class UserDaoMysql extends AbstractDao implements UserDao {
             statement.executeUpdate();
             resultSet = statement.getGeneratedKeys();
             if (!resultSet.next()) {
-                logger.error("Cannot receive User id");
+                logger.error("Cannot receive User id.");
                 DBManager.rollbackTransaction(connection);
                 DBManager.closeConnection(connection);
                 throw new DBException(ExceptionMessages.DB_NO_KEY, ExceptionMessages.DB_INTERNAL);

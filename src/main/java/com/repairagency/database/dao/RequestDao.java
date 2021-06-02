@@ -1,6 +1,6 @@
 package com.repairagency.database.dao;
 
-import com.repairagency.entities.items.Request;
+import com.repairagency.entities.beans.Request;
 import com.repairagency.exceptions.DBException;
 
 import java.util.List;

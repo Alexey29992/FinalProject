@@ -3,9 +3,9 @@ package com.repairagency.entities;
 import com.repairagency.text.Text;
 import com.repairagency.database.DBManager;
 import com.repairagency.database.dao.*;
-import com.repairagency.entities.items.PaymentRecord;
-import com.repairagency.entities.items.Request;
-import com.repairagency.entities.items.Wallet;
+import com.repairagency.entities.beans.PaymentRecord;
+import com.repairagency.entities.beans.Request;
+import com.repairagency.entities.beans.Wallet;
 import com.repairagency.entities.users.Client;
 import com.repairagency.entities.users.Manager;
 import com.repairagency.entities.users.Master;
@@ -25,10 +25,42 @@ public class EntityUtils {
 
     ////////////////////////////////////////////////////////
 
+    public static User signUp(String login, String password)
+            throws InvalidOperationException, DBException {
+        logger.debug("Registering new User with login '{}'", login);
+        Validator.validateLogin(login);
+        Validator.validatePassword(password);
+        if (EntityUtils.isLoginRegistered(login)) {
+            logger.debug("Can not register: login is already registered");
+            throw new InvalidOperationException(ExceptionMessages.USER_CREATE_LOGIN_REGISTERED);
+        }
+        return EntityUtils.newUser(login, password, Role.CLIENT);
+    }
+
+    public static User signIn(String login, String password)
+            throws DBException, InvalidOperationException {
+        logger.debug("Entering with login '{}'", login);
+        Validator.validateLogin(login);
+        Validator.validatePassword(password);
+        User user = EntityUtils.userGetByLogin(login);
+        if (!user.getPassword().equals(password)) {
+            logger.debug("Can not enter: password not correct");
+            throw new InvalidOperationException(ExceptionMessages.PASSWORD_INCORRECT);
+        }
+        return user;
+    }
+
+    ////////////////////////////////////////////////////////
+
     public static User newUser(String login, String password, Role role)
             throws DBException, InvalidOperationException {
         logger.debug("Creating new {} with login '{}'", role, login);
         User user;
+        Validator.validateLogin(login);
+        Validator.validatePassword(password);
+        if (EntityUtils.isLoginRegistered(login)) {
+            throw new InvalidOperationException(ExceptionMessages.USER_CREATE_LOGIN_REGISTERED);
+        }
         switch (role) {
             case CLIENT:
                 user = createClient(login, password);
@@ -53,7 +85,8 @@ public class EntityUtils {
         Request request = new Request(description, clientId);
         Connection connection = startTransaction();
         RequestDao dao = getRequestDao(connection);
-        request.id = dao.addEntity(request);
+        int id = dao.addEntity(request);
+        request.setId(id);
         completeTransaction(connection);
         return request;
     }
@@ -181,7 +214,8 @@ public class EntityUtils {
     public static void userAddToDB(User user) throws DBException {
         Connection connection = startTransaction();
         UserDao dao = getUserDao(connection);
-        user.id = dao.addEntity(user);
+        int id = dao.addEntity(user);
+        user.setId(id);
         completeTransaction(connection);
     }
 
@@ -193,6 +227,13 @@ public class EntityUtils {
         Connection connection = startTransaction();
         getUserDao(connection).updateEntity(user);
         completeTransaction(connection);
+    }
+
+    public static boolean isLoginRegistered(String login) throws DBException {
+        Connection connection = startTransaction();
+        boolean result = getUserDao(connection).isLoginRegistered(login);
+        completeTransaction(connection);
+        return result;
     }
 
     ////////////////////////////////////////////////////////
@@ -279,7 +320,7 @@ public class EntityUtils {
     }
 
     private static User createManager(String login, String password)
-            throws DBException, InvalidOperationException {
+            throws DBException {
         Connection connection = startTransaction();
         Manager manager = new Manager(login, password);
         UserDao userDao = getUserDao(connection);
@@ -290,7 +331,7 @@ public class EntityUtils {
     }
 
     private static User createMaster(String login, String password)
-            throws DBException, InvalidOperationException {
+            throws DBException {
         Connection connection = startTransaction();
         Master master = new Master(login, password);
         UserDao userDao = getUserDao(connection);
@@ -301,7 +342,7 @@ public class EntityUtils {
     }
 
     private static User createClient(String login, String password)
-            throws DBException, InvalidOperationException {
+            throws DBException {
         Connection connection = startTransaction();
         Client client = new Client(login, password);
         UserDao userDao = getUserDao(connection);

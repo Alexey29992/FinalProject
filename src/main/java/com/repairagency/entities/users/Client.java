@@ -3,9 +3,9 @@ package com.repairagency.entities.users;
 import com.repairagency.entities.EntityUtils;
 import com.repairagency.entities.Role;
 import com.repairagency.entities.User;
-import com.repairagency.entities.items.PaymentRecord;
-import com.repairagency.entities.items.Request;
-import com.repairagency.entities.items.Wallet;
+import com.repairagency.entities.beans.PaymentRecord;
+import com.repairagency.entities.beans.Request;
+import com.repairagency.entities.beans.Wallet;
 import com.repairagency.exceptions.DBException;
 import com.repairagency.exceptions.InvalidOperationException;
 import org.apache.logging.log4j.LogManager;
@@ -19,15 +19,13 @@ public class Client extends User {
 
     private Wallet wallet;
 
-    public Client(String login, String password)
-            throws InvalidOperationException {
+    public Client(String login, String password) {
         super(login, password, Role.CLIENT);
     }
 
     public Client(int id, String login, String password) {
-        this.id = id;
-        this.login = login;
-        this.password = password;
+        this(login, password);
+        setId(id);
     }
 
     public void setWallet(Wallet wallet) {
@@ -39,9 +37,9 @@ public class Client extends User {
     }
 
     public void createRequest(String description)
-            throws InvalidOperationException, DBException {
+            throws DBException {
         logger.debug("Creating new Request for User#{}", getId());
-        EntityUtils.newRequest(description, id);
+        EntityUtils.newRequest(description, getId());
     }
 
     public void payForRequest(Request request)
@@ -59,7 +57,7 @@ public class Client extends User {
 
     public List<Request> getRequestList(int chunkSize, int chunkNumber, String sortingFactor)
             throws DBException {
-        return EntityUtils.requestGetByClient(id, chunkSize, chunkNumber, sortingFactor);
+        return EntityUtils.requestGetByClient(getId(), chunkSize, chunkNumber, sortingFactor);
     }
 
     public List<PaymentRecord> getPaymentHistory(int chunkSize, int chunkNumber, String sortingFactor)

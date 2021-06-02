@@ -4,14 +4,13 @@ import com.repairagency.database.DbNames;
 import com.repairagency.database.dao.AbstractDao;
 import com.repairagency.database.DBManager;
 import com.repairagency.database.dao.PaymentRecordDao;
-import com.repairagency.entities.items.PaymentRecord;
+import com.repairagency.entities.beans.PaymentRecord;
 import com.repairagency.exceptions.DBException;
 import com.repairagency.exceptions.ExceptionMessages;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.sql.*;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -168,12 +167,13 @@ public class PaymentRecordDaoMysql extends AbstractDao implements PaymentRecordD
     }
 
     private PaymentRecord getPaymentRecordInstance(ResultSet resultSet) throws SQLException {
-        int id = resultSet.getInt(DbNames.ID);
-        int sum = resultSet.getInt(DbNames.PAYMENT_RECORD_SUM);
-        int walletId = resultSet.getInt(DbNames.PAYMENT_RECORD_WALLET_ID);
-        LocalDateTime date = resultSet.getTimestamp(DbNames.PAYMENT_RECORD_DATE).toLocalDateTime();
-        String dest = resultSet.getString(DbNames.PAYMENT_RECORD_DESTINATION);
-        return new PaymentRecord(id, sum, walletId, date, dest);
+        PaymentRecord pr = new PaymentRecord();
+        pr.setId(resultSet.getInt(DbNames.ID));
+        pr.setSum(resultSet.getInt(DbNames.PAYMENT_RECORD_SUM));
+        pr.setWalletId(resultSet.getInt(DbNames.PAYMENT_RECORD_WALLET_ID));
+        pr.setDate(resultSet.getTimestamp(DbNames.PAYMENT_RECORD_DATE).toLocalDateTime());
+        pr.setDestination(resultSet.getString(DbNames.PAYMENT_RECORD_DESTINATION));
+        return pr;
     }
 
 }

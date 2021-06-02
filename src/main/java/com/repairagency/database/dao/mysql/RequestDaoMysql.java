@@ -4,14 +4,13 @@ import com.repairagency.database.DbNames;
 import com.repairagency.database.dao.AbstractDao;
 import com.repairagency.database.DBManager;
 import com.repairagency.database.dao.RequestDao;
-import com.repairagency.entities.items.Request;
+import com.repairagency.entities.beans.Request;
 import com.repairagency.exceptions.DBException;
 import com.repairagency.exceptions.ExceptionMessages;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.sql.*;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -270,21 +269,6 @@ public class RequestDaoMysql extends AbstractDao implements RequestDao {
         }
     }
 
-    private Request getRequestInstance(ResultSet resultSet) throws SQLException {
-        int id = resultSet.getInt(DbNames.ID);
-        int clientId = resultSet.getInt(DbNames.REQUEST_CLIENT_ID);
-        LocalDateTime creationDate = resultSet.getTimestamp(DbNames.REQUEST_CREATION_DATE).toLocalDateTime();
-        Request.Status status = Request.Status.valueOf(resultSet.getString(DbNames.STATUS_NAME));
-        String description = resultSet.getString(DbNames.REQUEST_DESCRIPTION);
-        LocalDateTime completionDate = resultSet.getTimestamp(DbNames.REQUEST_COMPLETION_DATE).toLocalDateTime();
-        String userReview = resultSet.getString(DbNames.REQUEST_USER_REVIEW);
-        String cancelReason = resultSet.getString(DbNames.REQUEST_CANCEL_REASON);
-        int masterId = resultSet.getInt(DbNames.REQUEST_MASTER_ID);
-        int price = resultSet.getInt(DbNames.REQUEST_PRICE);
-        return new Request(id, clientId, creationDate, status, description,
-                completionDate, userReview, cancelReason, masterId, price);
-    }
-
     private static final String QUERY_ADD = String.format(
             "INSERT INTO %s (%s, %s, %s, %s) VALUES (?, ?, ?, ?)",
             DbNames.TABLE_REQUESTS,
@@ -357,6 +341,21 @@ public class RequestDaoMysql extends AbstractDao implements RequestDao {
             DBManager.closeConnection(connection);
             throw new DBException(message, ExceptionMessages.DB_NOT_FOUND, ex);
         }
+    }
+
+    private Request getRequestInstance(ResultSet resultSet) throws SQLException {
+        Request req = new Request();
+        req.setId(resultSet.getInt(DbNames.ID));
+        req.setClientId(resultSet.getInt(DbNames.REQUEST_CLIENT_ID));
+        req.setCreationDate(resultSet.getTimestamp(DbNames.REQUEST_CREATION_DATE).toLocalDateTime());
+        req.setStatus(Request.Status.valueOf(resultSet.getString(DbNames.STATUS_NAME)));
+        req.setDescription(resultSet.getString(DbNames.REQUEST_DESCRIPTION));
+        req.setCompletionDate(resultSet.getTimestamp(DbNames.REQUEST_COMPLETION_DATE).toLocalDateTime());
+        req.setUserReview(resultSet.getString(DbNames.REQUEST_USER_REVIEW));
+        req.setCancelReason(resultSet.getString(DbNames.REQUEST_CANCEL_REASON));
+        req.setMasterId(resultSet.getInt(DbNames.REQUEST_MASTER_ID));
+        req.setPrice(resultSet.getInt(DbNames.REQUEST_PRICE));
+        return req;
     }
 
 }
