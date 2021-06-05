@@ -12,6 +12,4 @@ public interface DaoFactory {
 
     UserDao getUserDao(Connection connection) throws DBException;
 
-    WalletDao getWalletDao(Connection connection) throws DBException;
-
 }

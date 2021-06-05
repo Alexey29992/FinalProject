@@ -1,6 +1,6 @@
 package com.repairagency.entities.users;
 
-import com.repairagency.entities.EntityUtils;
+import com.repairagency.entities.EntityManager;
 import com.repairagency.entities.Role;
 import com.repairagency.entities.User;
 import com.repairagency.entities.beans.Request;
@@ -33,13 +33,13 @@ public class Manager extends User {
         logger.debug("Assigning Master#{} to Request#{} by Manager#{}",
                 master.getId(), request.getId(), getId());
         request.setMasterId(master.getId());
-        EntityUtils.updateRequest(request);
+        EntityManager.updateRequest(request);
     }
 
     public void topUpClientWallet(Client client, int amount) throws DBException {
         logger.debug("Adding sum of money ({}) to Client#{}'s wallet by Manager#{}",
                 amount, client.getId(), getId());
-        EntityUtils.walletAddMoney(client.getWallet(), amount);
+        EntityManager.userGiveMoney(client, amount);
     }
 
     public void cancelRequest(Request request, String reason)
@@ -47,32 +47,32 @@ public class Manager extends User {
         logger.debug("Closing Request#{} by Manager#{}", request.getId(), getId());
         request.setStatus(Request.Status.CANCELLED);
         request.setCancelReason(reason);
-        EntityUtils.updateRequest(request);
+        EntityManager.updateRequest(request);
     }
 
     public void applyForPayment(Request request)
             throws InvalidOperationException, DBException {
         logger.debug("Applying Request#{} for payment by Manager#{}", request.getId(), getId());
         request.setStatus(Request.Status.WAIT_FOR_PAYMENT);
-        EntityUtils.updateRequest(request);
+        EntityManager.updateRequest(request);
     }
 
     public void confirmPayment(Request request)
             throws InvalidOperationException, DBException {
         logger.debug("Confirming payment for Request#{} by Manager#{}", request.getId(), getId());
         request.setStatus(Request.Status.PAID);
-        EntityUtils.updateRequest(request);
+        EntityManager.updateRequest(request);
     }
 
     public List<Request> getRequestList(int chunkSize, int chunkNumber, String sortingFactor)
             throws DBException {
-        return EntityUtils.requestGetAll(chunkSize, chunkNumber, sortingFactor);
+        return EntityManager.requestGetAll(chunkSize, chunkNumber, sortingFactor);
     }
 
     public List<Request> getOpenRequestList(Request.Status status, int chunkSize,
                                             int chunkNumber, String sortingFactor)
             throws DBException {
-        return EntityUtils.requestGetByStatus(status, chunkSize, chunkNumber, sortingFactor);
+        return EntityManager.requestGetByStatus(status, chunkSize, chunkNumber, sortingFactor);
     }
 
 }

@@ -7,16 +7,16 @@ import java.time.LocalDateTime;
 public class PaymentRecord extends PersistentEntity {
 
     private int sum;
-    private int walletId;
+    private int clientId;
     private LocalDateTime date;
     private String destination;
 
     public PaymentRecord() {
     }
 
-    public PaymentRecord(int sum, int walletId, String destination) {
+    public PaymentRecord(int sum, int clientId, String destination) {
         this.sum = sum;
-        this.walletId = walletId;
+        this.clientId = clientId;
         this.destination = destination;
         date = LocalDateTime.now();
     }
@@ -29,12 +29,12 @@ public class PaymentRecord extends PersistentEntity {
         this.sum = sum;
     }
 
-    public int getWalletId() {
-        return walletId;
+    public int getClientId() {
+        return clientId;
     }
 
-    public void setWalletId(int walletId) {
-        this.walletId = walletId;
+    public void setClientId(int clientId) {
+        this.clientId = clientId;
     }
 
     public LocalDateTime getDate() {
@@ -58,7 +58,7 @@ public class PaymentRecord extends PersistentEntity {
         return "PaymentRecord{" +
                 super.toString() +
                 "sum=" + sum +
-                ", walletId=" + walletId +
+                ", walletId=" + clientId +
                 ", date=" + date +
                 ", destination='" + destination + '\'' +
                 '}';

@@ -18,4 +18,5 @@ public interface RequestDao extends Dao<Request> {
 
     List<Request> getEntityListByStatus(Request.Status status, int chunkSize, int chunkNumber, String sortingFactor)
             throws DBException;
+
 }

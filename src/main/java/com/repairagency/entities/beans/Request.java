@@ -3,6 +3,7 @@ package com.repairagency.entities.beans;
 import com.repairagency.entities.PersistentEntity;
 
 import java.time.LocalDateTime;
+
 public class Request extends PersistentEntity {
 
     private int clientId;

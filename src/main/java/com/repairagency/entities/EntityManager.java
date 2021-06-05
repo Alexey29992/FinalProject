@@ -5,21 +5,20 @@ import com.repairagency.database.DBManager;
 import com.repairagency.database.dao.*;
 import com.repairagency.entities.beans.PaymentRecord;
 import com.repairagency.entities.beans.Request;
-import com.repairagency.entities.beans.Wallet;
 import com.repairagency.entities.users.Client;
 import com.repairagency.entities.users.Manager;
 import com.repairagency.entities.users.Master;
 import com.repairagency.exceptions.DBException;
-import com.repairagency.exceptions.ExceptionMessages;
+import com.repairagency.exceptions.ErrorMessages;
 import com.repairagency.exceptions.InvalidOperationException;
-import com.repairagency.validators.Validator;
+import com.repairagency.validator.Validator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.sql.Connection;
 import java.util.List;
 
-public class EntityUtils {
+public class EntityManager {
 
     private static final Logger logger = LogManager.getLogger();
 
@@ -30,11 +29,11 @@ public class EntityUtils {
         logger.debug("Registering new User with login '{}'", login);
         Validator.validateLogin(login);
         Validator.validatePassword(password);
-        if (EntityUtils.isLoginRegistered(login)) {
+        if (EntityManager.isLoginRegistered(login)) {
             logger.debug("Can not register: login is already registered");
-            throw new InvalidOperationException(ExceptionMessages.USER_CREATE_LOGIN_REGISTERED);
+            throw new InvalidOperationException(ErrorMessages.USER_CREATE_LOGIN_REGISTERED);
         }
-        return EntityUtils.newUser(login, password, Role.CLIENT);
+        return EntityManager.newUser(login, password, Role.CLIENT);
     }
 
     public static User signIn(String login, String password)
@@ -42,10 +41,10 @@ public class EntityUtils {
         logger.debug("Entering with login '{}'", login);
         Validator.validateLogin(login);
         Validator.validatePassword(password);
-        User user = EntityUtils.userGetByLogin(login);
+        User user = EntityManager.userGetByLogin(login);
         if (!user.getPassword().equals(password)) {
             logger.debug("Can not enter: password not correct");
-            throw new InvalidOperationException(ExceptionMessages.PASSWORD_INCORRECT);
+            throw new InvalidOperationException(ErrorMessages.USER_PASSWORD_INCORRECT);
         }
         return user;
     }
@@ -58,8 +57,8 @@ public class EntityUtils {
         User user;
         Validator.validateLogin(login);
         Validator.validatePassword(password);
-        if (EntityUtils.isLoginRegistered(login)) {
-            throw new InvalidOperationException(ExceptionMessages.USER_CREATE_LOGIN_REGISTERED);
+        if (EntityManager.isLoginRegistered(login)) {
+            throw new InvalidOperationException(ErrorMessages.USER_CREATE_LOGIN_REGISTERED);
         }
         switch (role) {
             case CLIENT:
@@ -73,7 +72,7 @@ public class EntityUtils {
                 break;
             default:
                 logger.error("User role not valid");
-                throw new InvalidOperationException(ExceptionMessages.USER_CREATE_INVALID_ROLE);
+                throw new InvalidOperationException(ErrorMessages.USER_CREATE_INVALID_ROLE);
         }
         logger.trace("Successfully created {} with id = {}", role, user.getId());
         return user;
@@ -101,7 +100,7 @@ public class EntityUtils {
         return list;
     }
 
-    public static List<PaymentRecord> paymentRecordGetByWallet(int walletId, int chunkSize, int chunkNumber, String sortingFactor)
+    public static List<PaymentRecord> paymentRecordGetByUser(int walletId, int chunkSize, int chunkNumber, String sortingFactor)
             throws DBException {
         Connection connection = startTransaction();
         PaymentRecordDao dao = getPaymentRecordDao(connection);
@@ -170,12 +169,6 @@ public class EntityUtils {
         Connection connection = startTransaction();
         UserDao userDao = getUserDao(connection);
         User user = userDao.getEntityByLogin(login);
-        if (user.getRole() == Role.CLIENT) {
-            WalletDao walletDao = getWalletDao(connection);
-            Wallet wallet = walletDao.getEntityByUser(user.getId());
-            Client client = (Client) user;
-            client.setWallet(wallet);
-        }
         completeTransaction(connection);
         return user;
     }
@@ -231,65 +224,45 @@ public class EntityUtils {
 
     public static boolean isLoginRegistered(String login) throws DBException {
         Connection connection = startTransaction();
-        boolean result = getUserDao(connection).isLoginRegistered(login);
+        boolean result = false;
+        User user = getUserDao(connection).getEntityByLogin(login);
+        if (user != null) {
+            result = true;
+        }
         completeTransaction(connection);
         return result;
     }
 
     ////////////////////////////////////////////////////////
 
-    public static void walletAddMoney(Wallet wallet, int amount) throws DBException {
-        logger.debug("Adding {}$ to Wallet#{}", amount, wallet.getId());
+    public static void userGiveMoney(Client client, int amount) throws DBException {
+        logger.trace("Giving {}$ to Client#{} balance", amount, client.getId());
         Connection connection = startTransaction();
+        UserDao userDao = getUserDao(connection);
+        client.setBalance(client.getBalance() + amount);
+        userDao.updateEntity(client);
+        logger.trace("Creating new PaymentRecord for Client#{}", client.getId());
         PaymentRecordDao paymentRecordDao = getPaymentRecordDao(connection);
-        WalletDao walletDao = getWalletDao(connection);
-        logger.debug("Creating new PaymentRecord for Wallet#{}", wallet.getId());
-        PaymentRecord paymentRecord = new PaymentRecord(amount, wallet.getId(), Text.PAYMENT_RECORD_ADD_MONEY);
+        PaymentRecord paymentRecord = new PaymentRecord(amount, client.getId(), Text.PAYMENT_RECORD_ADD_MONEY);
         paymentRecordDao.addEntity(paymentRecord);
-        walletDao.updateEntity(wallet);
         completeTransaction(connection);
-        int newBalance = wallet.getBalance() + amount;
-        wallet.setBalance(newBalance);
     }
 
-    public static void walletMakePayment(Wallet wallet, Request request)
+    public static void userMakePayment(Client client, Request request)
             throws InvalidOperationException, DBException {
         int amount = request.getPrice();
-        logger.debug("Taking {}$ from Wallet#{}", amount, wallet.getId());
-        Validator.validatePayment(wallet.getBalance(), amount, request);
+        logger.trace("Taking {}$ from Client#{} balance", amount, client.getId());
+        Validator.validatePayment(client.getBalance(), amount, request);
         Connection connection = startTransaction();
+        UserDao userDao = getUserDao(connection);
+        client.setBalance(client.getBalance() - amount);
+        userDao.updateEntity(client);
+        completeTransaction(connection);
+        logger.trace("Creating new PaymentRecord for Client#{}", client.getId());
         PaymentRecordDao paymentRecordDao = getPaymentRecordDao(connection);
-        logger.debug("Creating new PaymentRecord for Wallet#{}", wallet.getId());
-        PaymentRecord paymentRecord = new PaymentRecord(amount, wallet.getId(),
+        PaymentRecord paymentRecord = new PaymentRecord(amount, client.getId(),
                 Text.PAYMENT_RECORD_PAY_MONEY + request.getId());
         paymentRecordDao.addEntity(paymentRecord);
-        WalletDao walletDao = getWalletDao(connection);
-        walletDao.updateEntity(wallet);
-        completeTransaction(connection);
-        int newBalance = wallet.getBalance() - amount;
-        wallet.setBalance(newBalance);
-    }
-
-    public static Wallet walletGetById(int walletId) throws DBException {
-        Connection connection = startTransaction();
-        WalletDao dao = getWalletDao(startTransaction());
-        Wallet wallet = dao.getEntityById(walletId);
-        completeTransaction(connection);
-        return wallet;
-    }
-
-    public static Wallet walletGetByUser(int userId) throws DBException {
-        Connection connection = startTransaction();
-        WalletDao dao = getWalletDao(connection);
-        Wallet wallet = dao.getEntityByUser(userId);
-        completeTransaction(connection);
-        return wallet;
-    }
-
-    public static void updateWallet(Wallet wallet) throws DBException {
-        Connection connection = startTransaction();
-        getWalletDao(connection).updateEntity(wallet);
-        completeTransaction(connection);
     }
 
     ////////////////////////////////////////////////////////
@@ -313,10 +286,6 @@ public class EntityUtils {
 
     private static UserDao getUserDao(Connection connection) throws DBException {
         return DBManager.getDaoFactory().getUserDao(connection);
-    }
-
-    private static WalletDao getWalletDao(Connection connection) throws DBException {
-        return DBManager.getDaoFactory().getWalletDao(connection);
     }
 
     private static User createManager(String login, String password)
@@ -347,9 +316,6 @@ public class EntityUtils {
         Client client = new Client(login, password);
         UserDao userDao = getUserDao(connection);
         int clientId = userDao.addEntity(client);
-        Wallet wallet = new Wallet(clientId);
-        WalletDao walletDao = getWalletDao(connection);
-        walletDao.addEntity(wallet);
         completeTransaction(connection);
         client.setId(clientId);
         return client;

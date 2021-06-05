@@ -1,6 +1,6 @@
 package com.repairagency.entities.users;
 
-import com.repairagency.entities.EntityUtils;
+import com.repairagency.entities.EntityManager;
 import com.repairagency.entities.Role;
 import com.repairagency.entities.User;
 import com.repairagency.entities.beans.Request;
@@ -28,19 +28,19 @@ public class Master extends User {
             throws InvalidOperationException, DBException {
         logger.debug("Master#{} starting to process Request#{}", getId(), request.getId());
         request.setStatus(Request.Status.IN_PROCESS);
-        EntityUtils.updateRequest(request);
+        EntityManager.updateRequest(request);
     }
 
     public void closeRequest(Request request)
             throws InvalidOperationException, DBException {
         logger.debug("Master#{} closing Request#{}", getId(), request.getId());
         request.setStatus(Request.Status.DONE);
-        EntityUtils.updateRequest(request);
+        EntityManager.updateRequest(request);
     }
 
     public List<Request> getRequestList(int chunkSize, int chunkNumber, String sortingFactor)
             throws DBException {
-        return EntityUtils.requestGetAll(chunkSize, chunkNumber, sortingFactor);
+        return EntityManager.requestGetAll(chunkSize, chunkNumber, sortingFactor);
     }
 
 }

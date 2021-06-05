@@ -3,7 +3,7 @@ package com.repairagency.database;
 import com.repairagency.database.dao.DaoFactory;
 import com.repairagency.database.dao.mysql.DaoFactoryMysql;
 import com.repairagency.exceptions.DBException;
-import com.repairagency.exceptions.ExceptionMessages;
+import com.repairagency.exceptions.ErrorMessages;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -50,7 +50,7 @@ public class DBManager {
         if (daoFactory == null) {
             String message = "DAOFactory is not initialized";
             logger.error(message);
-            throw new DBException(message, ExceptionMessages.DB_INTERNAL);
+            throw new DBException(message, ErrorMessages.DB_INTERNAL);
         }
         return daoFactory;
     }
@@ -67,7 +67,7 @@ public class DBManager {
         if (dataSource == null) {
             String message = "DataSource is not initialized";
             logger.error(message);
-            throw new DBException(message, ExceptionMessages.DB_INTERNAL);
+            throw new DBException(message, ErrorMessages.DB_INTERNAL);
         }
         Connection conn = null;
         try {
@@ -79,7 +79,7 @@ public class DBManager {
             String message = "Cannot get Connection";
             logger.error(message, ex);
             closeConnection(conn);
-            throw new DBException(message, ExceptionMessages.DB_INTERNAL);
+            throw new DBException(message, ErrorMessages.DB_INTERNAL);
         }
     }
 
@@ -91,7 +91,7 @@ public class DBManager {
         } catch (SQLException ex) {
             String message = "Cannot commit Transaction";
             logger.error(message, ex);
-            throw new DBException(message, ExceptionMessages.DB_INTERNAL);
+            throw new DBException(message, ErrorMessages.DB_INTERNAL);
         }
     }
 

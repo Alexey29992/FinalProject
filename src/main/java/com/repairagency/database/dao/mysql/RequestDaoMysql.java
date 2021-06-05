@@ -1,12 +1,11 @@
 package com.repairagency.database.dao.mysql;
 
-import com.repairagency.database.DbNames;
 import com.repairagency.database.dao.AbstractDao;
 import com.repairagency.database.DBManager;
 import com.repairagency.database.dao.RequestDao;
 import com.repairagency.entities.beans.Request;
 import com.repairagency.exceptions.DBException;
-import com.repairagency.exceptions.ExceptionMessages;
+import com.repairagency.exceptions.ErrorMessages;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -17,6 +16,24 @@ import java.util.List;
 public class RequestDaoMysql extends AbstractDao implements RequestDao {
 
     private static final Logger logger = LogManager.getLogger();
+
+    private static final String QUERY_DELETE = "DELETE FROM request WHERE id = ?";
+    private static final String QUERY_UPDATE = "UPDATE request SET client_id = ?, " +
+            "creation_date = ?, status_id = ?, description = ?, completion_date = ?, " +
+            "user_review = ?, cancel_reason = ?, master_id = ?, price = ? WHERE id = ?";
+    private static final String QUERY_ADD = "INSERT INTO request (client_id, creation_date," +
+            " status_id, description) VALUES (?, ?, ?, ?)";
+    private static final String QUERY_GET_STATUS_ID = "SELECT id FROM status WHERE status_name = ?";
+    private static final String QUERY_GET_BY_STATUS = "SELECT request.*, status.status_name FROM " +
+            "request JOIN status ON status_id = status.id WHERE status.status_name = ? ORDER BY ? LIMIT ?, ?";
+    private static final String QUERY_GET_BY_CLIENT = "SELECT request.*, status.status_name FROM request " +
+            "JOIN status ON status_id = status.id WHERE client_id = ? ORDER BY ? LIMIT ?, ?";
+    private static final String QUERY_GET_BY_MASTER = "SELECT request.*, status.status_name FROM request " +
+            "JOIN status ON status_id = status.id WHERE master_id = ? ORDER BY ? LIMIT ?, ?";
+    private static final String QUERY_GET_ALL = "SELECT request.*, status.status_name FROM request JOIN " +
+            "status ON status_id = status.id ORDER BY ? LIMIT ?, ?";
+    private static final String QUERY_GET_BY_ID = "SELECT request.*, status.status_name FROM request JOIN " +
+            "status ON status_id = status.id WHERE request.id = ?";
 
     public RequestDaoMysql(Connection connection) {
         super(connection);
@@ -34,10 +51,6 @@ public class RequestDaoMysql extends AbstractDao implements RequestDao {
         updateEntity(req, statusId);
     }
 
-    private static final String QUERY_DELETE = String.format("DELETE FROM %s WHERE %s = ?",
-            DbNames.TABLE_REQUESTS,
-            DbNames.ID);
-
     @Override
     public void removeEntity(Request req) throws DBException {
         try (PreparedStatement statement = connection.prepareStatement(QUERY_DELETE)) {
@@ -48,17 +61,9 @@ public class RequestDaoMysql extends AbstractDao implements RequestDao {
             logger.error(message, ex);
             DBManager.rollbackTransaction(connection);
             DBManager.closeConnection(connection);
-            throw new DBException(message, ExceptionMessages.DB_INTERNAL, ex);
+            throw new DBException(message, ErrorMessages.DB_INTERNAL, ex);
         }
     }
-
-    private static final String QUERY_GET_BY_ID = String.format(
-            "SELECT %1$s.*, %2$s.%3$s FROM %1$s JOIN %2$s ON %4$s = %2$s.%5$s WHERE %5$s = ?",
-            DbNames.TABLE_REQUESTS,
-            DbNames.TABLE_STATUSES,
-            DbNames.STATUS_NAME,
-            DbNames.REQUEST_STATUS_ID,
-            DbNames.ID);
 
     @Override
     public Request getEntityById(int id) throws DBException {
@@ -70,8 +75,8 @@ public class RequestDaoMysql extends AbstractDao implements RequestDao {
                 logger.error("Cannot get Request#{}", id);
                 DBManager.rollbackTransaction(connection);
                 DBManager.closeConnection(connection);
-                throw new DBException(ExceptionMessages.DB_EMPTY_RESULT_SET,
-                        ExceptionMessages.DB_NOT_FOUND);
+                throw new DBException(ErrorMessages.DB_EMPTY_RESULT_SET,
+                        ErrorMessages.DB_NOT_FOUND);
             }
             return getRequestInstance(resultSet);
         } catch (SQLException ex) {
@@ -79,20 +84,11 @@ public class RequestDaoMysql extends AbstractDao implements RequestDao {
             logger.error(message, ex);
             DBManager.rollbackTransaction(connection);
             DBManager.closeConnection(connection);
-            throw new DBException(message, ExceptionMessages.DB_INTERNAL, ex);
+            throw new DBException(message, ErrorMessages.DB_INTERNAL, ex);
         } finally {
             closeResultSet(resultSet);
         }
     }
-
-    private static final String QUERY_GET_ALL = String.format(
-            "SELECT %1$s.*, %2$s.%3$s FROM %1$s JOIN %2$s ON %4$s = %2$s.%5$s" +
-                    " ORDER BY ? LIMIT ?, ?",
-            DbNames.TABLE_REQUESTS,
-            DbNames.TABLE_STATUSES,
-            DbNames.STATUS_NAME,
-            DbNames.REQUEST_STATUS_ID,
-            DbNames.ID);
 
     @Override
     public List<Request> getEntityListAll(int chunkSize, int chunkNumber, String sortingFactor)
@@ -116,21 +112,11 @@ public class RequestDaoMysql extends AbstractDao implements RequestDao {
             logger.error(message, ex);
             DBManager.rollbackTransaction(connection);
             DBManager.closeConnection(connection);
-            throw new DBException(message, ExceptionMessages.DB_INTERNAL, ex);
+            throw new DBException(message, ErrorMessages.DB_INTERNAL, ex);
         } finally {
             closeResultSet(resultSet);
         }
     }
-
-    private static final String QUERY_GET_BY_MASTER = String.format(
-            "SELECT %1$s.*, %2$s.%3$s FROM %1$s JOIN %2$s ON %4$s = %2$s.%5$s" +
-                    " WHERE %6$s = ? ORDER BY ? LIMIT ?, ?",
-            DbNames.TABLE_REQUESTS,
-            DbNames.TABLE_STATUSES,
-            DbNames.STATUS_NAME,
-            DbNames.REQUEST_STATUS_ID,
-            DbNames.ID,
-            DbNames.REQUEST_MASTER_ID);
 
     @Override
     public List<Request> getEntityListByMaster(int masterId, int chunkSize, int chunkNumber, String sortingFactor)
@@ -155,22 +141,11 @@ public class RequestDaoMysql extends AbstractDao implements RequestDao {
             logger.error(message, ex);
             DBManager.rollbackTransaction(connection);
             DBManager.closeConnection(connection);
-            throw new DBException(message, ExceptionMessages.DB_INTERNAL, ex);
+            throw new DBException(message, ErrorMessages.DB_INTERNAL, ex);
         } finally {
             closeResultSet(resultSet);
         }
     }
-
-    private static final String QUERY_GET_BY_CLIENT = String.format(
-            "SELECT %1$s.*, %2$s.%3$s FROM %1$s" +
-                    " JOIN %2$s ON %4$s = %2$s.%5$s" +
-                    " WHERE %6$s = ? ORDER BY ? LIMIT ?, ?",
-            DbNames.TABLE_REQUESTS,
-            DbNames.TABLE_STATUSES,
-            DbNames.STATUS_NAME,
-            DbNames.REQUEST_STATUS_ID,
-            DbNames.ID,
-            DbNames.REQUEST_CLIENT_ID);
 
     @Override
     public List<Request> getEntityListByClient(int clientId, int chunkSize, int chunkNumber, String sortingFactor)
@@ -195,21 +170,11 @@ public class RequestDaoMysql extends AbstractDao implements RequestDao {
             logger.error(message, ex);
             DBManager.rollbackTransaction(connection);
             DBManager.closeConnection(connection);
-            throw new DBException(message, ExceptionMessages.DB_INTERNAL, ex);
+            throw new DBException(message, ErrorMessages.DB_INTERNAL, ex);
         } finally {
             closeResultSet(resultSet);
         }
     }
-
-    private static final String QUERY_GET_BY_STATUS = String.format(
-            "SELECT %1$s.*, %2$s.%3$s FROM %1$s" +
-                    " JOIN %2$s ON %4$s = %2$s.%5$s" +
-                    " WHERE %2$s.%3$s = ? ORDER BY ? LIMIT ?, ?",
-            DbNames.TABLE_REQUESTS,
-            DbNames.TABLE_STATUSES,
-            DbNames.STATUS_NAME,
-            DbNames.REQUEST_STATUS_ID,
-            DbNames.ID);
 
     @Override
     public List<Request> getEntityListByStatus(Request.Status status, int chunkSize,
@@ -234,16 +199,11 @@ public class RequestDaoMysql extends AbstractDao implements RequestDao {
             logger.error(message, ex);
             DBManager.rollbackTransaction(connection);
             DBManager.closeConnection(connection);
-            throw new DBException(message, ExceptionMessages.DB_INTERNAL, ex);
+            throw new DBException(message, ErrorMessages.DB_INTERNAL, ex);
         } finally {
             closeResultSet(resultSet);
         }
     }
-
-    private static final String QUERY_GET_STATUS_ID = String.format("SELECT %s FROM %s WHERE %s = ?",
-            DbNames.ID,
-            DbNames.TABLE_STATUSES,
-            DbNames.STATUS_NAME);
 
     private int getStatusId(Request.Status status) throws DBException {
         ResultSet resultSet = null;
@@ -254,29 +214,20 @@ public class RequestDaoMysql extends AbstractDao implements RequestDao {
                 logger.error("Cannot get id of Status {}", status);
                 DBManager.rollbackTransaction(connection);
                 DBManager.closeConnection(connection);
-                throw new DBException(ExceptionMessages.DB_EMPTY_RESULT_SET,
-                        ExceptionMessages.DB_NOT_FOUND);
+                throw new DBException(ErrorMessages.DB_EMPTY_RESULT_SET,
+                        ErrorMessages.DB_NOT_FOUND);
             }
-            return resultSet.getInt(DbNames.ID);
+            return resultSet.getInt("id");
         } catch (SQLException ex) {
             String message = "Cannot get id of Status " + status;
             logger.error(message, ex);
             DBManager.rollbackTransaction(connection);
             DBManager.closeConnection(connection);
-            throw new DBException(message, ExceptionMessages.DB_INTERNAL, ex);
+            throw new DBException(message, ErrorMessages.DB_INTERNAL, ex);
         } finally {
             closeResultSet(resultSet);
         }
     }
-
-    private static final String QUERY_ADD = String.format(
-            "INSERT INTO %s (%s, %s, %s, %s) VALUES (?, ?, ?, ?)",
-            DbNames.TABLE_REQUESTS,
-            DbNames.REQUEST_CLIENT_ID,
-            DbNames.REQUEST_CREATION_DATE,
-            DbNames.REQUEST_STATUS_ID,
-            DbNames.REQUEST_DESCRIPTION
-    );
 
     private int addEntity(Request req, int statusId) throws DBException {
         ResultSet resultSet = null;
@@ -292,7 +243,7 @@ public class RequestDaoMysql extends AbstractDao implements RequestDao {
                 logger.error("Cannot receive Request id");
                 DBManager.rollbackTransaction(connection);
                 DBManager.closeConnection(connection);
-                throw new DBException(ExceptionMessages.DB_NO_KEY, ExceptionMessages.DB_INTERNAL);
+                throw new DBException(ErrorMessages.DB_NO_KEY, ErrorMessages.DB_INTERNAL);
             }
             return resultSet.getInt(1);
         } catch (SQLException ex) {
@@ -300,26 +251,11 @@ public class RequestDaoMysql extends AbstractDao implements RequestDao {
             logger.error(message, ex);
             DBManager.rollbackTransaction(connection);
             DBManager.closeConnection(connection);
-            throw new DBException(message, ExceptionMessages.DB_INTERNAL, ex);
+            throw new DBException(message, ErrorMessages.DB_INTERNAL, ex);
         } finally {
             closeResultSet(resultSet);
         }
     }
-
-    private static final String QUERY_UPDATE = String.format(
-            "UPDATE %s SET %s = ?, %s = ?, %s = ?, %s = ?, " +
-                    "%s = ? %s = ?, %s = ?, %s = ?, %s = ?, WHERE %s = ?",
-            DbNames.TABLE_REQUESTS,
-            DbNames.REQUEST_CLIENT_ID,
-            DbNames.REQUEST_CREATION_DATE,
-            DbNames.REQUEST_STATUS_ID,
-            DbNames.REQUEST_DESCRIPTION,
-            DbNames.REQUEST_COMPLETION_DATE,
-            DbNames.REQUEST_USER_REVIEW,
-            DbNames.REQUEST_CANCEL_REASON,
-            DbNames.REQUEST_MASTER_ID,
-            DbNames.REQUEST_PRICE,
-            DbNames.ID);
 
     private void updateEntity(Request req, int statusId) throws DBException {
         try (PreparedStatement statement = connection.prepareStatement(QUERY_UPDATE)) {
@@ -339,22 +275,25 @@ public class RequestDaoMysql extends AbstractDao implements RequestDao {
             logger.error(message, ex);
             DBManager.rollbackTransaction(connection);
             DBManager.closeConnection(connection);
-            throw new DBException(message, ExceptionMessages.DB_NOT_FOUND, ex);
+            throw new DBException(message, ErrorMessages.DB_NOT_FOUND, ex);
         }
     }
 
     private Request getRequestInstance(ResultSet resultSet) throws SQLException {
         Request req = new Request();
-        req.setId(resultSet.getInt(DbNames.ID));
-        req.setClientId(resultSet.getInt(DbNames.REQUEST_CLIENT_ID));
-        req.setCreationDate(resultSet.getTimestamp(DbNames.REQUEST_CREATION_DATE).toLocalDateTime());
-        req.setStatus(Request.Status.valueOf(resultSet.getString(DbNames.STATUS_NAME)));
-        req.setDescription(resultSet.getString(DbNames.REQUEST_DESCRIPTION));
-        req.setCompletionDate(resultSet.getTimestamp(DbNames.REQUEST_COMPLETION_DATE).toLocalDateTime());
-        req.setUserReview(resultSet.getString(DbNames.REQUEST_USER_REVIEW));
-        req.setCancelReason(resultSet.getString(DbNames.REQUEST_CANCEL_REASON));
-        req.setMasterId(resultSet.getInt(DbNames.REQUEST_MASTER_ID));
-        req.setPrice(resultSet.getInt(DbNames.REQUEST_PRICE));
+        req.setId(resultSet.getInt("id"));
+        req.setClientId(resultSet.getInt("client_id"));
+        req.setCreationDate(resultSet.getTimestamp("creation_date").toLocalDateTime());
+        req.setStatus(Request.Status.valueOf(resultSet.getString("status_name")));
+        req.setDescription(resultSet.getString("description"));
+        Timestamp completeDate = resultSet.getTimestamp("completion_date");
+        if (completeDate != null) {
+            req.setCompletionDate(completeDate.toLocalDateTime());
+        }
+        req.setUserReview(resultSet.getString("user_review"));
+        req.setCancelReason(resultSet.getString("cancel_reason"));
+        req.setMasterId(resultSet.getInt("master_id"));
+        req.setPrice(resultSet.getInt("price"));
         return req;
     }
 

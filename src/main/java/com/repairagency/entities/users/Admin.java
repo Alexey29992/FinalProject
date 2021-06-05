@@ -1,11 +1,11 @@
 package com.repairagency.entities.users;
 
-import com.repairagency.entities.EntityUtils;
+import com.repairagency.entities.EntityManager;
 import com.repairagency.entities.Role;
 import com.repairagency.entities.User;
 import com.repairagency.exceptions.DBException;
 import com.repairagency.exceptions.InvalidOperationException;
-import com.repairagency.validators.Validator;
+import com.repairagency.validator.Validator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -23,13 +23,13 @@ public class Admin extends Manager {
         logger.debug("Adding user with role '{}', login '{}'", role, login);
         Validator.validateLogin(login);
         Validator.validatePassword(password);
-        return EntityUtils.newUser(login, password, role);
+        return EntityManager.newUser(login, password, role);
     }
 
     public void setUserRole(User user, Role role) throws DBException {
         logger.debug("Applying to User#{} role '{}'", user.getId(), role);
         user.setRole(role);
-        EntityUtils.updateUser(user);
+        EntityManager.updateUser(user);
     }
 
 }

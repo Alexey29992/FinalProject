@@ -5,6 +5,10 @@ public enum Role {
     CLIENT(),
     MASTER(),
     MANAGER(),
-    ADMIN()
+    ADMIN();
+
+    public String toLowerCaseString() {
+        return super.toString().toLowerCase();
+    }
 
 }

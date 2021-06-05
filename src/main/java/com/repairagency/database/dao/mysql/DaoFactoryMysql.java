@@ -21,9 +21,4 @@ public class DaoFactoryMysql implements DaoFactory {
         return new UserDaoMysql(connection);
     }
 
-    @Override
-    public WalletDao getWalletDao(Connection connection) {
-        return new WalletDaoMysql(connection);
-    }
-
 }

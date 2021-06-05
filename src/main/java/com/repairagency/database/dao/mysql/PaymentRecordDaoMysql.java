@@ -1,12 +1,11 @@
 package com.repairagency.database.dao.mysql;
 
-import com.repairagency.database.DbNames;
 import com.repairagency.database.dao.AbstractDao;
 import com.repairagency.database.DBManager;
 import com.repairagency.database.dao.PaymentRecordDao;
 import com.repairagency.entities.beans.PaymentRecord;
 import com.repairagency.exceptions.DBException;
-import com.repairagency.exceptions.ExceptionMessages;
+import com.repairagency.exceptions.ErrorMessages;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -18,16 +17,18 @@ public class PaymentRecordDaoMysql extends AbstractDao implements PaymentRecordD
 
     private static final Logger logger = LogManager.getLogger();
 
+    private static final String QUERY_ADD = "INSERT INTO payment_record (date, sum," +
+            " destination, client_id) VALUES (?, ?, ?, ?)";
+    private static final String QUERY_UPDATE = "UPDATE payment_record SET date = ?," +
+            " sum = ?, destination = ?, client_id = ? WHERE id = ?";
+    private static final String QUERY_DELETE = "DELETE FROM payment_record WHERE id = ?";
+    private static final String QUERY_GET_BY_ID = "SELECT * FROM payment_record WHERE id = ?";
+    private static final String QUERY_GET_BY_CLIENT_ID = "SELECT * FROM payment_record WHERE" +
+            " client_id = ? ORDER BY ? LIMIT ?, ?";
+
     public PaymentRecordDaoMysql(Connection connection) {
         super(connection);
     }
-
-    private static final String QUERY_ADD = String.format("INSERT INTO %s (%s, %s, %s, %s) VALUES (?, ?, ?, ?)",
-            DbNames.TABLE_PAYMENT_RECORDS,
-            DbNames.PAYMENT_RECORD_DATE,
-            DbNames.PAYMENT_RECORD_SUM,
-            DbNames.PAYMENT_RECORD_DESTINATION,
-            DbNames.PAYMENT_RECORD_WALLET_ID);
 
     @Override
     public int addEntity(PaymentRecord paymentRecord) throws DBException {
@@ -37,14 +38,14 @@ public class PaymentRecordDaoMysql extends AbstractDao implements PaymentRecordD
             statement.setTimestamp(++k, Timestamp.valueOf(paymentRecord.getDate()));
             statement.setInt(++k, paymentRecord.getSum());
             statement.setString(++k, paymentRecord.getDestination());
-            statement.setInt(++k, paymentRecord.getWalletId());
+            statement.setInt(++k, paymentRecord.getClientId());
             statement.executeUpdate();
             resultSet = statement.getGeneratedKeys();
             if (!resultSet.next()) {
                 logger.error("Cannot receive PaymentRecord id");
                 DBManager.rollbackTransaction(connection);
                 DBManager.closeConnection(connection);
-                throw new DBException(ExceptionMessages.DB_NO_KEY, ExceptionMessages.DB_INTERNAL);
+                throw new DBException(ErrorMessages.DB_NO_KEY, ErrorMessages.DB_INTERNAL);
             }
             return resultSet.getInt(1);
         } catch (SQLException ex) {
@@ -52,19 +53,11 @@ public class PaymentRecordDaoMysql extends AbstractDao implements PaymentRecordD
             logger.error(message, ex);
             DBManager.rollbackTransaction(connection);
             DBManager.closeConnection(connection);
-            throw new DBException(message, ExceptionMessages.DB_INTERNAL, ex);
+            throw new DBException(message, ErrorMessages.DB_INTERNAL, ex);
         } finally {
             closeResultSet(resultSet);
         }
     }
-
-    private static final String QUERY_UPDATE = String.format("UPDATE %s SET %s = ?, %s = ?, %s = ?, %s = ? WHERE %s = ?",
-            DbNames.TABLE_PAYMENT_RECORDS,
-            DbNames.PAYMENT_RECORD_DATE,
-            DbNames.PAYMENT_RECORD_SUM,
-            DbNames.PAYMENT_RECORD_DESTINATION,
-            DbNames.PAYMENT_RECORD_WALLET_ID,
-            DbNames.ID);
 
     @Override
     public void updateEntity(PaymentRecord paymentRecord) throws DBException {
@@ -73,7 +66,7 @@ public class PaymentRecordDaoMysql extends AbstractDao implements PaymentRecordD
             statement.setTimestamp(++k, Timestamp.valueOf(paymentRecord.getDate()));
             statement.setInt(++k, paymentRecord.getSum());
             statement.setString(++k, paymentRecord.getDestination());
-            statement.setInt(++k, paymentRecord.getWalletId());
+            statement.setInt(++k, paymentRecord.getClientId());
             statement.setInt(++k, paymentRecord.getId());
             statement.executeUpdate();
         } catch (SQLException ex) {
@@ -81,13 +74,9 @@ public class PaymentRecordDaoMysql extends AbstractDao implements PaymentRecordD
             logger.error(message, ex);
             DBManager.rollbackTransaction(connection);
             DBManager.closeConnection(connection);
-            throw new DBException(message, ExceptionMessages.DB_INTERNAL, ex);
+            throw new DBException(message, ErrorMessages.DB_INTERNAL, ex);
         }
     }
-
-    private static final String QUERY_DELETE = String.format("DELETE FROM %s WHERE %s = ?",
-            DbNames.TABLE_PAYMENT_RECORDS,
-            DbNames.ID);
 
     @Override
     public void removeEntity(PaymentRecord paymentRecord) throws DBException {
@@ -99,13 +88,9 @@ public class PaymentRecordDaoMysql extends AbstractDao implements PaymentRecordD
             logger.error(message, ex);
             DBManager.rollbackTransaction(connection);
             DBManager.closeConnection(connection);
-            throw new DBException(message, ExceptionMessages.DB_INTERNAL, ex);
+            throw new DBException(message, ErrorMessages.DB_INTERNAL, ex);
         }
     }
-
-    private static final String QUERY_GET_BY_ID = String.format("SELECT * FROM %s WHERE %s = ?",
-            DbNames.TABLE_PAYMENT_RECORDS,
-            DbNames.ID);
 
     @Override
     public PaymentRecord getEntityById(int id) throws DBException {
@@ -117,8 +102,8 @@ public class PaymentRecordDaoMysql extends AbstractDao implements PaymentRecordD
                 logger.error("Cannot get PaymentRecord#{}", id);
                 DBManager.rollbackTransaction(connection);
                 DBManager.closeConnection(connection);
-                throw new DBException(ExceptionMessages.DB_EMPTY_RESULT_SET,
-                        ExceptionMessages.DB_NOT_FOUND);
+                throw new DBException(ErrorMessages.DB_EMPTY_RESULT_SET,
+                        ErrorMessages.DB_NOT_FOUND);
             }
             return getPaymentRecordInstance(resultSet);
         } catch (SQLException ex) {
@@ -126,27 +111,22 @@ public class PaymentRecordDaoMysql extends AbstractDao implements PaymentRecordD
             logger.error(message, ex);
             DBManager.rollbackTransaction(connection);
             DBManager.closeConnection(connection);
-            throw new DBException(message, ExceptionMessages.DB_INTERNAL, ex);
+            throw new DBException(message, ErrorMessages.DB_INTERNAL, ex);
         } finally {
             closeResultSet(resultSet);
         }
     }
 
-    private static final String QUERY_GET_BY_WALLET_ID = String.format(
-            "SELECT * FROM %s WHERE %s = ? ORDER BY ? LIMIT ?, ?",
-            DbNames.TABLE_PAYMENT_RECORDS,
-            DbNames.PAYMENT_RECORD_WALLET_ID);
-
     @Override
-    public List<PaymentRecord> getEntityList(int walletId, int chunkSize, int chunkNumber, String sortingFactor)
+    public List<PaymentRecord> getEntityList(int clientId, int chunkSize, int chunkNumber, String sortingFactor)
             throws DBException {
         List<PaymentRecord> paymentRecords = new ArrayList<>();
         ResultSet resultSet = null;
         int startPos = chunkNumber * chunkSize;
         int endPos = startPos + chunkSize;
-        try (PreparedStatement statement = connection.prepareStatement(QUERY_GET_BY_WALLET_ID)) {
+        try (PreparedStatement statement = connection.prepareStatement(QUERY_GET_BY_CLIENT_ID)) {
             int k = 0;
-            statement.setInt(++k, walletId);
+            statement.setInt(++k, clientId);
             statement.setString(++k, sortingFactor);
             statement.setInt(++k, startPos);
             statement.setInt(++k, endPos);
@@ -156,11 +136,11 @@ public class PaymentRecordDaoMysql extends AbstractDao implements PaymentRecordD
             }
             return paymentRecords;
         } catch (SQLException ex) {
-            String message = "Cannot get PaymentRecords for Wallet#" + walletId;
+            String message = "Cannot get PaymentRecords for Client#" + clientId;
             logger.error(message, ex);
             DBManager.rollbackTransaction(connection);
             DBManager.closeConnection(connection);
-            throw new DBException(message, ExceptionMessages.DB_INTERNAL, ex);
+            throw new DBException(message, ErrorMessages.DB_INTERNAL, ex);
         } finally {
             closeResultSet(resultSet);
         }
@@ -168,11 +148,11 @@ public class PaymentRecordDaoMysql extends AbstractDao implements PaymentRecordD
 
     private PaymentRecord getPaymentRecordInstance(ResultSet resultSet) throws SQLException {
         PaymentRecord pr = new PaymentRecord();
-        pr.setId(resultSet.getInt(DbNames.ID));
-        pr.setSum(resultSet.getInt(DbNames.PAYMENT_RECORD_SUM));
-        pr.setWalletId(resultSet.getInt(DbNames.PAYMENT_RECORD_WALLET_ID));
-        pr.setDate(resultSet.getTimestamp(DbNames.PAYMENT_RECORD_DATE).toLocalDateTime());
-        pr.setDestination(resultSet.getString(DbNames.PAYMENT_RECORD_DESTINATION));
+        pr.setId(resultSet.getInt("id"));
+        pr.setSum(resultSet.getInt("sum"));
+        pr.setClientId(resultSet.getInt("client_id"));
+        pr.setDate(resultSet.getTimestamp("date").toLocalDateTime());
+        pr.setDestination(resultSet.getString("destination"));
         return pr;
     }
 
