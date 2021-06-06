@@ -58,7 +58,7 @@ public class PaymentRecord extends PersistentEntity {
         return "PaymentRecord{" +
                 super.toString() +
                 "sum=" + sum +
-                ", walletId=" + clientId +
+                ", clientId=" + clientId +
                 ", date=" + date +
                 ", destination='" + destination + '\'' +
                 '}';

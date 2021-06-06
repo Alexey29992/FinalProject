@@ -42,6 +42,10 @@ public class EntityManager {
         Validator.validateLogin(login);
         Validator.validatePassword(password);
         User user = EntityManager.userGetByLogin(login);
+        if (user == null) {
+            logger.debug("Can not enter: '{}' not registered", login);
+            throw new InvalidOperationException(ErrorMessages.USER_LOGIN_NOT_FOUND);
+        }
         if (!user.getPassword().equals(password)) {
             logger.debug("Can not enter: password not correct");
             throw new InvalidOperationException(ErrorMessages.USER_PASSWORD_INCORRECT);
@@ -100,11 +104,11 @@ public class EntityManager {
         return list;
     }
 
-    public static List<PaymentRecord> paymentRecordGetByUser(int walletId, int chunkSize, int chunkNumber, String sortingFactor)
+    public static List<PaymentRecord> paymentRecordGetByUser(int clientId, int chunkSize, int chunkNumber, String sortingFactor)
             throws DBException {
         Connection connection = startTransaction();
         PaymentRecordDao dao = getPaymentRecordDao(connection);
-        List<PaymentRecord> list = dao.getEntityList(walletId, chunkSize, chunkNumber, sortingFactor);
+        List<PaymentRecord> list = dao.getEntityList(clientId, chunkSize, chunkNumber, sortingFactor);
         completeTransaction(connection);
         return list;
     }

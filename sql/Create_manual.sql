@@ -3,12 +3,14 @@ USE radb;
 
 CREATE TABLE IF NOT EXISTS status (
     id INT PRIMARY KEY AUTO_INCREMENT,
-    status_name VARCHAR(30) NOT NULL UNIQUE
+    status_name VARCHAR(30) NOT NULL UNIQUE,
+    INDEX status_status_name_idx (status_name)
 );
 
 CREATE TABLE IF NOT EXISTS role (
     id INT PRIMARY KEY AUTO_INCREMENT,
-    role_name VARCHAR(15) NOT NULL UNIQUE
+    role_name VARCHAR(15) NOT NULL UNIQUE,
+    INDEX role_role_name_idx (role_name)
 );
 
 CREATE TABLE IF NOT EXISTS user (
@@ -18,18 +20,21 @@ CREATE TABLE IF NOT EXISTS user (
     role_id INT NOT NULL,
     FOREIGN KEY (role_id)
         REFERENCES role (id)
-        ON DELETE RESTRICT
+        ON DELETE RESTRICT,
+    INDEX user_login_idx (login)
 );
 
 CREATE TABLE IF NOT EXISTS client (
-    id INT PRIMARY KEY AUTO_INCREMENT,
+    id INT PRIMARY KEY,
+    ph_number VARCHAR(16),
+    balance INT NOT NULL DEFAULT 0,
     FOREIGN KEY (id)
         REFERENCES user (id)
         ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS master (
-    id INT PRIMARY KEY AUTO_INCREMENT,
+    id INT PRIMARY KEY,
     FOREIGN KEY (id)
         REFERENCES user (id)
         ON UPDATE CASCADE
@@ -51,15 +56,10 @@ CREATE TABLE IF NOT EXISTS request (
         ON DELETE CASCADE,
     FOREIGN KEY (status_id)
         REFERENCES status (id)
-        ON DELETE RESTRICT
-);
-
-CREATE TABLE IF NOT EXISTS wallet (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    balance INT NOT NULL DEFAULT 0,
-    FOREIGN KEY (id)
-        REFERENCES client (id)
-        ON DELETE CASCADE
+        ON DELETE CASCADE,
+    INDEX request_client_id_idx (client_id),
+    INDEX request_status_id_idx (status_id),
+    INDEX request_master_id_idx (master_id)
 );
 
 CREATE TABLE IF NOT EXISTS payment_record (
@@ -67,10 +67,11 @@ CREATE TABLE IF NOT EXISTS payment_record (
     date DATETIME NOT NULL,
     sum INT NOT NULL,
     destination VARCHAR(50) NULL,
-    wallet_id INT NOT NULL,
-    FOREIGN KEY (wallet_id)
-        REFERENCES wallet (id)
-        ON DELETE CASCADE
+    client_id INT NOT NULL,
+    FOREIGN KEY (client_id)
+        REFERENCES client (id)
+        ON DELETE CASCADE,
+    INDEX payment_record_client_id_idx (client_id)
 );
 
 INSERT INTO role (role_name) VALUES ('CLIENT');
@@ -84,3 +85,5 @@ INSERT INTO status (status_name) VALUES ('PAID');
 INSERT INTO status (status_name) VALUES ('CANCELLED');
 INSERT INTO status (status_name) VALUES ('IN_PROCESS');
 INSERT INTO status (status_name) VALUES ('DONE');
+
+INSERT INTO user (login, password, role_id) VALUES ('admin', 'admin', (SELECT id FROM role WHERE role_name = 'ADMIN'));

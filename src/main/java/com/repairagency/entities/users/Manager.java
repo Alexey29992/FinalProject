@@ -36,8 +36,8 @@ public class Manager extends User {
         EntityManager.updateRequest(request);
     }
 
-    public void topUpClientWallet(Client client, int amount) throws DBException {
-        logger.debug("Adding sum of money ({}) to Client#{}'s wallet by Manager#{}",
+    public void topUpClientBalance(Client client, int amount) throws DBException {
+        logger.debug("Adding sum of money ({}) to Client#{}'s balance by Manager#{}",
                 amount, client.getId(), getId());
         EntityManager.userGiveMoney(client, amount);
     }

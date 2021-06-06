@@ -1,7 +1,6 @@
 USE radb;
 
 DROP TABLE IF EXISTS payment_record;
-DROP TABLE IF EXISTS wallet;
 DROP TABLE IF EXISTS request;
 DROP TABLE IF EXISTS client;
 DROP TABLE IF EXISTS master;
