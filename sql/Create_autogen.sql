@@ -50,6 +50,8 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `radb`.`client` (
   `id` INT NOT NULL,
+  `ph_number` VARCHAR(16) NULL,
+  `balance` INT NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
   CONSTRAINT `fk_client_user1`
     FOREIGN KEY (`id`)
@@ -122,35 +124,19 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `radb`.`wallet`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `radb`.`wallet` (
-  `balance` INT NOT NULL DEFAULT 0,
-  `id` INT NOT NULL,
-  PRIMARY KEY (`id`),
-  INDEX `fk_wallet_client1_idx` (`id` ASC) VISIBLE,
-  CONSTRAINT `fk_wallet_client1`
-    FOREIGN KEY (`id`)
-    REFERENCES `radb`.`client` (`id`)
-    ON DELETE CASCADE
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
 -- Table `radb`.`payment_record`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `radb`.`payment_record` (
-  `id` INT NOT NULL AUTO_INCREMENT,
+  `id` INT NOT NULL,
   `date` DATETIME NOT NULL,
   `destination` VARCHAR(50) NULL,
   `sum` INT NOT NULL,
-  `wallet_id` INT NOT NULL,
+  `client_id` INT NOT NULL,
   PRIMARY KEY (`id`),
-  INDEX `fk_payment_record_wallet1_idx` (`wallet_id` ASC) VISIBLE,
-  CONSTRAINT `fk_payment_record_wallet1`
-    FOREIGN KEY (`wallet_id`)
-    REFERENCES `radb`.`wallet` (`id`)
+  INDEX `fk_payment_record_client1_idx` (`client_id` ASC) VISIBLE,
+  CONSTRAINT `fk_payment_record_client1`
+    FOREIGN KEY (`client_id`)
+    REFERENCES `radb`.`client` (`id`)
     ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;

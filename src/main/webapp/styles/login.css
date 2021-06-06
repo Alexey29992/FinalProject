@@ -1,0 +1,37 @@
+.login-form {
+    width: 350px;
+    margin-top: 150px;
+    margin-left: auto;
+    margin-right: auto;
+    border: 1px solid #9a9a9a;
+    border-radius: 10px;
+    font-size: 25px;
+    text-align: center;
+}
+
+.input-text-form {
+    width: 270px;
+    padding: 7px 10px;
+    margin: 3px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.input-text-form:focus {
+    border-radius: 0;
+}
+
+.submit-button {
+    margin: 20px 0 25px 0;
+    font-size: 25px;
+    transition-duration: 0.4s;
+    border: 1px solid #c2c2c2;
+    border-radius: 5px;
+}
+
+.submit-button:hover {
+    background-color: #bce2e0;
+    border-color:  #306fff;
+}

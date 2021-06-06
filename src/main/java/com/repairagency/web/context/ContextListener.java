@@ -1,4 +1,4 @@
-package com.repairagency.context;
+package com.repairagency.web.context;
 
 import com.repairagency.database.DBManager;
 import org.apache.logging.log4j.LogManager;

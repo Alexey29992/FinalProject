@@ -128,11 +128,8 @@ public class UserDaoMysql extends AbstractDao implements UserDao {
             statement.setString(1, login);
             resultSet = statement.executeQuery();
             if (!resultSet.next()) {
-                logger.error("Cannot get User with login '{}'", login);
-                DBManager.rollbackTransaction(connection);
-                DBManager.closeConnection(connection);
-                throw new DBException(ErrorMessages.DB_EMPTY_RESULT_SET,
-                        ErrorMessages.USER_LOGIN_NOT_FOUND);
+                logger.trace("Cannot get User with login '{}'", login);
+                return null;
             }
             User user = getUserInstance(resultSet);
             logger.trace("Role : {}", user.getRole());
