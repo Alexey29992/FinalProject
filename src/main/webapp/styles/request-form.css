@@ -1,0 +1,40 @@
+.request-form {
+    width: 700px;
+    margin-top: 50px;
+    margin-left: auto;
+    margin-right: auto;
+    border: 1px solid #9a9a9a;
+    border-radius: 10px;
+    font-size: 25px;
+    text-align: center;
+}
+
+.textarea {
+    width: 600px;
+    height: 300px;
+    padding: 12px 20px;
+    box-sizing: border-box;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    resize: none;
+    font-size: 18px;
+}
+
+.textarea:focus {
+    border-radius: 0;
+}
+
+.submit-button {
+    margin: 20px;
+    padding: 5px 15px 10px;
+    font-size: 25px;
+    font-family: main-font, serif;
+    transition-duration: 0.4s;
+    border: 1px solid #c2c2c2;
+    border-radius: 5px;
+}
+
+.submit-button:hover {
+    background-color: #bce2e0;
+    border-color:  #306fff;
+}

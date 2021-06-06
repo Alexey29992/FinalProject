@@ -1,0 +1,18 @@
+.error-img {
+    display: inline-block;
+}
+
+.error {
+    margin: 20px auto;
+    width: max-content;
+    background: #b31313;
+    color: #fff;
+    padding: 10px;
+    border-radius: 10px;
+    font-size: 30px;
+    text-align: center;
+}
+
+.error-page {
+    margin-top: 150px;
+}
