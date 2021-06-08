@@ -24,14 +24,19 @@ public class RequestDaoMysql extends AbstractDao implements RequestDao {
     private static final String QUERY_ADD = "INSERT INTO request (client_id, creation_date," +
             " status_id, description) VALUES (?, ?, ?, ?)";
     private static final String QUERY_GET_STATUS_ID = "SELECT id FROM status WHERE status_name = ?";
+
     private static final String QUERY_GET_BY_STATUS = "SELECT request.*, status.status_name FROM " +
             "request JOIN status ON status_id = status.id WHERE status.status_name = ? ORDER BY ? LIMIT ?, ?";
+
     private static final String QUERY_GET_BY_CLIENT = "SELECT request.*, status.status_name FROM request " +
             "JOIN status ON status_id = status.id WHERE client_id = ? ORDER BY ? LIMIT ?, ?";
+
     private static final String QUERY_GET_BY_MASTER = "SELECT request.*, status.status_name FROM request " +
             "JOIN status ON status_id = status.id WHERE master_id = ? ORDER BY ? LIMIT ?, ?";
+
     private static final String QUERY_GET_ALL = "SELECT request.*, status.status_name FROM request JOIN " +
             "status ON status_id = status.id ORDER BY ? LIMIT ?, ?";
+
     private static final String QUERY_GET_BY_ID = "SELECT request.*, status.status_name FROM request JOIN " +
             "status ON status_id = status.id WHERE request.id = ?";
 
@@ -196,6 +201,28 @@ public class RequestDaoMysql extends AbstractDao implements RequestDao {
             return requests;
         } catch (SQLException ex) {
             String message = "Cannot get Request List with Status#" + status;
+            logger.error(message, ex);
+            DBManager.rollbackTransaction(connection);
+            DBManager.closeConnection(connection);
+            throw new DBException(message, ErrorMessages.DB_INTERNAL, ex);
+        } finally {
+            closeResultSet(resultSet);
+        }
+    }
+
+    @Override
+    public List<Request> getEntityList(String query) throws DBException {
+        logger.trace("getEntityList#query : {}", query);
+        List<Request> requests = new ArrayList<>();
+        ResultSet resultSet = null;
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                requests.add(getRequestInstance(resultSet));
+            }
+            return requests;
+        } catch (SQLException ex) {
+            String message = "Cannot get Entity List";
             logger.error(message, ex);
             DBManager.rollbackTransaction(connection);
             DBManager.closeConnection(connection);

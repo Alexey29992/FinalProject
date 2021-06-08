@@ -1,4 +1,5 @@
 @import "error.css";
+@import "tables.css";
 
 @font-face {
     font-family: main-font;
@@ -7,6 +8,7 @@
 
 html {
     font-family: main-font, serif;
+    min-width: 820px;
 }
 
 .center {
@@ -18,6 +20,30 @@ html {
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+button {
+    padding: 5px 10px 5px 10px;
+    font-family: main-font, serif;
+    transition-duration: 0.4s;
+    border: 1px solid #9a9a9a;
+    border-radius: 7px;
+    background-color: #ddd;
+}
+
+input[type=submit] {
+    padding: 0 10px 5px 10px;
+    font-size: 25px;
+    font-family: main-font, serif;
+    transition-duration: 0.4s;
+    border: 1px solid #9a9a9a;
+    border-radius: 7px;
+    background-color: #ddd;
+}
+
+button:hover {
+    background-color: #bce2e0;
+    border-color:  #306fff;
 }
 
 .head {
@@ -63,6 +89,7 @@ html {
 }
 
 .button-img {
+    max-block-size: 50px;
     vertical-align: middle;
 }
 
@@ -77,3 +104,26 @@ html {
     top: 20px;
     left: 30px;
 }
+
+.blue-button {
+    border: initial;
+    display: inline-block;
+    position: relative;
+    margin: 10px;
+    padding: 0 20px;
+    text-align: center;
+    text-decoration: none;
+    font: bold 12px/25px Arial, sans-serif;
+    text-shadow: 1px 1px 1px rgba(255,255,255, .22);
+    border-radius: 30px;
+    box-shadow: 1px 1px 1px rgba(0,0,0, .29), inset 1px 1px 1px rgba(255,255,255, .44);
+    transition: all 0.15s ease;
+    color: #19667d;
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#70c9e3), color-stop(100%,#39a0be));
+}
+
+.blue-button:hover {
+    background: -webkit-gradient(linear, left bottom, left top, color-stop(0%,#70c9e3), color-stop(100%,#39a0be));
+    color: white;
+}
+

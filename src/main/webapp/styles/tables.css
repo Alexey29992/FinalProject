@@ -1,0 +1,106 @@
+
+
+table {
+    text-align: left;
+    font-family: Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+table caption {
+    display: none;
+}
+
+table td, table th {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+table tr {
+    color: #474747FF;
+}
+
+table tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+table tr:hover {
+    color: #145366;
+    background-color: #ddd;
+}
+
+table th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: #04AA6D;
+    color: #eeeeee;
+}
+
+.table-control button {
+    border: initial;
+    display: inline-block;
+    position: relative;
+    padding: 0 20px;
+    margin: -3px;
+    text-align: center;
+    text-decoration: none;
+    font: bold 12px/25px Arial, sans-serif;
+    text-shadow: 1px 1px 1px rgba(255,255,255, .22);
+    border-radius: 0;
+    box-shadow: 0 1px 3px rgba(0,0,0, 0.29), inset 1px 1px 1px rgba(255,255,255, 0.44);
+    transition: all 0.15s ease;
+}
+
+.table-control button:enabled {
+    color: #145366FF;
+    background: #70c9e3;
+    background: -webkit-linear-gradient(top,  #70c9e3 0%,#39a0be 100%);
+}
+
+.table-control button:hover:enabled {
+    background: -webkit-gradient(linear, left bottom, left top, color-stop(0%,#70c9e3), color-stop(100%,#39a0be));
+    color: white;
+}
+
+.table-control button:disabled {
+    box-shadow: inset 0 1px 3px #0000004D, 0 1px #FFFFFF19;
+    color: #515151;
+    background: #d3d3d3;
+    background: -webkit-linear-gradient(bottom,  #d3d3d3 0%,#8a8a8a 100%);
+}
+
+#first-page {
+    margin-right: 1px;
+}
+
+.page-number {
+    color: #08334EFF;
+    position: relative;
+    top: 2px;
+    text-align: center;
+    font: bold 18px Arial, sans-serif;
+    border: 1px solid #9a9a9a;
+    border-radius: 4px;
+    padding: 5px 11px 4px 11px;
+    display: inline-flex;
+}
+
+.page-frame {
+    text-align: center;
+    border: 1px solid #9a9a9a;
+    padding: 2px 10px 6px 10px;
+    border-radius: 4px;
+    font-size: 18px;
+    display: inline-block;
+}
+
+.size-frame {
+    text-align: center;
+    border: 1px solid #9a9a9a;
+    padding: 5px 10px 10px 10px;
+    border-radius: 4px;
+    font-size: 18px;
+    display: inline-block;
+}
+

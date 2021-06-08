@@ -1,5 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="my" tagdir="/WEB-INF/tags"%>
+<%@ taglib prefix="my" tagdir="/WEB-INF/tags" %>
 
 <header class="head">
     <h1>Welcome to repairing agency!</h1>

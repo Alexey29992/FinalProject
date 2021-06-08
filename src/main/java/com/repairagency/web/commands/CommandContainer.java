@@ -27,6 +27,7 @@ public class CommandContainer {
     }
 
     public static Command getCommand(String key) {
+        logger.trace("CommandContainer#getCommand queried with command : {}", key);
         if (!commandMap.containsKey(key)) {
             logger.error("Invalid command {} was queried", key);
             return commandMap.get(Names.INVALID_COMMAND);

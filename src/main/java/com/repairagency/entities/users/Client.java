@@ -73,4 +73,13 @@ public class Client extends User {
         return EntityManager.paymentRecordGetByUser(getId(), chunkSize, chunkNumber, sortingFactor);
     }
 
+    @Override
+    public String toString() {
+        return super.toString() +
+                " Client{" +
+                "balance=" + balance +
+                ", phNumber='" + phNumber + '\'' +
+                '}';
+    }
+
 }

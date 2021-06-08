@@ -2,7 +2,7 @@
 <c:if test="${not empty sessionScope.user}">
     <a href="${pageContext.request.contextPath}/main/logout.jsp" class="log-in-out-button">
         <button class="medium-text">
-            <img src="${pageContext.request.contextPath}/resources/out.png" class="button-img" alt="out-button"/>
+            <img src="${pageContext.request.contextPath}/resources/logout.png" class="button-img" alt="out-button"/>
             Log out
         </button>
     </a>
@@ -10,7 +10,7 @@
 <c:if test="${empty sessionScope.user}">
     <a href="${pageContext.request.contextPath}/main/login.jsp" class="log-in-out-button">
         <button class="medium-text">
-            <img src="${pageContext.request.contextPath}/resources/enter.png" class="button-img" alt="enter-button"/>
+            <img src="${pageContext.request.contextPath}/resources/login.png" class="button-img" alt="enter-button"/>
             Log in
         </button>
     </a>

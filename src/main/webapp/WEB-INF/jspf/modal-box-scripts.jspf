@@ -1,0 +1,17 @@
+<script>
+    function openModal(suffix) {
+        document.getElementById('modal-box' + suffix).style.display = "block";
+        document.getElementById('modal-content' + suffix).innerHTML =
+            document.getElementById('modal-button' + suffix).innerHTML;
+    }
+
+    function closeModal(suffix) {
+        document.getElementById('modal-box' + suffix).style.display = "none";
+    }
+
+    window.onclick = function (event) {
+        if (event.target.id.includes("modal-box")) {
+            event.target.style.display = "none";
+        }
+    }
+</script>

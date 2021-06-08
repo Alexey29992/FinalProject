@@ -1,0 +1,85 @@
+@import "select.css";
+@import "toggle-radio.css";
+@import "modal-box.css";
+
+* {
+    box-sizing: border-box;
+}
+
+.row {
+    text-align: center;
+}
+
+.column-middle {
+    display: inline-block;
+    width: 100%;
+    padding: 10px;
+}
+
+.column-middle-left {
+    display: inline-block;
+    width: 56%;
+    padding: 10px;
+}
+
+.column-middle-right {
+    display: inline-block;
+    width: 43%;
+    padding: 8px;
+
+}
+
+@media (min-width: 1300px) {
+    .column-left, .column-right {
+        display: initial;
+    }
+    .column-middle {
+        width: 70%;
+    }
+}
+
+.row:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+.req-table td:nth-child(1) {
+    width: 50px;
+}
+
+.req-table td:nth-child(2) {
+    width: 50px;
+}
+
+.req-table td:nth-child(n+3):nth-child(-n+5) {
+    width: 180px;
+}
+
+.req-table td:nth-child(n+6):nth-child(-n+7){
+    max-width: 370px;
+    width: 370px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+.filter-frame {
+    display: inline-block;
+    width: 36%;
+}
+
+.sort-frame {
+    display: inline-block;
+    width: 36%;
+}
+
+.order-frame {
+    display: inline-block;
+    position: relative;
+    top: 3px;
+    padding-top: 9px;
+    padding-left: 1px;
+    min-width: 145px;
+    min-height: 42px;
+    width: 26%;
+}

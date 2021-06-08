@@ -1,6 +1,7 @@
 package com.repairagency.web.context;
 
 import com.repairagency.database.DBManager;
+import com.repairagency.web.constants.Constants;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -16,6 +17,7 @@ public class ContextListener implements ServletContextListener {
     @Override
     public void contextInitialized(ServletContextEvent sce) {
         logger.debug("Initializing context");
+        sce.getServletContext().setAttribute("constants", new Constants());
         DBManager.initDataSource();
         DBManager.defaultDaoFactory();
     }

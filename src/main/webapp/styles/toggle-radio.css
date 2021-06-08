@@ -1,0 +1,33 @@
+.toggle-radio input {
+    display: none;
+}
+
+.toggle-radio label {
+    background-color: #e4e4e4;
+    color: #0000009F;
+    text-align: center;
+    padding: 7px 16px;
+    margin-right: -5px;
+    box-shadow: inset 0 1px 3px #0000004D, 0 1px #FFFFFF19;
+    transition: all 0.1s ease-in-out;
+}
+
+.toggle-radio input:checked + label {
+    background: -webkit-linear-gradient(top,  #70c9e3 0%,#39a0be 100%);
+    box-shadow: inset 1px 1px 1px rgba(255,255,255, 0.44);
+}
+
+.toggle-radio input:not(:checked):hover + label {
+    cursor: pointer;
+    color: black;
+    background: #d3d3d3 -webkit-linear-gradient(bottom, #d3d3d3 0%, #8a8a8a 100%);
+}
+
+.toggle-radio label:first-of-type {
+    border-radius: 5px 0 0 5px;
+}
+
+.toggle-radio label:last-of-type {
+    border-radius: 0 5px 5px 0;
+}
+

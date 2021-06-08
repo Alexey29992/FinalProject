@@ -22,6 +22,14 @@ public class EntityManager {
 
     private static final Logger logger = LogManager.getLogger();
 
+    public static List<Request> getRequestList(String query) throws DBException {
+        Connection connection = startTransaction();
+        RequestDao dao = getRequestDao(connection);
+        List<Request> list = dao.getEntityList(query);
+        completeTransaction(connection);
+        return list;
+    }
+
     ////////////////////////////////////////////////////////
 
     public static User signUp(String login, String password)
