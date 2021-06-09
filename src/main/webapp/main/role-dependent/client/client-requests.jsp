@@ -229,24 +229,31 @@
             <c:forEach var="row" items="${requestScope.requestList}">
                 <tr>
                     <td>${row.id}</td>
-                    <td>${row.price}</td>
+                    <td>
+                        <c:if test="${row.price > 0}">
+                            <form method="post" action="controller">
+                                <input type="hidden" name="command" value="make-payment"/>
+                                <input type="hidden" name="request-id" value="${row.id}"/>
+                                <button>${row.price}</button>
+                            </form>
+                        </c:if>
+                    </td>
                     <td>${row.status}</td>
                     <td>${row.creationDate}</td>
                     <td>${row.completionDate}</td>
-                    <td><my:modal content="${row.description}"/></td>
+                    <td><my:modalShow content="${row.description}"/></td>
                     <td>
                         <c:choose>
-                            <c:when test="">
-                                <div class="feedback-content">
-                                    <my:modal content="${row.userReview}"/>
-                                </div>
+                            <c:when test="${not empty row.userReview}">
+                                <my:modalShow content="${row.userReview}"/>
                             </c:when>
                             <c:otherwise>
-                                <div class="feedback-button-frame">
-                                    <button class="feedback-button" onclick="">
-                                        Feedback
-                                    </button>
-                                </div>
+                                <c:if test="${row.status.name() == 'DONE' && empty row.userReview}">
+                                    <form method="get" action="feedback.jsp">
+                                        <input type="hidden" name="request-id" value="${row.id}"/>
+                                        <button>Leave Feedback</button>
+                                    </form>
+                                </c:if>
                             </c:otherwise>
                         </c:choose>
                     </td>

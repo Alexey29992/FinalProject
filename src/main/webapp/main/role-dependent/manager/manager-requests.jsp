@@ -5,7 +5,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link href="${pageContext.request.contextPath}/styles/client-requests.css" rel="stylesheet" type="text/css">
+    <link href="${pageContext.request.contextPath}/styles/manager-requests.css" rel="stylesheet" type="text/css">
     <link href="${pageContext.request.contextPath}/styles/common.css" rel="stylesheet" type="text/css">
     <link rel="icon" href="${pageContext.request.contextPath}/resources/title.png" type="image/icon">
     <title>Request Management</title>
@@ -39,7 +39,7 @@
             submitForm();
         }
 
-        <c:if test="${requestScope.requestList == null}">
+        <c:if test="${requestScope.requestData == null}">
         window.onload = function () {
             submitForm();
         }
@@ -61,93 +61,121 @@
                 <input type="hidden" name="command" value="get-manager-requests"/>
                 <input type="hidden" id="size" name="size" value="${pageContext.request.getParameter('size')}"/>
                 <input type="hidden" id="page" name="page" value="${pageContext.request.getAttribute('page')}"/>
-                <div class="filter-frame">
-                    <label>
-                        Filter by status:
-                        <select name="filter-status" class="select-css" onchange="this.form.submit()">
-                            <c:set var="filterStatus" value="${pageContext.request.getParameter('filter-status')}"/>
-                            <option value="none"
-                                    <c:if test="${filterStatus == 'none'}">
-                                        selected
-                                    </c:if>>
-                                none
-                            </option>
-                            <option value="new"
-                                    <c:if test="${filterStatus == 'new'}">
-                                        selected
-                                    </c:if>>
-                                New
-                            </option>
-                            <option value="wait-for-payment"
-                                    <c:if test="${filterStatus == 'wait-for-payment'}">
-                                        selected
-                                    </c:if>>
-                                Wait for payment
-                            </option>
-                            <option value="paid"
-                                    <c:if test="${filterStatus == 'paid'}">
-                                        selected
-                                    </c:if>>
-                                Paid
-                            </option>
-                            <option value="cancelled"
-                                    <c:if test="${filterStatus == 'cancelled'}">
-                                        selected
-                                    </c:if>>
-                                Cancelled
-                            </option>
-                            <option value="in-process"
-                                    <c:if test="${filterStatus == 'in-process'}">
-                                        selected
-                                    </c:if>>
-                                In process
-                            </option>
-                            <option value="done"
-                                    <c:if test="${filterStatus == 'done'}">
-                                        selected
-                                    </c:if>>
-                                Done
-                            </option>
-                        </select>
-                    </label>
+                <div class="dropdown-filters-outer">
+                    <div class="filter-status-frame">
+                        <label>
+                            Filter by status:
+                            <select name="filter-status" class="select-css" onchange="this.form.submit()">
+                                <c:set var="filter" value="${pageContext.request.getParameter('filter-status')}"/>
+                                <option value="none"
+                                        <c:if test="${filter == 'none'}">
+                                            selected
+                                        </c:if>>
+                                    none
+                                </option>
+                                <option value="new"
+                                        <c:if test="${filter == 'new'}">
+                                            selected
+                                        </c:if>>
+                                    New
+                                </option>
+                                <option value="wait-for-payment"
+                                        <c:if test="${filter == 'wait-for-payment'}">
+                                            selected
+                                        </c:if>>
+                                    Wait for payment
+                                </option>
+                                <option value="paid"
+                                        <c:if test="${filter == 'paid'}">
+                                            selected
+                                        </c:if>>
+                                    Paid
+                                </option>
+                                <option value="cancelled"
+                                        <c:if test="${filter == 'cancelled'}">
+                                            selected
+                                        </c:if>>
+                                    Cancelled
+                                </option>
+                                <option value="in-process"
+                                        <c:if test="${filter == 'in-process'}">
+                                            selected
+                                        </c:if>>
+                                    In process
+                                </option>
+                                <option value="done"
+                                        <c:if test="${filter == 'done'}">
+                                            selected
+                                        </c:if>>
+                                    Done
+                                </option>
+                            </select>
+                        </label>
+                    </div>
+                    <div class="sort-frame">
+                        <label>
+                            Sort by:
+                            <select name="sort-factor" class="select-css" onchange="this.form.submit()">
+                                <c:set var="sortFactor" value="${pageContext.request.getParameter('sort-factor')}"/>
+                                <option value="id"
+                                        <c:if test="${sortFactor == 'id'}">
+                                            selected
+                                        </c:if>>
+                                    ID
+                                </option>
+                                <option value="creation-date"
+                                        <c:if test="${sortFactor == 'creation-date'}">
+                                            selected
+                                        </c:if>>
+                                    Creation Date
+                                </option>
+                                <option value="status"
+                                        <c:if test="${sortFactor == 'status'}">
+                                            selected
+                                        </c:if>>
+                                    Status
+                                </option>
+                                <option value="price"
+                                        <c:if test="${sortFactor == 'price'}">
+                                            selected
+                                        </c:if>>
+                                    Price
+                                </option>
+                                <option value="completion-date"
+                                        <c:if test="${sortFactor == 'completion-date'}">
+                                            selected
+                                        </c:if>>
+                                    Completion Date
+                                </option>
+                            </select>
+                        </label>
+                    </div>
                 </div>
-                <div class="sort-frame">
-                    <label>
-                        Sort by:
-                        <select name="sort-factor" class="select-css" onchange="this.form.submit()">
-                            <c:set var="sortFactor" value="${pageContext.request.getParameter('sort-factor')}"/>
-                            <option value="id"
-                                    <c:if test="${sortFactor == 'id'}">
-                                        selected
-                                    </c:if>>
-                                ID
-                            </option>
-                            <option value="creation-date"
-                                    <c:if test="${sortFactor == 'creation-date'}">
-                                        selected
-                                    </c:if>>
-                                Creation Date
-                            </option>
-                            <option value="status"
-                                    <c:if test="${sortFactor == 'status'}">
-                                        selected
-                                    </c:if>>
-                                Status
-                            </option>
-                            <option value="price"
-                                    <c:if test="${sortFactor == 'price'}">
-                                        selected
-                                    </c:if>>
-                                Price
-                            </option>
-                            <option value="completion-date"
-                                    <c:if test="${sortFactor == 'completion-date'}">
-                                        selected
-                                    </c:if>>
-                                Completion Date
-                            </option>
-                        </select>
-                    </label>
+                <div class="text-filters-outer">
+                    <div class="text-filters">
+                        <div class="filter-master-frame">
+                            <label>
+                                Filter by master:
+                                <input type="text" name="filter-master" placeholder="Master's login..."
+                                       value="${pageContext.request.getParameter('filter-master')}"/>
+                            </label>
+                        </div>
+                        <div class="filter-client-frame">
+                            <label>
+                                Filter by client:
+                                <input type="text" name="filter-client" placeholder="Client's login..."
+                                       value="${pageContext.request.getParameter('filter-client')}"/>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="refresh-button-frame">
+                        <label>
+                            <button class="refresh-button">
+                                <img src="${pageContext.request.contextPath}/resources/refresh.png" alt="refresh"/>
+                            </button>
+                        </label>
+                    </div>
+
                 </div>
                 <div class="order-frame toggle-radio">
                     <c:set var="sortOrder" value="${pageContext.request.getParameter('sort-order')}"/>
@@ -218,6 +246,8 @@
             <caption>Request history:</caption>
             <tr>
                 <th scope="col">Id</th>
+                <th scope="col">User</th>
+                <th scope="col">Master</th>
                 <th scope="col">Price</th>
                 <th scope="col">Status</th>
                 <th scope="col">Creation Date</th>
@@ -225,30 +255,20 @@
                 <th scope="col">Description</th>
                 <th scope="col">Feedback</th>
             </tr>
-            <c:forEach var="row" items="${requestScope.requestList}">
+            <c:forEach var="row" items="${requestScope.requestData}">
                 <tr>
-                    <td>${row.id}</td>
-                    <td>${row.price}</td>
-                    <td>${row.status}</td>
-                    <td>${row.creationDate}</td>
-                    <td>${row.completionDate}</td>
-                    <td><my:modal content="${row.description}"/></td>
+                    <td>${row.request.id}</td>
+                    <td>${row.clientLogin}</td>
                     <td>
-                        <c:choose>
-                            <c:when test="">
-                                <div class="feedback-content">
-                                    <my:modal content="${row.userReview}"/>
-                                </div>
-                            </c:when>
-                            <c:otherwise>
-                                <div class="feedback-button-frame">
-                                    <button class="feedback-button" onclick="">
-                                        Feedback
-                                    </button>
-                                </div>
-                            </c:otherwise>
-                        </c:choose>
+                            ${row.masterLogin}
+
                     </td>
+                    <td>${row.request.price}</td>
+                    <td>${row.request.status}</td>
+                    <td>${row.request.creationDate}</td>
+                    <td>${row.request.completionDate}</td>
+                    <td><my:modalShow content="${row.request.description}"/></td>
+                    <td><my:modalShow content="${row.request.userReview}"/></td>
                 </tr>
             </c:forEach>
         </table>

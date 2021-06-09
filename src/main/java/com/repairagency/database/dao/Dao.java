@@ -1,6 +1,6 @@
 package com.repairagency.database.dao;
 
-import com.repairagency.exceptions.DBException;
+import com.repairagency.exception.DBException;
 
 public interface Dao<T> {
 

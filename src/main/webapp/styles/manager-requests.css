@@ -1,0 +1,181 @@
+@import "select.css";
+@import "toggle-radio.css";
+@import "modal-box.css";
+
+* {
+    box-sizing: border-box;
+}
+
+.row {
+    text-align: center;
+}
+
+.column-middle {
+    display: inline-block;
+    width: 100%;
+}
+
+.column-middle-left {
+    display: inline-block;
+    width: 56%;
+    padding-bottom: 8px;
+}
+
+.column-middle-right {
+    display: inline-block;
+    width: 43%;
+    padding-bottom: 8px;
+
+}
+
+@media (min-width: 1300px) {
+    .column-left, .column-right {
+        display: initial;
+    }
+    .column-middle {
+        width: 70%;
+    }
+}
+
+.row:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+.req-table td:nth-child(1) {
+    width: 50px;
+}
+
+.req-table td:nth-child(n+2):nth-child(-n+3) {
+    width: 100px;
+}
+
+.req-table td:nth-child(4) {
+    width: 50px;
+}
+
+.req-table td:nth-child(n+5):nth-child(-n+7) {
+    width: 180px;
+}
+
+.req-table td:nth-child(n+8):nth-child(-n+9){
+    padding: 2px;
+    max-width: 340px;
+    width: 340px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.refresh-button-frame {
+    position: relative;
+    display: inline-block;
+    bottom: 3px;
+}
+
+.refresh-button-frame button {
+    border: initial;
+    display: inline-block;
+    position: relative;
+    padding: 4px 10px;
+    text-align: center;
+    text-decoration: none;
+    font: bold 12px/25px Arial, sans-serif;
+    text-shadow: 1px 1px 1px rgba(255,255,255, .22);
+    border-radius: 0;
+    box-shadow: 0 1px 3px rgba(0,0,0, 0.29), inset 1px 1px 1px rgba(255,255,255, 0.44);
+    transition: all 0.15s ease;
+}
+
+.refresh-button-frame button:enabled {
+    color: #145366FF;
+    background: #70c9e3;
+    background: -webkit-linear-gradient(top,  #70c9e3 0%,#39a0be 100%);
+}
+
+.refresh-button-frame button:hover:enabled {
+    background: -webkit-gradient(linear, left bottom, left top, color-stop(0%,#70c9e3), color-stop(100%,#39a0be));
+    color: white;
+}
+
+.refresh-button-frame button:disabled {
+    box-shadow: inset 0 1px 3px #0000004D, 0 1px #FFFFFF19;
+    color: #515151;
+    background: #d3d3d3;
+    background: -webkit-linear-gradient(bottom,  #d3d3d3 0%,#8a8a8a 100%);
+}
+
+.refresh-button-frame img {
+    vertical-align: middle;
+    max-block-size: 30px;
+}
+
+.filter-client-frame,
+.filter-master-frame {
+    display: inline-block;
+    min-width: 100%;
+}
+
+.filter-client-frame input,
+.filter-master-frame input{
+    width: 100%;
+    padding: 10px 10px 9px 10px;
+    display: inline-block;
+    border: 1px solid #9a9a9a;
+    border-radius: 6px;
+    box-sizing: border-box;
+    background: linear-gradient(to top, #ffffff 0%, #e5e5e5 100%);
+}
+
+.filter-client-frame label,
+.filter-master-frame label{
+    text-align: left;
+    display: inline-block;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.filter-client-frame input:focus,
+.filter-master-frame input:focus {
+    border-radius: 0;
+}
+
+.dropdown-filters-outer {
+    width: 35%;
+    display: inline-block;
+    text-align: left;
+}
+
+.filter-status-frame {
+    display: inline-block;
+    width: 100%;
+}
+
+.sort-frame {
+    display: inline-block;
+    width: 100%;
+}
+
+.order-frame {
+    display: inline-block;
+    position: relative;
+    top: 3px;
+    padding-top: 9px;
+    min-width: 145px;
+    min-height: 42px;
+    width: 21%;
+}
+
+.text-filters-outer {
+    text-align: center;
+    top: 2px;
+    position: relative;
+    display: inline-block;
+    width: 42%;
+}
+
+.text-filters {
+    display: inline-block;
+    max-width: 70%;
+}

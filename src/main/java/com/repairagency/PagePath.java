@@ -2,6 +2,8 @@ package com.repairagency;
 
 public class PagePath {
 
+
+
     private PagePath(){
     }
 
@@ -18,5 +20,6 @@ public class PagePath {
     public static final String REQUEST_CREATE = "main/role-dependent/client/request-form.jsp";
     public static final String CHANGE_USER_SETTINGS = "main/role-dependent/client/profile-settings.jsp";
     public static final String CLIENT_REQUESTS = "main/role-dependent/client/client-requests.jsp";
+    public static final String MANAGER_REQUESTS = "main/role-dependent/manager/manager-requests.jsp";
 
 }

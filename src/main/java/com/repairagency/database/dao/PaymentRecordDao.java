@@ -1,7 +1,7 @@
 package com.repairagency.database.dao;
 
-import com.repairagency.entities.beans.PaymentRecord;
-import com.repairagency.exceptions.DBException;
+import com.repairagency.entity.bean.PaymentRecord;
+import com.repairagency.exception.DBException;
 
 import java.util.List;
 

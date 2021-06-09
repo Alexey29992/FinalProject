@@ -3,9 +3,9 @@ package com.repairagency.database.dao.mysql;
 import com.repairagency.database.dao.AbstractDao;
 import com.repairagency.database.DBManager;
 import com.repairagency.database.dao.PaymentRecordDao;
-import com.repairagency.entities.beans.PaymentRecord;
-import com.repairagency.exceptions.DBException;
-import com.repairagency.exceptions.ErrorMessages;
+import com.repairagency.entity.bean.PaymentRecord;
+import com.repairagency.exception.DBException;
+import com.repairagency.exception.ErrorMessages;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

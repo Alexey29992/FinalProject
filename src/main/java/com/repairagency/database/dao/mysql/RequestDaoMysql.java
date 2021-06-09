@@ -3,13 +3,15 @@ package com.repairagency.database.dao.mysql;
 import com.repairagency.database.dao.AbstractDao;
 import com.repairagency.database.DBManager;
 import com.repairagency.database.dao.RequestDao;
-import com.repairagency.entities.beans.Request;
-import com.repairagency.exceptions.DBException;
-import com.repairagency.exceptions.ErrorMessages;
+import com.repairagency.database.wrapper.ManagerRequestData;
+import com.repairagency.entity.bean.Request;
+import com.repairagency.exception.DBException;
+import com.repairagency.exception.ErrorMessages;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.sql.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -232,6 +234,31 @@ public class RequestDaoMysql extends AbstractDao implements RequestDao {
         }
     }
 
+    @Override
+    public List<ManagerRequestData> getEntityListManager(String query) throws DBException {
+        logger.trace("getEntityListManager#query : {}", query);
+        List<ManagerRequestData> requests = new ArrayList<>();
+        ResultSet resultSet = null;
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                Request req = getRequestInstance(resultSet);
+                String clientLogin = resultSet.getString("client_login");
+                String masterLogin = resultSet.getString("master_login");
+                requests.add(new ManagerRequestData(req, clientLogin, masterLogin));
+            }
+            return requests;
+        } catch (SQLException ex) {
+            String message = "Cannot get Entity List";
+            logger.error(message, ex);
+            DBManager.rollbackTransaction(connection);
+            DBManager.closeConnection(connection);
+            throw new DBException(message, ErrorMessages.DB_INTERNAL, ex);
+        } finally {
+            closeResultSet(resultSet);
+        }
+    }
+
     private int getStatusId(Request.Status status) throws DBException {
         ResultSet resultSet = null;
         try (PreparedStatement statement = connection.prepareStatement(QUERY_GET_STATUS_ID)) {
@@ -291,11 +318,17 @@ public class RequestDaoMysql extends AbstractDao implements RequestDao {
             statement.setTimestamp(++k, Timestamp.valueOf(req.getCreationDate()));
             statement.setInt(++k, statusId);
             statement.setString(++k, req.getDescription());
-            statement.setTimestamp(++k, Timestamp.valueOf(req.getCompletionDate()));
+            LocalDateTime compDateTime = req.getCompletionDate();
+            Timestamp compTimestamp = null;
+            if (compDateTime != null) {
+                compTimestamp = Timestamp.valueOf(compDateTime);
+            }
+            statement.setTimestamp(++k, compTimestamp);
             statement.setString(++k, req.getUserReview());
             statement.setString(++k, req.getCancelReason());
             statement.setInt(++k, req.getMasterId());
             statement.setInt(++k, req.getPrice());
+            statement.setInt(++k, req.getId());
             statement.executeUpdate();
         } catch (SQLException ex) {
             String message = "Request#" + req.getId() + " cannot be updated";

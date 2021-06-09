@@ -1,8 +1,8 @@
 package com.repairagency.database.dao;
 
-import com.repairagency.entities.Role;
-import com.repairagency.entities.User;
-import com.repairagency.exceptions.DBException;
+import com.repairagency.entity.Role;
+import com.repairagency.entity.User;
+import com.repairagency.exception.DBException;
 
 import java.util.List;
 

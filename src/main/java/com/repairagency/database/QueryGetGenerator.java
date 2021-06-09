@@ -1,0 +1,83 @@
+package com.repairagency.database;
+
+import com.repairagency.database.wrapper.QueryData;
+
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
+
+public class QueryGetGenerator {
+
+    private final String queryBase;
+    private StringBuilder query;
+
+    public QueryGetGenerator(String queryBase, QueryData data) {
+        this.queryBase = queryBase;
+        this.data = data;
+    }
+
+    private final QueryData data;
+
+    public String generateQuery() {
+        query = new StringBuilder(queryBase);
+        if (!data.getFilterFactors().isEmpty()) {
+            Set<Map.Entry<String, String>> entrySet = data.getFilterFactors().entrySet();
+            Iterator<Map.Entry<String, String>> iterator = entrySet.iterator();
+            Map.Entry<String, String> entry = iterator.next();
+            this.where(entry.getKey(), entry.getValue());
+            while (iterator.hasNext()) {
+                entry = iterator.next();
+                this.and(entry.getKey(), entry.getValue());
+            }
+        }
+        if (data.getSortFactor() != null) {
+            this.orderBy();
+            if (data.isDescending()) {
+                this.desc();
+            }
+        }
+        if (data.getLimitFactor() != 0) {
+            this.limit();
+            if (data.getOffsetFactor() != 0) {
+                this.offset();
+            }
+        }
+        return query.toString();
+    }
+
+    private void where(String column, String value) {
+        query.append(" WHERE (")
+                .append(column)
+                .append(" = '")
+                .append(value)
+                .append("')");
+    }
+
+    private void and(String column, String value) {
+        query.append(" AND (")
+                .append(column)
+                .append(" = '")
+                .append(value)
+                .append("')");
+    }
+
+    private void orderBy() {
+        query.append(" ORDER BY ")
+                .append(data.getSortFactor());
+    }
+
+    private void desc() {
+        query.append(" DESC");
+    }
+
+    private void limit() {
+        query.append(" LIMIT ")
+                .append(data.getLimitFactor());
+    }
+
+    private void offset() {
+        query.append(" OFFSET ")
+                .append(data.getOffsetFactor());
+    }
+
+}

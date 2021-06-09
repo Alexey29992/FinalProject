@@ -10,7 +10,7 @@
     <uri>http://repairagency.com/taglib</uri>
     <tag>
         <name>processAction</name>
-        <tag-class>com.repairagency.web.tags.ActionProcessor</tag-class>
+        <tag-class>com.repairagency.web.tag.ActionProcessor</tag-class>
         <body-content>empty</body-content>
     </tag>
 

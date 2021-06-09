@@ -1,7 +1,8 @@
 package com.repairagency.database.dao;
 
-import com.repairagency.entities.beans.Request;
-import com.repairagency.exceptions.DBException;
+import com.repairagency.database.wrapper.ManagerRequestData;
+import com.repairagency.entity.bean.Request;
+import com.repairagency.exception.DBException;
 
 import java.util.List;
 
@@ -20,5 +21,7 @@ public interface RequestDao extends Dao<Request> {
             throws DBException;
 
     List<Request> getEntityList(String query) throws DBException;
+
+    List<ManagerRequestData> getEntityListManager(String query) throws DBException;
 
 }

@@ -1,7 +1,7 @@
 package com.repairagency.web.context;
 
 import com.repairagency.database.DBManager;
-import com.repairagency.web.constants.Constants;
+import com.repairagency.web.constant.Constants;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

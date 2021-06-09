@@ -9,6 +9,7 @@
 html {
     font-family: main-font, serif;
     min-width: 820px;
+    overflow-y: scroll;
 }
 
 .center {
@@ -44,6 +45,10 @@ input[type=submit] {
 button:hover {
     background-color: #bce2e0;
     border-color:  #306fff;
+}
+
+button:disabled:hover {
+
 }
 
 .head {
