@@ -11,7 +11,7 @@ import com.repairagency.entities.users.Master;
 import com.repairagency.exceptions.DBException;
 import com.repairagency.exceptions.ErrorMessages;
 import com.repairagency.exceptions.InvalidOperationException;
-import com.repairagency.validator.Validator;
+import com.repairagency.utils.Validator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

@@ -57,12 +57,13 @@
 }
 
 .req-table td:nth-child(n+6):nth-child(-n+7){
-    max-width: 370px;
-    width: 370px;
+    max-width: 340px;
+    width: 340px;
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
 }
+
 .filter-frame {
     display: inline-block;
     width: 36%;
