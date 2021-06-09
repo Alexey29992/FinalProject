@@ -4,6 +4,7 @@ import com.repairagency.PagePath;
 import com.repairagency.entities.EntityManager;
 import com.repairagency.entities.User;
 import com.repairagency.exceptions.ErrorMessages;
+import com.repairagency.utils.Validator;
 import com.repairagency.web.commands.Command;
 import com.repairagency.exceptions.DBException;
 import com.repairagency.exceptions.InvalidOperationException;
@@ -28,6 +29,9 @@ public class Login implements Command {
         String password = req.getParameter("password");
         User user = null;
         try {
+            Validator.validateLogin(login);
+            login = Validator.escapeHTMLSpecial(login);
+            Validator.validatePassword(password);
             if ("sign-up".equals(type)) {
                 logger.trace("Attempt to sign up");
                 user = EntityManager.signUp(login, password);

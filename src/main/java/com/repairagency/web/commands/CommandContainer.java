@@ -23,7 +23,7 @@ public class CommandContainer {
         commandMap.put(Names.CHECK_PHONE, new CheckPhone());
         commandMap.put(Names.CHANGE_CLIENT_SETTINGS, new ChangeClientSettings());
         commandMap.put(Names.CHANGE_PASSWORD, new ChangePassword());
-        commandMap.put(Names.GET_REQUEST_LIST, new GetRequestList());
+        commandMap.put(Names.GET_CLIENT_REQUESTS, new GetClientRequests());
     }
 
     public static Command getCommand(String key) {

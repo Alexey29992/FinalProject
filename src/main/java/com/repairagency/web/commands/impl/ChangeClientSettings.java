@@ -4,6 +4,7 @@ import com.repairagency.PagePath;
 import com.repairagency.entities.EntityManager;
 import com.repairagency.entities.users.Client;
 import com.repairagency.exceptions.DBException;
+import com.repairagency.utils.Validator;
 import com.repairagency.web.commands.Command;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -23,6 +24,7 @@ public class ChangeClientSettings implements Command {
         HttpSession session = req.getSession();
         Client client = (Client) session.getAttribute("user");
         try {
+            Validator.escapeHTMLSpecial(phNumber);
             client.setPhNumber(phNumber);
             EntityManager.updateUser(client);
             session.setAttribute("action", "settings-client-success");

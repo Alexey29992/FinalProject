@@ -8,7 +8,7 @@
     <link href="${pageContext.request.contextPath}/styles/client-requests.css" rel="stylesheet" type="text/css">
     <link href="${pageContext.request.contextPath}/styles/common.css" rel="stylesheet" type="text/css">
     <link rel="icon" href="${pageContext.request.contextPath}/resources/title.png" type="image/icon">
-    <title>Request History</title>
+    <title>Request Management</title>
     <script>
         function submitForm() {
             document.getElementById("request-query").submit();
@@ -49,8 +49,6 @@
 </head>
 <body>
 <my:navBar/>
-
-
 <div class="row">
     <div class="column-middle">
         <div class="column-middle-left">

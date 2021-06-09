@@ -35,8 +35,6 @@ public class EntityManager {
     public static User signUp(String login, String password)
             throws InvalidOperationException, DBException {
         logger.debug("Registering new User with login '{}'", login);
-        Validator.validateLogin(login);
-        Validator.validatePassword(password);
         if (EntityManager.isLoginRegistered(login)) {
             logger.debug("Can not register: login is already registered");
             throw new InvalidOperationException(ErrorMessages.USER_CREATE_LOGIN_REGISTERED);
@@ -47,8 +45,6 @@ public class EntityManager {
     public static User signIn(String login, String password)
             throws DBException, InvalidOperationException {
         logger.debug("Entering with login '{}'", login);
-        Validator.validateLogin(login);
-        Validator.validatePassword(password);
         User user = EntityManager.userGetByLogin(login);
         if (user == null) {
             logger.debug("Can not enter: '{}' not registered", login);

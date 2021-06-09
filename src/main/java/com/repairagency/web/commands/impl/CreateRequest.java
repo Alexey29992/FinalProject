@@ -4,6 +4,7 @@ import com.repairagency.PagePath;
 import com.repairagency.entities.EntityManager;
 import com.repairagency.entities.User;
 import com.repairagency.exceptions.DBException;
+import com.repairagency.utils.Validator;
 import com.repairagency.web.commands.Command;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -21,6 +22,7 @@ public class CreateRequest implements Command {
         String description = req.getParameter("description");
         User user = (User) req.getSession().getAttribute("user");
         try {
+            description = Validator.escapeHTMLSpecial(description);
             EntityManager.newRequest(description, user.getId());
         } catch (DBException ex) {
             logger.error("Cannot create request", ex);

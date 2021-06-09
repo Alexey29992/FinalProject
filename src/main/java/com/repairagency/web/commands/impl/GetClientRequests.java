@@ -18,7 +18,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class GetRequestList implements Command {
+public class GetClientRequests implements Command {
 
     private static final Logger logger = LogManager.getLogger();
     private int newPage;
@@ -26,7 +26,7 @@ public class GetRequestList implements Command {
 
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) {
-        logger.debug("Executing command : get-request-list");
+        logger.debug("Executing command : get-client-requests");
         HttpSession session = req.getSession();
         QueryGetGenerator generator = parseHttpParams(req);
         String query = generator.generateQuery();

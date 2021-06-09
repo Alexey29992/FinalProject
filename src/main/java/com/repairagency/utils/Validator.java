@@ -49,6 +49,10 @@ public class Validator {
         }
     }
 
-
+    public static String escapeHTMLSpecial(String input) {
+        return input.replace("&", "&amp")
+                .replace("<", "&lt")
+                .replace(">", "&gt");
+    }
 
 }
