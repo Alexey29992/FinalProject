@@ -1,4 +1,4 @@
-package com.repairagency.validator;
+package com.repairagency.utils;
 
 import com.repairagency.config.Config;
 import com.repairagency.entities.beans.Request;

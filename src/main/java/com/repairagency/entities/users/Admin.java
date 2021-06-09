@@ -5,7 +5,7 @@ import com.repairagency.entities.Role;
 import com.repairagency.entities.User;
 import com.repairagency.exceptions.DBException;
 import com.repairagency.exceptions.InvalidOperationException;
-import com.repairagency.validator.Validator;
+import com.repairagency.utils.Validator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

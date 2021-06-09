@@ -2,7 +2,7 @@ package com.repairagency.web.commands.impl;
 
 import com.repairagency.PagePath;
 import com.repairagency.config.Config;
-import com.repairagency.database.dao.test.QueryGetGenerator;
+import com.repairagency.utils.QueryGetGenerator;
 import com.repairagency.entities.EntityManager;
 import com.repairagency.entities.User;
 import com.repairagency.entities.beans.Request;
@@ -38,7 +38,6 @@ public class GetRequestList implements Command {
             session.setAttribute("error", ex.getPublicMessage());
             return PagePath.ERROR;
         }
-
         req.setAttribute("page", newPage);
         boolean hasNextPage = false;
         boolean hasPrevPage = false;
@@ -162,7 +161,7 @@ public class GetRequestList implements Command {
         if (newPage < 0) {
             newPage = 0;
         }
-        QueryGetGenerator generator = new QueryGetGenerator();
+        QueryGetGenerator generator = new QueryGetGenerator(QueryGetGenerator.REQUEST_BASE);
         generator.setDescending(descending);
         generator.setSortFactor(sortFactor);
         generator.setFilterFactors(filterFactors);
