@@ -51,6 +51,7 @@ public class GetClientRequests implements Command {
         req.setAttribute("requestList", requestList);
         req.setAttribute("hasNextPage", hasNextPage);
         req.setAttribute("hasPrevPage", hasPrevPage);
+        req.setAttribute("forwarded", 1);
         return PagePath.CLIENT_REQUESTS;
     }
 

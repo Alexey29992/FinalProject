@@ -49,11 +49,16 @@
 </head>
 <body>
 <my:navBar/>
+<c:if test="${not empty pageContext.request.getParameter('command')}">
+    <c:if test="${empty requestScope.forwarded}">
+        <jsp:forward page="/controller"/>
+    </c:if>
+</c:if>
 <div class="row">
     <div class="column-middle">
         <div class="column-middle-left">
-            <form method="get" action="${pageContext.request.contextPath}/controller" id="request-query">
-                <input type="hidden" name="command" value="get-client-requests"/>
+            <form method="get" action="${pageContext.request.requestURI}" id="request-query">
+                <input type="hidden" name="command" value="get-manager-requests"/>
                 <input type="hidden" id="size" name="size" value="${pageContext.request.getParameter('size')}"/>
                 <input type="hidden" id="page" name="page" value="${pageContext.request.getAttribute('page')}"/>
                 <div class="filter-frame">
@@ -227,12 +232,12 @@
                     <td>${row.status}</td>
                     <td>${row.creationDate}</td>
                     <td>${row.completionDate}</td>
-                    <td><my:modalButtonGenerator content="${row.description}"/></td>
+                    <td><my:modal content="${row.description}"/></td>
                     <td>
                         <c:choose>
                             <c:when test="">
                                 <div class="feedback-content">
-                                    <my:modalButtonGenerator content="${row.userReview}"/>
+                                    <my:modal content="${row.userReview}"/>
                                 </div>
                             </c:when>
                             <c:otherwise>

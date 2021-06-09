@@ -13,7 +13,7 @@
             <div class="modal-close" onclick="closeModal(${requestScope.suffix})">
                 &times;
             </div>
-            <div id="modal-content${requestScope.suffix}" class="modal-content"></div>
+            <pre id="modal-content${requestScope.suffix}" class="modal-content"></pre>
         </div>
     </div>
 </c:if>
