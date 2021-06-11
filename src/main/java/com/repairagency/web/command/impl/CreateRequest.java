@@ -1,6 +1,6 @@
 package com.repairagency.web.command.impl;
 
-import com.repairagency.PagePath;
+import com.repairagency.web.command.PagePath;
 import com.repairagency.entity.EntityManager;
 import com.repairagency.entity.User;
 import com.repairagency.exception.DBException;
@@ -24,13 +24,14 @@ public class CreateRequest implements Command {
         try {
             description = Validator.escapeHTMLSpecial(description);
             EntityManager.newRequest(description, user.getId());
+            req.getSession().setAttribute("action", "request-success");
+            return req.getContextPath() + PagePath.HOME;
         } catch (DBException ex) {
             logger.error("Cannot create request", ex);
             req.getSession().setAttribute("error", ex.getPublicMessage());
-            return PagePath.ERROR;
+            return req.getContextPath() + PagePath.ERROR;
         }
-        req.getSession().setAttribute("action", "request-success");
-        return PagePath.HOME;
+
     }
 
 }

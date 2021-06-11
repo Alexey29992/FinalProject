@@ -29,7 +29,7 @@ public class EntityManager {
     public static List<Request> getClientRequestList(QueryData queryData) throws DBException {
         Connection connection = startTransaction();
         RequestDao dao = getRequestDao(connection);
-        QueryGetGenerator generator = new QueryGetGenerator(QueryBases.MANAGER_REQUEST_BASE, queryData);
+        QueryGetGenerator generator = new QueryGetGenerator(QueryBases.CLIENT_REQUEST_BASE, queryData);
         String query = generator.generateQuery();
         List<Request> list = dao.getEntityList(query);
         completeTransaction(connection);
@@ -63,7 +63,7 @@ public class EntityManager {
             logger.debug("Can not register: login is already registered");
             throw new InvalidOperationException(ErrorMessages.USER_CREATE_LOGIN_REGISTERED);
         }
-        return EntityManager.newUser(login, password, Role.CLIENT);
+        return EntityManager.newUser(login, password, User.Role.CLIENT);
     }
 
     public static User signIn(String login, String password)
@@ -83,7 +83,7 @@ public class EntityManager {
 
     ////////////////////////////////////////////////////////
 
-    public static User newUser(String login, String password, Role role)
+    public static User newUser(String login, String password, User.Role role)
             throws DBException, InvalidOperationException {
         logger.debug("Creating new {} with login '{}'", role, login);
         User user;
@@ -205,7 +205,7 @@ public class EntityManager {
         return user;
     }
 
-    public static User userGetById(int userId) throws DBException {
+    public static User getUserById(int userId) throws DBException {
         Connection connection = startTransaction();
         UserDao dao = getUserDao(connection);
         User user = dao.getEntityById(userId);
@@ -221,7 +221,7 @@ public class EntityManager {
         return list;
     }
 
-    public static List<User> usersGetByRole(Role role, int chunkSize, int chunkNumber, String sortingFactor) throws DBException {
+    public static List<User> usersGetByRole(User.Role role, int chunkSize, int chunkNumber, String sortingFactor) throws DBException {
         Connection connection = startTransaction();
         UserDao dao = getUserDao(connection);
         List<User> list = dao.getEntityListByRole(role, chunkSize, chunkNumber, sortingFactor);
@@ -267,52 +267,56 @@ public class EntityManager {
 
     ////////////////////////////////////////////////////////
 
-    public static void userGiveMoney(Client client, int amount) throws DBException {
-        logger.trace("Giving {}$ to Client#{} balance", amount, client.getId());
+    public static int topUpClientBalance(int clientId, int amount) throws DBException {
+        logger.debug("Top up Client balance");
+        logger.trace("amount#{}$ , Client#{}", amount, clientId);
         Connection connection = startTransaction();
         UserDao userDao = getUserDao(connection);
-        client.setBalance(client.getBalance() + amount);
-        userDao.updateEntity(client);
-        logger.trace("Creating new PaymentRecord for Client#{}", client.getId());
+        logger.trace("Receiving Client from DB");
+        Client client = (Client) userDao.getEntityById(clientId);
         PaymentRecordDao paymentRecordDao = getPaymentRecordDao(connection);
-        PaymentRecord paymentRecord = new PaymentRecord(amount, client.getId(), Text.PAYMENT_RECORD_ADD_MONEY);
+        int newBalance = client.getBalance() + amount;
+        client.setBalance(newBalance);
+        logger.trace("Updating Client in DB");
+        userDao.updateEntity(client);
+        logger.trace("Creating new PaymentRecord for Client");
+        PaymentRecord paymentRecord = new PaymentRecord(amount, clientId, Text.PAYMENT_RECORD_ADD_MONEY);
         paymentRecordDao.addEntity(paymentRecord);
         completeTransaction(connection);
+        return newBalance;
     }
 
-    public static int makePayment(int clientId, Request request)
+    public static int makePayment(Client client, int requestId)
             throws InvalidOperationException, DBException {
-        logger.debug("Processing payment for Client#{}", clientId);
-        int amount = request.getPrice();
+        logger.debug("Processing payment");
+        logger.trace("Client#{} , Request#{}", client.getId(), requestId);
         Connection connection = startTransaction();
-
-        logger.trace("Receiving Client instance from DB");
         UserDao userDao = getUserDao(connection);
         RequestDao requestDao = getRequestDao(connection);
         PaymentRecordDao paymentRecordDao = getPaymentRecordDao(connection);
-        Client client = (Client) userDao.getEntityById(clientId);
 
-        logger.trace("Validating payment");
-        Validator.validatePayment(client.getBalance(), amount, request);
+        logger.trace("Receiving Request instance from DB");
+        Request request = requestDao.getEntityById(requestId);
 
-        logger.trace("Updating Request#{}", request.getId());
+        int amount = request.getPrice();
+
+        logger.trace("Validating payment balance : {}, price {}", client.getBalance(), request.getPrice());
+        Validator.validatePayment(client, request, amount);
+
+        logger.trace("Updating Request");
         request.setStatus(Request.Status.PAID);
         requestDao.updateEntity(request);
 
-        logger.trace("Creating new PaymentRecord for Client#{}", clientId);
-        PaymentRecord paymentRecord = new PaymentRecord(amount, clientId,
+        logger.trace("Creating new PaymentRecord for Client");
+        PaymentRecord paymentRecord = new PaymentRecord(amount, client.getId(),
                 Text.PAYMENT_RECORD_PAY_MONEY + request.getId());
         paymentRecordDao.addEntity(paymentRecord);
 
-        logger.trace("Taking {}$ from Client#{}", amount, clientId);
         int newBalance = client.getBalance() - amount;
-        try {
-            client.setBalance(client.getBalance() - amount);
-            userDao.updateEntity(client);
-        } catch (DBException ex) {
-            logger.error("Cannot proceed payment: unable to update user", ex);
-            throw ex;
-        }
+        logger.trace("Updating Client in DB");
+        client.setBalance(newBalance);
+        userDao.updateEntity(client);
+
         completeTransaction(connection);
         return newBalance;
     }

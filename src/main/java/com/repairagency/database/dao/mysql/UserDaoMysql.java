@@ -3,7 +3,6 @@ package com.repairagency.database.dao.mysql;
 import com.repairagency.database.DBManager;
 import com.repairagency.database.dao.AbstractDao;
 import com.repairagency.database.dao.UserDao;
-import com.repairagency.entity.Role;
 import com.repairagency.entity.User;
 import com.repairagency.entity.user.Admin;
 import com.repairagency.entity.user.Client;
@@ -24,10 +23,10 @@ public class UserDaoMysql extends AbstractDao implements UserDao {
 
     private static final String QUERY_DELETE = "DELETE FROM user WHERE id = ?";
     private static final String QUERY_GET_BY_ID =
-            "SELECT user.*, role.role_name, client.ph_number FROM user JOIN role ON " +
-                    "role_id = role.id JOIN client ON user.id = client.id WHERE user.login = ?";
+            "SELECT user.*, role.role_name, client.ph_number, client.balance FROM user JOIN role ON " +
+                    "role_id = role.id JOIN client ON user.id = client.id WHERE user.id = ?";
     private static final String QUERY_GET_BY_LOGIN =
-            "SELECT user.*, role.role_name, client.ph_number FROM user JOIN role ON " +
+            "SELECT user.*, role.role_name, client.ph_number, client.balance FROM user JOIN role ON " +
                     "role_id = role.id JOIN client ON user.id = client.id WHERE user.login = ?";
     private static final String QUERY_GET_ALL = "SELECT user.*, role.role_name FROM" +
             " user JOIN role ON role_id = role.id ORDER BY ? LIMIT ?, ?";
@@ -49,7 +48,7 @@ public class UserDaoMysql extends AbstractDao implements UserDao {
     @Override
     public int addEntity(User user) throws DBException {
         logger.debug("Adding user");
-        Role role = user.getRole();
+        User.Role role = user.getRole();
         int roleId = getRoleId(role);
         int userId = addUser(user, roleId);
         user.setId(userId);
@@ -108,7 +107,10 @@ public class UserDaoMysql extends AbstractDao implements UserDao {
                 throw new DBException(ErrorMessages.DB_EMPTY_RESULT_SET,
                         ErrorMessages.DB_NOT_FOUND);
             }
-            return getUserInstance(resultSet);
+
+            User user = getUserInstance(resultSet);
+            logger.trace("USER: {}", user);
+            return user;
         } catch (SQLException ex) {
             String message = "Cannot get User#" + id;
             logger.error(message, ex);
@@ -174,7 +176,7 @@ public class UserDaoMysql extends AbstractDao implements UserDao {
         }
     }
 
-    public List<User> getEntityListByRole(Role role, int chunkSize, int chunkNumber, String sortingFactor)
+    public List<User> getEntityListByRole(User.Role role, int chunkSize, int chunkNumber, String sortingFactor)
             throws DBException {
         logger.debug("Querying user list by role");
         List<User> users = new ArrayList<>();
@@ -297,7 +299,7 @@ public class UserDaoMysql extends AbstractDao implements UserDao {
 
     ////////////////////////////////////////////////////////
 
-    private int getRoleId(Role role) throws DBException {
+    private int getRoleId(User.Role role) throws DBException {
         logger.debug("Querying role id");
         ResultSet resultSet = null;
         try (PreparedStatement statement = connection.prepareStatement(QUERY_GET_ROLE_ID)) {
@@ -329,13 +331,15 @@ public class UserDaoMysql extends AbstractDao implements UserDao {
         int id = resultSet.getInt("id");
         String login = resultSet.getString("login");
         String password = resultSet.getString("password");
-        Role role = Role.valueOf(resultSet.getString("role_name"));
+        User.Role role = User.Role.valueOf(resultSet.getString("role_name"));
         String phone = resultSet.getString("ph_number");
+        int balance = resultSet.getInt("balance");
         logger.trace("User role : {}", role);
         switch (role) {
             case CLIENT:
                 Client client = new Client(id, login, password);
                 client.setPhNumber(phone);
+                client.setBalance(balance);
                 return client;
             case MASTER:
                 return new Master(id, login, password);

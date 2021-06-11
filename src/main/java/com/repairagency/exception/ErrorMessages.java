@@ -4,9 +4,11 @@ import com.repairagency.config.Config;
 
 public class ErrorMessages {
 
+
+
     private ErrorMessages() {
     }
-
+    public static final Object INVALID_INPUT = "Invalid input";
     public static final String INVALID_COMMAND = "Invalid command";
     public static final String UNEXPECTED = "Unexpected error";
 
@@ -21,15 +23,15 @@ public class ErrorMessages {
     public static final String USER_LOGIN_INVALID_LENGTH = "Invalid login. Login should contain from "
             + Config.LOGIN_LENGTH_MIN + " to " + Config.LOGIN_LENGTH_MAX + " characters";
     public static final String USER_FORBIDDEN_INPUT_CHARS = "Only letters, numbers, '-' and '_' allowed here";
-    public static final Object USER_UNABLE_FEEDBACK = "This request is not done yet";
-    public static final Object USER_UNABLE_PAY_STATUS = "You cannot pay for this request";
-    public static final Object USER_UNABLE_PAY_MONEY = "Not enough money";
+    public static final String USER_UNABLE_FEEDBACK = "This request is not done yet";
+    public static final String USER_UNABLE_PAY_STATUS = "You cannot pay for this request";
+    public static final String USER_UNABLE_PAY_MONEY = "Not enough money";
+
+    public static final String MANAGER_INVALID_TOP_UP = "Sum should be positive number";
 
     public static final String DB_INTERNAL = "Your query cannot be processed";
     public static final String DB_NOT_FOUND = "Queried entity does not exist, or some errors occurred";
 
-    public static final String PAYMENT_INVALID = "You cannot pay for this request";
-    public static final String PAYMENT_NOT_ENOUGH_MONEY = "Not enough money to proceed payment";
 
     ////////////////////////////////
 

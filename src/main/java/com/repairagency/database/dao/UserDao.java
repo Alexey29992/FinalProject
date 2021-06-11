@@ -1,6 +1,5 @@
 package com.repairagency.database.dao;
 
-import com.repairagency.entity.Role;
 import com.repairagency.entity.User;
 import com.repairagency.exception.DBException;
 
@@ -14,7 +13,7 @@ public interface UserDao extends Dao<User> {
     List<User> getEntityListAll(int chunkSize, int chunkNumber, String sortingFactor)
             throws DBException;
 
-    List<User> getEntityListByRole(Role role, int chunkSize, int chunkNumber, String sortingFactor)
+    List<User> getEntityListByRole(User.Role role, int chunkSize, int chunkNumber, String sortingFactor)
             throws DBException;
 
 }

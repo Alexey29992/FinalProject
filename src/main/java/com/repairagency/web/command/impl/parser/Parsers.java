@@ -81,7 +81,7 @@ public class Parsers {
     }
 
     public static int parseSize(String sizeAttr) {
-        int size = Config.ROWS_PER_PAGE;
+        int size = Config.DEFAULT_TABLE_SIZE;
         if (sizeAttr != null) {
             switch (sizeAttr) {
                 case "5":
@@ -104,7 +104,7 @@ public class Parsers {
     }
 
     public static int parsePage(String pageAttr) {
-        int newPage = 0;
+        int newPage = Config.DEFAULT_TABLE_PAGE;
         if (pageAttr != null) {
             try {
                 newPage = Integer.parseInt(pageAttr);
@@ -113,7 +113,7 @@ public class Parsers {
             }
         }
         if (newPage < 0) {
-            newPage = 0;
+            newPage = Config.DEFAULT_TABLE_PAGE;
         }
         return newPage;
     }

@@ -1,6 +1,6 @@
 package com.repairagency.web.command.impl;
 
-import com.repairagency.PagePath;
+import com.repairagency.web.command.PagePath;
 import com.repairagency.exception.ErrorMessages;
 import com.repairagency.web.command.Command;
 import org.apache.logging.log4j.LogManager;

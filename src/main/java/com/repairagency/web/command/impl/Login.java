@@ -1,6 +1,6 @@
 package com.repairagency.web.command.impl;
 
-import com.repairagency.PagePath;
+import com.repairagency.web.command.PagePath;
 import com.repairagency.entity.EntityManager;
 import com.repairagency.entity.User;
 import com.repairagency.exception.ErrorMessages;
@@ -41,18 +41,18 @@ public class Login implements Command {
                 user = EntityManager.signIn(login, password);
             }
             if (user == null) {
-                logger.trace("Unable to log in");
+                logger.trace("Cannot log in");
                 session.setAttribute("error", ErrorMessages.UNEXPECTED);
-                return PagePath.ERROR;
+                return req.getContextPath() + PagePath.ERROR;
             }
             logger.trace("Logged as (role) : {}", user.getRole());
             session.setAttribute("user", user);
             session.setAttribute("action", type);
-            return PagePath.HOME;
+            return req.getContextPath() + PagePath.HOME;
         } catch (DBException | InvalidOperationException ex) {
             logger.error("Cannot log in", ex);
             req.getSession().setAttribute("error", ex.getPublicMessage());
-            return PagePath.LOGIN;
+            return req.getContextPath() + PagePath.LOGIN;
         }
     }
 

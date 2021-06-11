@@ -1,8 +1,7 @@
 package com.repairagency.web.command.impl;
 
-import com.repairagency.PagePath;
+import com.repairagency.web.command.PagePath;
 import com.repairagency.entity.EntityManager;
-import com.repairagency.entity.bean.Request;
 import com.repairagency.entity.user.Client;
 import com.repairagency.exception.DBException;
 import com.repairagency.exception.ErrorMessages;
@@ -23,34 +22,24 @@ public class MakePayment implements Command {
     public String execute(HttpServletRequest req, HttpServletResponse resp) {
         logger.debug("Executing command : make-payment");
         String idAttr =  req.getParameter("request-id");
+        logger.trace("Request#{}", idAttr);
         HttpSession session = req.getSession();
         Client client = (Client) session.getAttribute("user");
-        logger.trace(idAttr);
         try {
-            int id = Integer.parseInt(idAttr);
-
-            Request request = EntityManager.getRequest(id);
-            if (request.getStatus() != Request.Status.WAIT_FOR_PAYMENT) {
-                req.getSession().setAttribute("error", ErrorMessages.USER_UNABLE_PAY_STATUS);
-                return PagePath.ERROR;
-            }
-            EntityManager.makePayment(client.getId(), request);
-            EntityManager.updateRequest(request);
-        } catch (DBException ex) {
-            logger.error("Cannot set feedback", ex);
+            int requestId = Integer.parseInt(idAttr);
+            int newBalance = EntityManager.makePayment(client, requestId);
+            client.setBalance(newBalance);
+            req.getSession().setAttribute("action", "payment-success");
+            return req.getContextPath() + PagePath.HOME;
+        } catch (DBException | InvalidOperationException ex) {
+            logger.error("Cannot make payment", ex);
             req.getSession().setAttribute("error", ex.getPublicMessage());
-            return PagePath.ERROR;
+            return req.getContextPath() + PagePath.ERROR;
         } catch (NumberFormatException ex) {
             logger.error("Invalid request-id", ex);
             req.getSession().setAttribute("error", ErrorMessages.UNEXPECTED);
-            return PagePath.ERROR;
-        } catch (InvalidOperationException ex) {
-            logger.error("Not enough money to make payment", ex);
-            req.getSession().setAttribute("error", ErrorMessages.USER_UNABLE_PAY_MONEY);
-            return PagePath.ERROR;
+            return req.getContextPath() + PagePath.ERROR;
         }
-        req.getSession().setAttribute("action", "feedback-success");
-        return PagePath.HOME;
     }
 
 }

@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="my" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="ralib" uri="http://repairagency.com/taglib" %>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -49,11 +50,7 @@
 </head>
 <body>
 <my:navBar/>
-<c:if test="${not empty pageContext.request.getParameter('command')}">
-    <c:if test="${empty requestScope.forwarded}">
-        <jsp:forward page="/controller"/>
-    </c:if>
-</c:if>
+<ralib:onRequest command="get-manager-requests"/>
 <div class="row">
     <div class="column-middle">
         <div class="column-middle-left">
@@ -195,7 +192,10 @@
         <div class="column-middle-right table-control">
             <div class="page-frame">
                 <label>
-                    <button onclick="setPage(0)">
+                    <button onclick="setPage(0)"
+                            <c:if test="${!requestScope.hasPrevPage}">
+                                disabled
+                            </c:if>>
                         1
                     </button>
                 </label>
@@ -220,23 +220,36 @@
                 </label>
             </div>
             <div class="size-frame">
+                <c:set var="size" value="${pageContext.request.getParameter('size')}"/>
                 <label>
-                    <button onclick="setSize(5)">
+                    <button onclick="setSize(5)"
+                            <c:if test="${size == '5'}">
+                                disabled
+                            </c:if>>
                         5
                     </button>
                 </label>
                 <label>
-                    <button onclick="setSize(10)">
+                    <button onclick="setSize(10)"
+                            <c:if test="${size == '10'}">
+                                disabled
+                            </c:if>>
                         10
                     </button>
                 </label>
                 <label>
-                    <button onclick="setSize(20)">
+                    <button onclick="setSize(20)"
+                            <c:if test="${size == '20' || size == ''}">
+                                disabled
+                            </c:if>>
                         20
                     </button>
                 </label>
                 <label>
-                    <button onclick="setSize(40)">
+                    <button onclick="setSize(40)"
+                            <c:if test="${size == '40'}">
+                                disabled
+                            </c:if>>
                         40
                     </button>
                 </label>
@@ -257,14 +270,58 @@
             </tr>
             <c:forEach var="row" items="${requestScope.requestData}">
                 <tr>
-                    <td>${row.request.id}</td>
-                    <td>${row.clientLogin}</td>
                     <td>
-                            ${row.masterLogin}
-
+                        <form method="get" action="${pageContext.request.contextPath}/controller">
+                            <input type="hidden" name="command" value="get-request-info">
+                            <label>
+                                <button name="request-id" value="${row.request.id}">
+                                        ${row.request.id}
+                                </button>
+                            </label>
+                        </form>
+                            ${row.request.id}
                     </td>
-                    <td>${row.request.price}</td>
-                    <td>${row.request.status}</td>
+                    <td>
+                        <form method="get" action="${pageContext.request.contextPath}/controller">
+                            <input type="hidden" name="command" value="get-user-by-id">
+                            <label>
+                                <button name="user-id" value="${row.request.clientId}">
+                                        ${row.clientLogin}
+                                </button>
+                            </label>
+                        </form>
+                    </td>
+                    <td>
+                        <c:choose>
+                            <c:when test="${not empty row.masterLogin}">
+                                ${row.masterLogin}
+                            </c:when>
+                            <c:otherwise>
+                                <%--
+                                <form method="get" action="${pageContext.request.contextPath}/controller">
+                                    <input type="hidden" name="command" value="assign-master">
+                                    <label>
+                                        <select name="master-id">
+                                            <c:forEach var="master" items="${requestScope.masters}">
+                                                <option value="${master.id}">
+                                                        ${master.login}
+                                                </option>
+                                            </c:forEach>
+                                        </select>
+                                    </label>
+                                </form>
+                                --%>
+                            </c:otherwise>
+                        </c:choose>
+                    </td>
+                    <td>
+                        <c:if test="${row.request.price > 0}">
+                            ${row.request.price}$
+                        </c:if>
+                    </td>
+                    <td>
+                            ${row.request.status}
+                    </td>
                     <td>${row.request.creationDate}</td>
                     <td>${row.request.completionDate}</td>
                     <td><my:modalShow content="${row.request.description}"/></td>

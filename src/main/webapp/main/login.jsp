@@ -10,7 +10,7 @@
     <script type="text/javascript">
         window.onload = function () {
             document.getElementById("sign-in").checked = true;
-            document.getElementById("submit").value = "Sign in";
+            document.getElementById("visibility").checked = false;
         }
 
         function setButtonLabel(x) {
@@ -41,9 +41,9 @@
     <label for="sign-up">Sign Up:</label>
     <input type="radio" id="sign-up" name="type" value="sign-up" onclick="setButtonLabel('Sign up');"/>
     <label for="sign-in">Sign In:</label>
-    <input type="radio" id="sign-in" name="type" value="sign-in" onclick="setButtonLabel('Sign in');"/>
+    <input type="radio" id="sign-in" name="type" value="sign-in" onclick="setButtonLabel('Sign in');" checked/>
     <br/>
-    <input type="submit" id="submit" value="Submit" class="submit-button"/>
+    <input type="submit" id="submit" value="Sign in" class="submit-button"/>
 </form>
 <my:error/>
 </body>

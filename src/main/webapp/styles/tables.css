@@ -30,7 +30,7 @@ table tr:hover {
 table th {
     white-space: nowrap;
     padding: 14px 10px 14px 10px;
-    text-align: left;
+    text-align: center;
     background-color: #57BBD9FF;
     color: #eeeeee;
 }

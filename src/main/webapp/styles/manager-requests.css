@@ -68,6 +68,10 @@
     white-space: nowrap;
 }
 
+.req-table td:nth-child(n+1):nth-child(-n+7) {
+    text-align: center;
+}
+
 .refresh-button-frame {
     position: relative;
     display: inline-block;

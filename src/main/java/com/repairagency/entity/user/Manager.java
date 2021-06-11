@@ -1,7 +1,6 @@
 package com.repairagency.entity.user;
 
 import com.repairagency.entity.EntityManager;
-import com.repairagency.entity.Role;
 import com.repairagency.entity.User;
 import com.repairagency.entity.bean.Request;
 import com.repairagency.exception.DBException;
@@ -39,7 +38,7 @@ public class Manager extends User {
     public void topUpClientBalance(Client client, int amount) throws DBException {
         logger.debug("Adding sum of money ({}) to Client#{}'s balance by Manager#{}",
                 amount, client.getId(), getId());
-        EntityManager.userGiveMoney(client, amount);
+        EntityManager.topUpClientBalance(client.getId(), amount);
     }
 
     public void cancelRequest(Request request, String reason)

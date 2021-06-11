@@ -43,15 +43,19 @@
     clear: both;
 }
 
-.req-table td:nth-child(1) {
+.req-table td:nth-child(n+1):nth-child(-n+2) {
+    text-align: center;
     width: 50px;
 }
 
-.req-table td:nth-child(2) {
-    width: 50px;
+.req-table td:nth-child(3) {
+    text-align: center;
+    padding: 1px 1px 1px 1px;
+    width: 180px;
 }
 
-.req-table td:nth-child(n+3):nth-child(-n+5) {
+.req-table td:nth-child(n+4):nth-child(-n+5) {
+    text-align: center;
     width: 180px;
 }
 
@@ -60,7 +64,6 @@
     max-width: 340px;
     width: 340px;
     text-overflow: ellipsis;
-    text-align: center;
     overflow: hidden;
     white-space: nowrap;
 }
@@ -84,4 +87,24 @@
     min-width: 145px;
     min-height: 42px;
     width: 26%;
+}
+
+.pay-button {
+    display: inline-block;
+    vertical-align: middle;
+    text-align: center;
+    border: none;
+    background-color: inherit;
+    cursor: pointer;
+    color: inherit;
+    width: 100%;
+}
+
+.pay-button:enabled:hover {
+    background-color: #70C9E3AB;
+}
+
+.pay-button:disabled:hover {
+    cursor: initial;
+    background-color: initial;
 }

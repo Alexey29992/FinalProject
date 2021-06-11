@@ -13,10 +13,7 @@
 <body>
 <my:navBar/>
 <c:choose>
-    <c:when test="${empty requestScope.isNumberSet}">
-        <jsp:forward page="/controller?command=check-phone"/>
-    </c:when>
-    <c:when test="${requestScope.isNumberSet}">
+    <c:when test="${not empty sessionScope.user.phNumber}">
         <form method="post" action="${pageContext.request.contextPath}/controller" class="text-form">
             <input type="hidden" name="command" value="create-request"/>
             <label>

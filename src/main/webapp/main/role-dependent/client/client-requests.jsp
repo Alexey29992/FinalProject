@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="my" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="ralib" uri="http://repairagency.com/taglib" %>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -38,23 +39,12 @@
             document.getElementById("page").value = 0;
             submitForm();
         }
-
-        <c:if test="${requestScope.requestList == null}">
-        window.onload = function () {
-            submitForm();
-        }
-        </c:if>
     </script>
     <jsp:include page="/WEB-INF/jspf/modal-box-scripts.jspf"/>
 </head>
 <body>
 <my:navBar/>
-
-<c:if test="${not empty pageContext.request.getParameter('command')}">
-    <c:if test="${empty requestScope.forwarded}">
-        <jsp:forward page="/controller"/>
-    </c:if>
-</c:if>
+<ralib:onRequest command="get-client-requests"/>
 <div class="row">
     <div class="column-middle">
         <div class="column-middle-left">
@@ -168,7 +158,10 @@
         <div class="column-middle-right table-control">
             <div class="page-frame">
                 <label>
-                    <button onclick="setPage(0)">
+                    <button onclick="setPage(0)"
+                            <c:if test="${!requestScope.hasPrevPage}">
+                                disabled
+                            </c:if>>
                         1
                     </button>
                 </label>
@@ -193,23 +186,36 @@
                 </label>
             </div>
             <div class="size-frame">
+                <c:set var="size" value="${pageContext.request.getParameter('size')}"/>
                 <label>
-                    <button onclick="setSize(5)">
+                    <button onclick="setSize(5)"
+                            <c:if test="${size == '5'}">
+                                disabled
+                            </c:if>>
                         5
                     </button>
                 </label>
                 <label>
-                    <button onclick="setSize(10)">
+                    <button onclick="setSize(10)"
+                            <c:if test="${size == '10'}">
+                                disabled
+                            </c:if>>
                         10
                     </button>
                 </label>
                 <label>
-                    <button onclick="setSize(20)">
+                    <button onclick="setSize(20)"
+                            <c:if test="${size == '20' || size == ''}">
+                                disabled
+                            </c:if>>
                         20
                     </button>
                 </label>
                 <label>
-                    <button onclick="setSize(40)">
+                    <button onclick="setSize(40)"
+                            <c:if test="${size == '40'}">
+                                disabled
+                            </c:if>>
                         40
                     </button>
                 </label>
@@ -231,14 +237,21 @@
                     <td>${row.id}</td>
                     <td>
                         <c:if test="${row.price > 0}">
-                            <form method="post" action="controller">
-                                <input type="hidden" name="command" value="make-payment"/>
-                                <input type="hidden" name="request-id" value="${row.id}"/>
-                                <button>${row.price}</button>
-                            </form>
+                            ${row.price}$
                         </c:if>
                     </td>
-                    <td>${row.status}</td>
+                    <td>
+                        <form method="post" action="${pageContext.request.requestURI}">
+                            <input type="hidden" name="command" value="make-payment"/>
+                            <input type="hidden" name="request-id" value="${row.id}"/>
+                            <button class="pay-button"
+                                    <c:if test="${row.status.name() != 'WAIT_FOR_PAYMENT'}">
+                                        disabled
+                                    </c:if>>
+                                    ${row.status}
+                            </button>
+                        </form>
+                    </td>
                     <td>${row.creationDate}</td>
                     <td>${row.completionDate}</td>
                     <td><my:modalShow content="${row.description}"/></td>

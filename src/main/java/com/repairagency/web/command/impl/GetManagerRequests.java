@@ -1,6 +1,6 @@
 package com.repairagency.web.command.impl;
 
-import com.repairagency.PagePath;
+import com.repairagency.web.command.PagePath;
 import com.repairagency.database.wrapper.ManagerRequestData;
 import com.repairagency.entity.EntityManager;
 
@@ -23,6 +23,7 @@ public class GetManagerRequests extends GetTableContent {
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) {
         logger.debug("Executing command : get-manager-requests");
+        logger.trace("Parsing HTTP parameters for Request query");
         QueryData queryData = new QueryData();
         parseStandardParams(queryData, req);
         parseFilters(queryData, req);
@@ -52,7 +53,6 @@ public class GetManagerRequests extends GetTableContent {
     }
 
     void parseFilters(QueryData data, HttpServletRequest req) {
-        logger.trace("Parsing HTTP parameters for Request query");
         String statusFilterAttr = req.getParameter("filter-status");
         logger.trace("filter-status : {}", statusFilterAttr);
         String masterFilterAttr = req.getParameter("filter-master");

@@ -1,13 +1,13 @@
 package com.repairagency.web.context;
 
 import com.repairagency.database.DBManager;
-import com.repairagency.web.constant.Constants;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
+import java.util.HashMap;
 
 @WebListener
 public class ContextListener implements ServletContextListener {
@@ -17,7 +17,7 @@ public class ContextListener implements ServletContextListener {
     @Override
     public void contextInitialized(ServletContextEvent sce) {
         logger.debug("Initializing context");
-        sce.getServletContext().setAttribute("constants", new Constants());
+        sce.getServletContext().setAttribute("user-balance-updates", new HashMap<Integer, Integer>());
         DBManager.initDataSource();
         DBManager.defaultDaoFactory();
     }

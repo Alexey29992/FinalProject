@@ -1,6 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="my" tagdir="/WEB-INF/tags" %>
-<%@ taglib prefix="ralib" uri="http://repairagency.com/taglib" %>
 
 <!DOCTYPE html>
 <html lang="en">

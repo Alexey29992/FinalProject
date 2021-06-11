@@ -1,7 +1,6 @@
 package com.repairagency.entity.user;
 
 import com.repairagency.entity.EntityManager;
-import com.repairagency.entity.Role;
 import com.repairagency.entity.User;
 import com.repairagency.exception.DBException;
 import com.repairagency.exception.InvalidOperationException;

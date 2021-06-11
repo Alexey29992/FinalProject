@@ -1,6 +1,6 @@
 package com.repairagency.web.command.impl;
 
-import com.repairagency.PagePath;
+import com.repairagency.web.command.PagePath;
 import com.repairagency.database.wrapper.QueryData;
 import com.repairagency.entity.EntityManager;
 import com.repairagency.entity.User;
@@ -12,7 +12,6 @@ import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.util.List;
 
 
@@ -23,7 +22,7 @@ public class GetClientRequests extends GetTableContent {
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) {
         logger.debug("Executing command : get-client-requests");
-        HttpSession session = req.getSession();
+        logger.trace("Parsing HTTP parameters for Request query");
         QueryData queryData = new QueryData();
         parseStandardParams(queryData, req);
         parseFilters(queryData, req);
@@ -32,7 +31,7 @@ public class GetClientRequests extends GetTableContent {
             requestList = EntityManager.getClientRequestList(queryData);
         } catch (DBException ex) {
             logger.error("Cannot get Request List", ex);
-            session.setAttribute("error", ex.getPublicMessage());
+            req.getSession().setAttribute("error", ex.getPublicMessage());
             return PagePath.ERROR;
         }
         req.setAttribute("page", page);
@@ -48,12 +47,10 @@ public class GetClientRequests extends GetTableContent {
         req.setAttribute("requestList", requestList);
         req.setAttribute("hasNextPage", hasNextPage);
         req.setAttribute("hasPrevPage", hasPrevPage);
-        req.setAttribute("forwarded", 1);
         return PagePath.CLIENT_REQUESTS;
     }
 
     void parseFilters(QueryData data, HttpServletRequest req) {
-        logger.trace("Parsing HTTP parameters for Request query");
         String statusFilterAttr = req.getParameter("filter-status");
         logger.trace("filter-status : {}", statusFilterAttr);
         User user = (User) req.getSession().getAttribute("user");

@@ -10,7 +10,8 @@ public class Config {
     public static final int LOGIN_LENGTH_MIN = 3;
     public static final int LOGIN_LENGTH_MAX = 20;
 
-    public static final int ROWS_PER_PAGE = 20;
+    public static final int DEFAULT_TABLE_SIZE = 20;
+    public static final int DEFAULT_TABLE_PAGE = 0;
 
     public static final String ADMIN_LOGIN = "admin";
     public static final String ADMIN_PASSWORD = "admin";

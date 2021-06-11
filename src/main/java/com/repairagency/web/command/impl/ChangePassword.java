@@ -1,6 +1,6 @@
 package com.repairagency.web.command.impl;
 
-import com.repairagency.PagePath;
+import com.repairagency.web.command.PagePath;
 import com.repairagency.entity.EntityManager;
 import com.repairagency.entity.User;
 import com.repairagency.exception.DBException;
@@ -32,16 +32,16 @@ public class ChangePassword implements Command {
                 user.setPassword(newPass);
                 EntityManager.updateUser(user);
                 session.setAttribute("action", "password-success");
-                return PagePath.HOME;
+                return req.getContextPath() + PagePath.HOME;
             } catch (InvalidOperationException | DBException ex) {
                 logger.error("Cannot change user password", ex);
                 session.setAttribute("error", ex.getPublicMessage());
-                return PagePath.ERROR;
+                return req.getContextPath() + PagePath.CHANGE_USER_SETTINGS;
             }
         }
         logger.error("Cannot change user password. Password confirmation failed");
         session.setAttribute("error", ErrorMessages.USER_PASSWORD_INCORRECT);
-        return PagePath.ERROR;
+        return req.getContextPath() + PagePath.CHANGE_USER_SETTINGS;
     }
 
 }

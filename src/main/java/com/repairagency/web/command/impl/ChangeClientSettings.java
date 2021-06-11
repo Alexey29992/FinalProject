@@ -1,6 +1,6 @@
 package com.repairagency.web.command.impl;
 
-import com.repairagency.PagePath;
+import com.repairagency.web.command.PagePath;
 import com.repairagency.entity.EntityManager;
 import com.repairagency.entity.user.Client;
 import com.repairagency.exception.DBException;
@@ -28,11 +28,11 @@ public class ChangeClientSettings implements Command {
             client.setPhNumber(phNumber);
             EntityManager.updateUser(client);
             session.setAttribute("action", "settings-client-success");
-            return PagePath.HOME;
+            return req.getContextPath() + PagePath.HOME;
         } catch (DBException ex) {
             logger.error("Cannot change user settings", ex);
             session.setAttribute("error", ex.getPublicMessage());
-            return PagePath.CHANGE_USER_SETTINGS;
+            return req.getContextPath() + PagePath.ERROR;
         }
     }
 

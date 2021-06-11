@@ -1,6 +1,6 @@
 package com.repairagency.web.command.impl;
 
-import com.repairagency.PagePath;
+import com.repairagency.web.command.PagePath;
 import com.repairagency.entity.EntityManager;
 import com.repairagency.entity.bean.Request;
 import com.repairagency.exception.DBException;
@@ -29,21 +29,21 @@ public class Feedback implements Command {
             Request request = EntityManager.getRequest(id);
             if (request.getStatus() != Request.Status.DONE && request.getUserReview() == null) {
                 req.getSession().setAttribute("error", ErrorMessages.USER_UNABLE_FEEDBACK);
-                return PagePath.ERROR;
+                return req.getContextPath() + PagePath.ERROR;
             }
             request.setUserReview(feedback);
             EntityManager.updateRequest(request);
+            req.getSession().setAttribute("action", "feedback-success");
+            return req.getContextPath() + PagePath.HOME;
         } catch (DBException ex) {
             logger.error("Cannot set feedback", ex);
             req.getSession().setAttribute("error", ex.getPublicMessage());
-            return PagePath.ERROR;
+            return req.getContextPath() + PagePath.ERROR;
         } catch (NumberFormatException ex) {
             logger.error("Invalid request-id", ex);
             req.getSession().setAttribute("error", ErrorMessages.UNEXPECTED);
-            return PagePath.ERROR;
+            return req.getContextPath() + PagePath.ERROR;
         }
-        req.getSession().setAttribute("action", "feedback-success");
-        return PagePath.HOME;
     }
 
 }

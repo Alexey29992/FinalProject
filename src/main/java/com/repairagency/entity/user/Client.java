@@ -1,7 +1,6 @@
 package com.repairagency.entity.user;
 
 import com.repairagency.entity.EntityManager;
-import com.repairagency.entity.Role;
 import com.repairagency.entity.User;
 import com.repairagency.entity.bean.PaymentRecord;
 import com.repairagency.entity.bean.Request;
@@ -54,7 +53,7 @@ public class Client extends User {
             throws InvalidOperationException, DBException {
         logger.debug("Processing payment for Request#{} from User#{} with Balance#{}",
                 request.getId(), getId(), balance);
-        EntityManager.makePayment(this.getId(), request);
+        EntityManager.makePayment(this, request.getId());
     }
 
     public void addReview(Request request, String review) throws DBException {

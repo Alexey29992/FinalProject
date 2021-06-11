@@ -22,9 +22,9 @@ public class Controller extends HttpServlet {
         logger.debug("Controller receives 'get' request");
         String command = req.getParameter(COMMAND);
         logger.trace("{} : {}", COMMAND, command);
-        String view = CommandContainer.getCommand(command).execute(req, resp);
-        req.removeAttribute(COMMAND);
-        req.getRequestDispatcher(view).forward(req, resp);
+        String address = CommandContainer.getCommand(command).execute(req, resp);
+        logger.trace("forward to : {}", address);
+        req.getRequestDispatcher(address).forward(req, resp);
     }
 
     @Override
@@ -33,8 +33,9 @@ public class Controller extends HttpServlet {
         req.setCharacterEncoding("UTF-8");
         String command = req.getParameter(COMMAND);
         logger.trace("{} : {}", COMMAND, command);
-        String view = CommandContainer.getCommand(command).execute(req, resp);
-        resp.sendRedirect(view);
+        String address = CommandContainer.getCommand(command).execute(req, resp);
+        logger.trace("sendRedirect to : {}", address);
+        resp.sendRedirect(address);
     }
 
 }
