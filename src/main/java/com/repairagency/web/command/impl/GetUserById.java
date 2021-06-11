@@ -4,6 +4,7 @@ import com.repairagency.entity.EntityManager;
 import com.repairagency.entity.User;
 import com.repairagency.exception.DBException;
 import com.repairagency.exception.ErrorMessages;
+import com.repairagency.web.command.Command;
 import com.repairagency.web.command.PagePath;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -11,7 +12,7 @@ import org.apache.logging.log4j.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class GetUserById extends GetTableContent {
+public class GetUserById implements Command {
 
     private static final Logger logger = LogManager.getLogger();
 

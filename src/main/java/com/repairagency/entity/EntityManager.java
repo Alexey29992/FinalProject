@@ -2,7 +2,7 @@ package com.repairagency.entity;
 
 import com.repairagency.database.QueryBases;
 import com.repairagency.database.QueryGetGenerator;
-import com.repairagency.database.wrapper.ManagerRequestData;
+import com.repairagency.database.wrapper.RequestData;
 import com.repairagency.database.wrapper.QueryData;
 import com.repairagency.text.Text;
 import com.repairagency.database.DBManager;
@@ -26,22 +26,12 @@ public class EntityManager {
 
     private static final Logger logger = LogManager.getLogger();
 
-    public static List<Request> getClientRequestList(QueryData queryData) throws DBException {
+    public static List<RequestData> getRequestList(QueryData queryData) throws DBException {
         Connection connection = startTransaction();
         RequestDao dao = getRequestDao(connection);
-        QueryGetGenerator generator = new QueryGetGenerator(QueryBases.CLIENT_REQUEST_BASE, queryData);
+        QueryGetGenerator generator = new QueryGetGenerator(QueryBases.GENERAL_REQUEST_BASE, queryData);
         String query = generator.generateQuery();
-        List<Request> list = dao.getEntityList(query);
-        completeTransaction(connection);
-        return list;
-    }
-
-    public static List<ManagerRequestData> getManagerRequestList(QueryData queryData) throws DBException {
-        Connection connection = startTransaction();
-        RequestDao dao = getRequestDao(connection);
-        QueryGetGenerator generator = new QueryGetGenerator(QueryBases.MANAGER_REQUEST_BASE, queryData);
-        String query = generator.generateQuery();
-        List<ManagerRequestData> data = dao.getEntityListManager(query);
+        List<RequestData> data = dao.getEntityList(query);
         completeTransaction(connection);
         return data;
     }

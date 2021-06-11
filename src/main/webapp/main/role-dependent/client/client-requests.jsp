@@ -143,7 +143,7 @@
                 <div class="order-frame toggle-radio">
                     <c:set var="sortOrder" value="${pageContext.request.getParameter('sort-order')}"/>
                     <input type="radio" id="desc" name="sort-order" value="desc" onclick="this.form.submit()"
-                            <c:if test="${sortOrder == 'desc' || sortOrder == null}">
+                            <c:if test="${sortOrder == 'desc' || empty sortOrder}">
                                 checked
                             </c:if>/>
                     <label for="desc">DSC:</label>
@@ -205,7 +205,7 @@
                 </label>
                 <label>
                     <button onclick="setSize(20)"
-                            <c:if test="${size == '20' || size == ''}">
+                            <c:if test="${size == '20' || empty size}">
                                 disabled
                             </c:if>>
                         20
@@ -232,38 +232,38 @@
                 <th scope="col">Description</th>
                 <th scope="col">Feedback</th>
             </tr>
-            <c:forEach var="row" items="${requestScope.requestList}">
+            <c:forEach var="row" items="${requestScope.requestData}">
                 <tr>
-                    <td>${row.id}</td>
+                    <td>${row.request.id}</td>
                     <td>
-                        <c:if test="${row.price > 0}">
-                            ${row.price}$
+                        <c:if test="${row.request.price > 0}">
+                            ${row.request.price}$
                         </c:if>
                     </td>
                     <td>
                         <form method="post" action="${pageContext.request.requestURI}">
                             <input type="hidden" name="command" value="make-payment"/>
-                            <input type="hidden" name="request-id" value="${row.id}"/>
+                            <input type="hidden" name="request-id" value="${row.request.id}"/>
                             <button class="pay-button"
-                                    <c:if test="${row.status.name() != 'WAIT_FOR_PAYMENT'}">
+                                    <c:if test="${row.request.status.name() != 'WAIT_FOR_PAYMENT'}">
                                         disabled
                                     </c:if>>
-                                    ${row.status}
+                                    ${row.request.status}
                             </button>
                         </form>
                     </td>
-                    <td>${row.creationDate}</td>
-                    <td>${row.completionDate}</td>
-                    <td><my:modalShow content="${row.description}"/></td>
+                    <td>${row.request.creationDate}</td>
+                    <td>${row.request.completionDate}</td>
+                    <td><my:modalShow content="${row.request.description}" buttonStyle="table-cell-button"/></td>
                     <td>
                         <c:choose>
-                            <c:when test="${not empty row.userReview}">
-                                <my:modalShow content="${row.userReview}"/>
+                            <c:when test="${not empty row.request.userReview}">
+                                <my:modalShow content="${row.request.userReview}" buttonStyle="table-cell-button"/>
                             </c:when>
                             <c:otherwise>
-                                <c:if test="${row.status.name() == 'DONE' && empty row.userReview}">
+                                <c:if test="${row.request.status.name() == 'DONE' && empty row.request.userReview}">
                                     <form method="get" action="feedback.jsp">
-                                        <input type="hidden" name="request-id" value="${row.id}"/>
+                                        <input type="hidden" name="request-id" value="${row.request.id}"/>
                                         <button>Leave Feedback</button>
                                     </form>
                                 </c:if>

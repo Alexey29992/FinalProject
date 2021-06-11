@@ -3,7 +3,7 @@ package com.repairagency.database.dao.mysql;
 import com.repairagency.database.dao.AbstractDao;
 import com.repairagency.database.DBManager;
 import com.repairagency.database.dao.RequestDao;
-import com.repairagency.database.wrapper.ManagerRequestData;
+import com.repairagency.database.wrapper.RequestData;
 import com.repairagency.entity.bean.Request;
 import com.repairagency.exception.DBException;
 import com.repairagency.exception.ErrorMessages;
@@ -213,31 +213,9 @@ public class RequestDaoMysql extends AbstractDao implements RequestDao {
     }
 
     @Override
-    public List<Request> getEntityList(String query) throws DBException {
-        logger.trace("getEntityList#query : {}", query);
-        List<Request> requests = new ArrayList<>();
-        ResultSet resultSet = null;
-        try (PreparedStatement statement = connection.prepareStatement(query)) {
-            resultSet = statement.executeQuery();
-            while (resultSet.next()) {
-                requests.add(getRequestInstance(resultSet));
-            }
-            return requests;
-        } catch (SQLException ex) {
-            String message = "Cannot get Entity List";
-            logger.error(message, ex);
-            DBManager.rollbackTransaction(connection);
-            DBManager.closeConnection(connection);
-            throw new DBException(message, ErrorMessages.DB_INTERNAL, ex);
-        } finally {
-            closeResultSet(resultSet);
-        }
-    }
-
-    @Override
-    public List<ManagerRequestData> getEntityListManager(String query) throws DBException {
+    public List<RequestData> getEntityList(String query) throws DBException {
         logger.trace("getEntityListManager#query : {}", query);
-        List<ManagerRequestData> requests = new ArrayList<>();
+        List<RequestData> requests = new ArrayList<>();
         ResultSet resultSet = null;
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             resultSet = statement.executeQuery();
@@ -245,7 +223,7 @@ public class RequestDaoMysql extends AbstractDao implements RequestDao {
                 Request req = getRequestInstance(resultSet);
                 String clientLogin = resultSet.getString("client_login");
                 String masterLogin = resultSet.getString("master_login");
-                requests.add(new ManagerRequestData(req, clientLogin, masterLogin));
+                requests.add(new RequestData(req, clientLogin, masterLogin));
             }
             return requests;
         } catch (SQLException ex) {

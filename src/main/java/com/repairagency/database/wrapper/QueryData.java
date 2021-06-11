@@ -7,7 +7,7 @@ public class QueryData {
 
     private final Map<String, String> filterFactors = new HashMap<>();
     private String sortFactor;
-    private boolean descending;
+    private String sortOrder;
     private int limitFactor;
     private int offsetFactor;
 
@@ -27,12 +27,12 @@ public class QueryData {
         this.sortFactor = sortFactor;
     }
 
-    public boolean isDescending() {
-        return descending;
+    public String getSortOrder() {
+        return sortOrder;
     }
 
-    public void setDescending(boolean descending) {
-        this.descending = descending;
+    public void setSortOrder(String sortOrder) {
+        this.sortOrder = sortOrder;
     }
 
     public int getLimitFactor() {
@@ -50,5 +50,8 @@ public class QueryData {
     public void setOffsetFactor(int offsetFactor) {
         this.offsetFactor = offsetFactor;
     }
+
+
+
 
 }

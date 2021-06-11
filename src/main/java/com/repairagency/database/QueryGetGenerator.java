@@ -32,8 +32,8 @@ public class QueryGetGenerator {
         }
         if (data.getSortFactor() != null) {
             this.orderBy();
-            if (data.isDescending()) {
-                this.desc();
+            if (data.getSortOrder() != null) {
+                this.orderDirection();
             }
         }
         if (data.getLimitFactor() != 0) {
@@ -66,8 +66,9 @@ public class QueryGetGenerator {
                 .append(data.getSortFactor());
     }
 
-    private void desc() {
-        query.append(" DESC");
+    private void orderDirection() {
+        query.append(" ")
+                .append(data.getSortOrder());
     }
 
     private void limit() {

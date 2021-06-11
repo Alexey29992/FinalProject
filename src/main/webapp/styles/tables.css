@@ -68,6 +68,24 @@ table th {
     background: -webkit-linear-gradient(bottom,  #d3d3d3 0%,#8a8a8a 100%);
 }
 
+.table-cell-button {
+    border: none;
+    background-color: inherit;
+    font-size: inherit;
+    text-align: left;
+    cursor: pointer;
+    display: inline-block;
+    color: inherit;
+    width: 100%;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.table-cell-button:hover {
+    background-color: #70C9E3AB;
+}
+
 .page-number {
     color: #08334EFF;
     position: relative;

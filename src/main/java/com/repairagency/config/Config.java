@@ -12,6 +12,8 @@ public class Config {
 
     public static final int DEFAULT_TABLE_SIZE = 20;
     public static final int DEFAULT_TABLE_PAGE = 0;
+    public static final String DEFAULT_TABLE_ORDER = "desc";
+    public static final String DEFAULT_TABLE_SORT = "id";
 
     public static final String ADMIN_LOGIN = "admin";
     public static final String ADMIN_PASSWORD = "admin";

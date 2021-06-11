@@ -1,6 +1,6 @@
 package com.repairagency.database.dao;
 
-import com.repairagency.database.wrapper.ManagerRequestData;
+import com.repairagency.database.wrapper.RequestData;
 import com.repairagency.entity.bean.Request;
 import com.repairagency.exception.DBException;
 
@@ -20,8 +20,7 @@ public interface RequestDao extends Dao<Request> {
     List<Request> getEntityListByStatus(Request.Status status, int chunkSize, int chunkNumber, String sortingFactor)
             throws DBException;
 
-    List<Request> getEntityList(String query) throws DBException;
+    List<RequestData> getEntityList(String query) throws DBException;
 
-    List<ManagerRequestData> getEntityListManager(String query) throws DBException;
 
 }

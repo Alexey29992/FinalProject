@@ -177,7 +177,7 @@
                 <div class="order-frame toggle-radio">
                     <c:set var="sortOrder" value="${pageContext.request.getParameter('sort-order')}"/>
                     <input type="radio" id="desc" name="sort-order" value="desc" onclick="this.form.submit()"
-                            <c:if test="${sortOrder == 'desc' || sortOrder == null}">
+                            <c:if test="${sortOrder == 'desc' || empty sortOrder}">
                                 checked
                             </c:if>/>
                     <label for="desc">DSC:</label>
@@ -239,7 +239,7 @@
                 </label>
                 <label>
                     <button onclick="setSize(20)"
-                            <c:if test="${size == '20' || size == ''}">
+                            <c:if test="${size == '20' || empty size}">
                                 disabled
                             </c:if>>
                         20
@@ -271,7 +271,7 @@
             <c:forEach var="row" items="${requestScope.requestData}">
                 <tr>
                     <td>
-                        <form method="get" action="${pageContext.request.contextPath}/controller">
+                        <form method="get" action="${pageContext.request.requestURI}">
                             <input type="hidden" name="command" value="get-request-info">
                             <label>
                                 <button name="request-id" value="${row.request.id}">
@@ -282,7 +282,7 @@
                             ${row.request.id}
                     </td>
                     <td>
-                        <form method="get" action="${pageContext.request.contextPath}/controller">
+                        <form method="get" action="${pageContext.request.requestURI}">
                             <input type="hidden" name="command" value="get-user-by-id">
                             <label>
                                 <button name="user-id" value="${row.request.clientId}">
@@ -293,15 +293,25 @@
                     </td>
                     <td>
                         <c:choose>
-                            <c:when test="${not empty row.masterLogin}">
-                                ${row.masterLogin}
+                            <c:when test="${not empty row.request.masterId}">
+                                <form method="get" action="${pageContext.request.requestURI}">
+                                    <input type="hidden" name="command" value="get-user-by-id">
+                                    <label>
+                                        <button name="user-id" value="${row.request.masterId}">
+                                                ${row.masterLogin}
+                                        </button>
+                                    </label>
+                                </form>
                             </c:when>
                             <c:otherwise>
-                                <%--
-                                <form method="get" action="${pageContext.request.contextPath}/controller">
+                                <form method="get" action="${pageContext.request.requestURI}">
                                     <input type="hidden" name="command" value="assign-master">
                                     <label>
                                         <select name="master-id">
+                                            <c:if test="${empty requestScope.masters}">
+                                                <%--<jsp:forward page=""></jsp:forward>--%>
+                                            </c:if>
+
                                             <c:forEach var="master" items="${requestScope.masters}">
                                                 <option value="${master.id}">
                                                         ${master.login}
@@ -310,7 +320,6 @@
                                         </select>
                                     </label>
                                 </form>
-                                --%>
                             </c:otherwise>
                         </c:choose>
                     </td>
@@ -324,8 +333,8 @@
                     </td>
                     <td>${row.request.creationDate}</td>
                     <td>${row.request.completionDate}</td>
-                    <td><my:modalShow content="${row.request.description}"/></td>
-                    <td><my:modalShow content="${row.request.userReview}"/></td>
+                    <td><my:modalShow content="${row.request.description}" buttonStyle="table-cell-button"/></td>
+                    <td><my:modalShow content="${row.request.userReview}" buttonStyle="table-cell-button"/></td>
                 </tr>
             </c:forEach>
         </table>

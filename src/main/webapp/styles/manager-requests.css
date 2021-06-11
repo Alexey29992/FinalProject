@@ -61,8 +61,8 @@
 
 .req-table td:nth-child(n+8):nth-child(-n+9){
     padding: 2px;
-    max-width: 340px;
-    width: 340px;
+    max-width: 200px;
+    width: 200px;
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
