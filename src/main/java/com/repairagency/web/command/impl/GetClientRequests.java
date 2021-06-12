@@ -2,8 +2,8 @@ package com.repairagency.web.command.impl;
 
 import com.repairagency.web.command.Command;
 import com.repairagency.web.command.PagePath;
-import com.repairagency.database.wrapper.QueryData;
-import com.repairagency.entity.User;
+import com.repairagency.database.QueryGetData;
+import com.repairagency.bean.User;
 import com.repairagency.web.command.impl.parser.Parser;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -21,7 +21,7 @@ public class GetClientRequests extends GetRequestTable implements Command {
         return getRequestTable(req, PagePath.CLIENT_REQUESTS);
     }
 
-    protected void parseFilters(HttpServletRequest req, QueryData data) {
+    protected void parseFilters(HttpServletRequest req, QueryGetData data) {
         String statusFilterAttr = req.getParameter("filter-status");
         logger.trace("filter-status : {}", statusFilterAttr);
         User user = (User) req.getSession().getAttribute("user");

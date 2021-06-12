@@ -55,17 +55,21 @@
     width: 50px;
 }
 
-.req-table td:nth-child(n+5):nth-child(-n+7) {
-    width: 180px;
+.req-table td:nth-child(n+5):nth-child(-n+9) {
+    max-width: 180px;
+    min-width: 180px;
 }
 
 .req-table td:nth-child(n+8):nth-child(-n+9){
     padding: 2px;
-    max-width: 200px;
-    width: 200px;
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
+}
+
+.req-table td:nth-child(10) {
+    padding: 2px;
+    text-align: center;
 }
 
 .req-table td:nth-child(n+1):nth-child(-n+7) {

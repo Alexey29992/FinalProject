@@ -6,6 +6,7 @@ public class ErrorMessages {
 
 
 
+
     private ErrorMessages() {
     }
     public static final Object INVALID_INPUT = "Invalid input";
@@ -28,10 +29,11 @@ public class ErrorMessages {
     public static final String USER_UNABLE_PAY_MONEY = "Not enough money";
 
     public static final String MANAGER_INVALID_TOP_UP = "Sum should be positive number";
+    public static final String NO_SUCH_USER = "Cannot find user";
+    public static final String NO_SUCH_REQUEST = "Cannot find user";
 
     public static final String DB_INTERNAL = "Your query cannot be processed";
     public static final String DB_NOT_FOUND = "Queried entity does not exist, or some errors occurred";
-
 
     ////////////////////////////////
 

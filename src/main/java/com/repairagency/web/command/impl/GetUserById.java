@@ -1,9 +1,10 @@
 package com.repairagency.web.command.impl;
 
-import com.repairagency.entity.EntityManager;
-import com.repairagency.entity.User;
+import com.repairagency.bean.EntityManager;
+import com.repairagency.bean.User;
 import com.repairagency.exception.DBException;
 import com.repairagency.exception.ErrorMessages;
+import com.repairagency.exception.InvalidOperationException;
 import com.repairagency.web.command.Command;
 import com.repairagency.web.command.PagePath;
 import org.apache.logging.log4j.LogManager;
@@ -24,17 +25,17 @@ public class GetUserById implements Command {
         logger.trace("User id : {}", userIdAttr);
         try {
             int userId = Integer.parseInt(userIdAttr);
-            User user = EntityManager.getUserById(userId);
+            User user = EntityManager.getUser(userId);
             req.setAttribute("user", user);
             return PagePath.MANAGER_USER_INFO;
-        } catch (DBException ex) {
+        } catch (DBException | InvalidOperationException ex) {
             logger.error("Cannot get user", ex);
             req.getSession().setAttribute("error", ex.getPublicMessage());
             return PagePath.ERROR;
         }  catch (NumberFormatException ex) {
             logger.error("Invalid id attribute", ex);
             req.getSession().setAttribute("error", ErrorMessages.INVALID_INPUT);
-            return req.getContextPath() + PagePath.ERROR;
+            return PagePath.ERROR;
         }
     }
 

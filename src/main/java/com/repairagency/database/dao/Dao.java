@@ -1,8 +1,12 @@
 package com.repairagency.database.dao;
 
+import com.repairagency.bean.AbstractBean;
+import com.repairagency.database.QueryGetData;
 import com.repairagency.exception.DBException;
 
-public interface Dao<T> {
+import java.util.List;
+
+public interface Dao<T extends AbstractBean> {
 
     int addEntity(T entity) throws DBException;
 
@@ -10,6 +14,6 @@ public interface Dao<T> {
 
     void removeEntity(T entity) throws DBException;
 
-    T getEntityById(int id) throws DBException;
+    List<T> getEntityList(QueryGetData queryData) throws DBException;
 
 }

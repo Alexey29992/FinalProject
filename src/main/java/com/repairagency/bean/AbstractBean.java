@@ -1,9 +1,9 @@
-package com.repairagency.entity;
+package com.repairagency.bean;
 
 import java.io.Serializable;
 import java.util.Objects;
 
-public abstract class PersistentEntity implements Serializable {
+public abstract class AbstractBean implements Serializable {
 
     private int id;
 
@@ -19,7 +19,7 @@ public abstract class PersistentEntity implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        PersistentEntity that = (PersistentEntity) o;
+        AbstractBean that = (AbstractBean) o;
         return id == that.id;
     }
 
@@ -30,7 +30,7 @@ public abstract class PersistentEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "id=" + id;
+        return "AbstractBean{id=" + id + '}';
     }
 
 }

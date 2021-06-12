@@ -1,6 +1,5 @@
 table {
-    text-align: left;
-    font-family: Arial, Helvetica, sans-serif;
+    line-height: 2.1;
     border-collapse: collapse;
     width: 100%;
 }
@@ -33,6 +32,36 @@ table th {
     text-align: center;
     background-color: #57BBD9FF;
     color: #eeeeee;
+}
+
+.page-number {
+    color: #08334EFF;
+    position: relative;
+    top: 2px;
+    text-align: center;
+    font: bold 18px Arial, sans-serif;
+    border: 1px solid #9a9a9a;
+    border-radius: 4px;
+    padding: 4px 11px 4px 11px;
+    display: inline-flex;
+}
+
+.page-frame {
+    text-align: center;
+    border: 1px solid #9a9a9a;
+    padding: 2px 10px 6px 10px;
+    border-radius: 4px;
+    font-size: 18px;
+    display: inline-block;
+}
+
+.size-frame {
+    text-align: center;
+    border: 1px solid #9a9a9a;
+    padding: 5px 10px 10px 10px;
+    border-radius: 4px;
+    font-size: 18px;
+    display: inline-block;
 }
 
 .table-control button {
@@ -71,6 +100,7 @@ table th {
 .table-cell-button {
     border: none;
     background-color: inherit;
+    padding: 7px 13px;
     font-size: inherit;
     text-align: left;
     cursor: pointer;
@@ -86,32 +116,25 @@ table th {
     background-color: #70C9E3AB;
 }
 
-.page-number {
-    color: #08334EFF;
-    position: relative;
-    top: 2px;
+.action-button {
+    display:inline-block;
+    border: initial;
+    cursor: pointer;
+    padding: 13px 23px 13px 23px;
+    font-weight: 700;
+    line-height: 1;
     text-align: center;
-    font: bold 18px Arial, sans-serif;
-    border: 1px solid #9a9a9a;
-    border-radius: 4px;
-    padding: 4px 11px 4px 11px;
-    display: inline-flex;
+    text-shadow:0 1px 1px rgba(0, 0, 0, 0.5);
+    background:#10bc98;
+    color:#fff;
+    transition: initial;
 }
 
-.page-frame {
-    text-align: center;
-    border: 1px solid #9a9a9a;
-    padding: 2px 10px 6px 10px;
-    border-radius: 4px;
-    font-size: 18px;
-    display: inline-block;
+.action-button:hover {
+    border: 1px solid #10bc98;
+    background:#13d7ae;
 }
 
-.size-frame {
-    text-align: center;
-    border: 1px solid #9a9a9a;
-    padding: 5px 10px 10px 10px;
-    border-radius: 4px;
-    font-size: 18px;
-    display: inline-block;
+.action-button:active, .action-button:focus{
+    background:#0fae8d;
 }

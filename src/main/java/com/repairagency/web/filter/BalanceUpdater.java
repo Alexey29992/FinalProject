@@ -1,7 +1,7 @@
 package com.repairagency.web.filter;
 
-import com.repairagency.entity.User;
-import com.repairagency.entity.user.Client;
+import com.repairagency.bean.User;
+import com.repairagency.bean.user.Client;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;

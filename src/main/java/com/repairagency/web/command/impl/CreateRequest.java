@@ -1,8 +1,8 @@
 package com.repairagency.web.command.impl;
 
 import com.repairagency.web.command.PagePath;
-import com.repairagency.entity.EntityManager;
-import com.repairagency.entity.User;
+import com.repairagency.bean.EntityManager;
+import com.repairagency.bean.User;
 import com.repairagency.exception.DBException;
 import com.repairagency.util.Validator;
 import com.repairagency.web.command.Command;

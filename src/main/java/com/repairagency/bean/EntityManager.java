@@ -1,17 +1,14 @@
-package com.repairagency.entity;
+package com.repairagency.bean;
 
-import com.repairagency.database.QueryBases;
-import com.repairagency.database.QueryGetGenerator;
-import com.repairagency.database.wrapper.RequestData;
-import com.repairagency.database.wrapper.QueryData;
+import com.repairagency.bean.data.PaymentRecord;
+import com.repairagency.bean.data.Request;
+import com.repairagency.database.QueryGetData;
 import com.repairagency.text.Text;
 import com.repairagency.database.DBManager;
 import com.repairagency.database.dao.*;
-import com.repairagency.entity.bean.PaymentRecord;
-import com.repairagency.entity.bean.Request;
-import com.repairagency.entity.user.Client;
-import com.repairagency.entity.user.Manager;
-import com.repairagency.entity.user.Master;
+import com.repairagency.bean.user.Client;
+import com.repairagency.bean.user.Manager;
+import com.repairagency.bean.user.Master;
 import com.repairagency.exception.DBException;
 import com.repairagency.exception.ErrorMessages;
 import com.repairagency.exception.InvalidOperationException;
@@ -26,23 +23,8 @@ public class EntityManager {
 
     private static final Logger logger = LogManager.getLogger();
 
-    public static List<RequestData> getRequestList(QueryData queryData) throws DBException {
-        Connection connection = startTransaction();
-        RequestDao dao = getRequestDao(connection);
-        QueryGetGenerator generator = new QueryGetGenerator(QueryBases.GENERAL_REQUEST_BASE, queryData);
-        String query = generator.generateQuery();
-        List<RequestData> data = dao.getEntityList(query);
-        completeTransaction(connection);
-        return data;
+    private EntityManager() {
     }
-
-/*    public static List<Request> getMasterRequestList() throws DBException {
-        Connection connection = startTransaction();
-        RequestDao dao = getRequestDao(connection);
-        List<Request> list = dao.getEntityList();
-        completeTransaction(connection);
-        return list;
-    }*/
 
     ////////////////////////////////////////////////////////
 
@@ -59,7 +41,7 @@ public class EntityManager {
     public static User signIn(String login, String password)
             throws DBException, InvalidOperationException {
         logger.debug("Entering with login '{}'", login);
-        User user = EntityManager.userGetByLogin(login);
+        User user = EntityManager.getUser(login);
         if (user == null) {
             logger.debug("Can not enter: '{}' not registered", login);
             throw new InvalidOperationException(ErrorMessages.USER_LOGIN_NOT_FOUND);
@@ -100,83 +82,40 @@ public class EntityManager {
         return user;
     }
 
-    public static Request newRequest(String description, int clientId)
-            throws DBException {
+    ////////////////////////////////////////////////////////
+
+    public static List<PaymentRecord> getPaymentRecordList(QueryGetData queryData) throws DBException {
+        Connection connection = startTransaction();
+        List<PaymentRecord> requests = getPaymentRecordList(queryData, connection);
+        completeTransaction(connection);
+        return requests;
+    }
+
+    ////////////////////////////////////////////////////////
+
+    public static void newRequest(String description, int clientId) throws DBException {
         logger.debug("Creating new request from Client#{}", clientId);
         Request request = new Request(description, clientId);
         Connection connection = startTransaction();
-        RequestDao dao = getRequestDao(connection);
+        Dao<Request> dao = getRequestDao(connection);
         int id = dao.addEntity(request);
         request.setId(id);
+        completeTransaction(connection);
+    }
+
+    public static Request getRequest(int id)
+            throws DBException, InvalidOperationException {
+        Connection connection = startTransaction();
+        Request request = getRequest(id, connection);
         completeTransaction(connection);
         return request;
     }
 
-    ////////////////////////////////////////////////////////
-
-    public static PaymentRecord paymentRecordGetById(int id) throws DBException {
+    public static List<Request> getRequestList(QueryGetData queryData) throws DBException {
         Connection connection = startTransaction();
-        PaymentRecordDao dao = getPaymentRecordDao(connection);
-        PaymentRecord list = dao.getEntityById(id);
+        List<Request> requests = getRequestList(queryData, connection);
         completeTransaction(connection);
-        return list;
-    }
-
-    public static List<PaymentRecord> paymentRecordGetByUser(int clientId, int chunkSize, int chunkNumber, String sortingFactor)
-            throws DBException {
-        Connection connection = startTransaction();
-        PaymentRecordDao dao = getPaymentRecordDao(connection);
-        List<PaymentRecord> list = dao.getEntityList(clientId, chunkSize, chunkNumber, sortingFactor);
-        completeTransaction(connection);
-        return list;
-    }
-
-    ////////////////////////////////////////////////////////
-
-    public static Request getRequest(int id)
-            throws DBException {
-        Connection connection = startTransaction();
-        RequestDao dao = getRequestDao(connection);
-        Request req = dao.getEntityById(id);
-        completeTransaction(connection);
-        return req;
-    }
-
-    public static List<Request> requestGetAll(int chunkSize, int chunkNumber, String sortingFactor)
-            throws DBException {
-        Connection connection = startTransaction();
-        RequestDao dao = getRequestDao(connection);
-        List<Request> list = dao.getEntityListAll(chunkSize, chunkNumber, sortingFactor);
-        completeTransaction(connection);
-        return list;
-    }
-
-    public static List<Request> requestGetByClient(int clientId, int chunkSize, int chunkNumber, String sortingFactor)
-            throws DBException {
-        Connection connection = startTransaction();
-        RequestDao dao = getRequestDao(connection);
-        List<Request> list = dao.getEntityListByClient(clientId, chunkSize, chunkNumber, sortingFactor);
-        completeTransaction(connection);
-        return list;
-    }
-
-    public static List<Request> requestGetByMaster(int masterId, int chunkSize, int chunkNumber, String sortingFactor)
-            throws DBException {
-        Connection connection = startTransaction();
-        RequestDao dao = getRequestDao(connection);
-        List<Request> list = dao.getEntityListByMaster(masterId, chunkSize, chunkNumber, sortingFactor);
-        completeTransaction(connection);
-        return list;
-    }
-
-    public static List<Request> requestGetByStatus(Request.Status status, int chunkSize,
-                                                   int chunkNumber, String sortingFactor)
-            throws DBException {
-        Connection connection = startTransaction();
-        RequestDao dao = getRequestDao(connection);
-        List<Request> list = dao.getEntityListByStatus(status, chunkSize, chunkNumber, sortingFactor);
-        completeTransaction(connection);
-        return list;
+        return requests;
     }
 
     public static void updateRequest(Request request) throws DBException {
@@ -187,88 +126,73 @@ public class EntityManager {
 
     ////////////////////////////////////////////////////////
 
-    public static User userGetByLogin(String login) throws DBException {
+    public static User getUser(int id)
+            throws DBException, InvalidOperationException {
         Connection connection = startTransaction();
-        UserDao userDao = getUserDao(connection);
-        User user = userDao.getEntityByLogin(login);
+        User user = getUser(id, connection);
         completeTransaction(connection);
         return user;
     }
 
-    public static User getUserById(int userId) throws DBException {
+    public static User getUser(String login)
+            throws DBException, InvalidOperationException {
         Connection connection = startTransaction();
-        UserDao dao = getUserDao(connection);
-        User user = dao.getEntityById(userId);
+        User user = getUser(login, connection);
         completeTransaction(connection);
         return user;
     }
 
-    public static List<User> usersGetAll(int chunkSize, int chunkNumber, String sortingFactor) throws DBException {
+    public static List<User> getUserList(QueryGetData queryData) throws DBException {
         Connection connection = startTransaction();
-        UserDao dao = getUserDao(connection);
-        List<User> list = dao.getEntityListAll(chunkSize, chunkNumber, sortingFactor);
+        List<User> users = getUserList(queryData, connection);
         completeTransaction(connection);
-        return list;
+        return users;
     }
 
-    public static List<User> usersGetByRole(User.Role role, int chunkSize, int chunkNumber, String sortingFactor) throws DBException {
+    public static void updateUser(User request) throws DBException {
         Connection connection = startTransaction();
-        UserDao dao = getUserDao(connection);
-        List<User> list = dao.getEntityListByRole(role, chunkSize, chunkNumber, sortingFactor);
+        getUserDao(connection).updateEntity(request);
         completeTransaction(connection);
-        return list;
     }
 
     public static void userRemove(User user) throws DBException {
         Connection connection = startTransaction();
-        UserDao dao = getUserDao(connection);
+        Dao<User> dao = getUserDao(connection);
         dao.removeEntity(user);
         completeTransaction(connection);
     }
 
-    public static void userAddToDB(User user) throws DBException {
-        Connection connection = startTransaction();
-        UserDao dao = getUserDao(connection);
-        int id = dao.addEntity(user);
-        user.setId(id);
-        completeTransaction(connection);
-    }
-
-    public void userSignOut() {
-        // should be realized (deleting Cookies)
-    }
-
-    public static void updateUser(User user) throws DBException {
-        Connection connection = startTransaction();
-        getUserDao(connection).updateEntity(user);
-        completeTransaction(connection);
-    }
-
     public static boolean isLoginRegistered(String login) throws DBException {
-        Connection connection = startTransaction();
-        boolean result = false;
-        User user = getUserDao(connection).getEntityByLogin(login);
-        if (user != null) {
-            result = true;
+        boolean result = true;
+        try {
+            getUser(login);
+            logger.trace("Login {} is free", login);
+        } catch (InvalidOperationException ex) {
+            logger.trace("Login {} is registered", login);
+            result = false;
         }
-        completeTransaction(connection);
         return result;
     }
 
     ////////////////////////////////////////////////////////
 
-    public static int topUpClientBalance(int clientId, int amount) throws DBException {
+    public static int topUpClientBalance(int clientId, int amount)
+            throws DBException, InvalidOperationException {
         logger.debug("Top up Client balance");
         logger.trace("amount#{}$ , Client#{}", amount, clientId);
         Connection connection = startTransaction();
-        UserDao userDao = getUserDao(connection);
+        Dao<User> userDao = getUserDao(connection);
+        Dao<PaymentRecord> paymentRecordDao = getPaymentRecordDao(connection);
+
         logger.trace("Receiving Client from DB");
-        Client client = (Client) userDao.getEntityById(clientId);
-        PaymentRecordDao paymentRecordDao = getPaymentRecordDao(connection);
+        Client client = (Client) getUser(clientId, connection);
+
         int newBalance = client.getBalance() + amount;
         client.setBalance(newBalance);
+
         logger.trace("Updating Client in DB");
         userDao.updateEntity(client);
+
         logger.trace("Creating new PaymentRecord for Client");
         PaymentRecord paymentRecord = new PaymentRecord(amount, clientId, Text.PAYMENT_RECORD_ADD_MONEY);
         paymentRecordDao.addEntity(paymentRecord);
@@ -281,12 +205,12 @@ public class EntityManager {
         logger.debug("Processing payment");
         logger.trace("Client#{} , Request#{}", client.getId(), requestId);
         Connection connection = startTransaction();
-        UserDao userDao = getUserDao(connection);
-        RequestDao requestDao = getRequestDao(connection);
-        PaymentRecordDao paymentRecordDao = getPaymentRecordDao(connection);
+        Dao<User> userDao = getUserDao(connection);
+        Dao<Request> requestDao = getRequestDao(connection);
+        Dao<PaymentRecord> paymentRecordDao = getPaymentRecordDao(connection);
 
         logger.trace("Receiving Request instance from DB");
-        Request request = requestDao.getEntityById(requestId);
+        Request request = getRequest(requestId, connection);
 
         int amount = request.getPrice();
 
@@ -313,6 +237,54 @@ public class EntityManager {
 
     ////////////////////////////////////////////////////////
 
+    private static User getUser(int id, Connection connection)
+            throws DBException, InvalidOperationException {
+        QueryGetData queryData = new QueryGetData();
+        queryData.setFilterFactor("user.id", String.valueOf(id));
+        List<User> list = getUserList(queryData, connection);
+        if (list.isEmpty()) {
+            throw new InvalidOperationException(ErrorMessages.NO_SUCH_USER);
+        }
+        return list.get(0);
+    }
+
+    private static User getUser(String login, Connection connection)
+            throws DBException, InvalidOperationException {
+        QueryGetData queryData = new QueryGetData();
+        queryData.setFilterFactor("user.login", login);
+        List<User> list = getUserList(queryData, connection);
+        if (list.isEmpty()) {
+            throw new InvalidOperationException(ErrorMessages.NO_SUCH_USER);
+        }
+        return list.get(0);
+    }
+
+    private static List<User> getUserList(QueryGetData queryData, Connection connection)
+            throws DBException {
+        return getUserDao(connection).getEntityList(queryData);
+    }
+
+    private static Request getRequest(int id, Connection connection)
+            throws DBException, InvalidOperationException {
+        QueryGetData queryData = new QueryGetData();
+        queryData.setFilterFactor("request.id", String.valueOf(id));
+        List<Request> list = getRequestList(queryData, connection);
+        if (list.isEmpty()) {
+            throw new InvalidOperationException(ErrorMessages.NO_SUCH_REQUEST);
+        }
+        return list.get(0);
+    }
+
+    private static List<Request> getRequestList(QueryGetData queryData, Connection connection)
+            throws DBException {
+        return getRequestDao(connection).getEntityList(queryData);
+    }
+
+    private static List<PaymentRecord> getPaymentRecordList(QueryGetData queryData, Connection connection)
+            throws DBException {
+        return getPaymentRecordDao(connection).getEntityList(queryData);
+    }
+
     private static Connection startTransaction() throws DBException {
         return DBManager.getConnection();
     }
@@ -322,15 +294,15 @@ public class EntityManager {
         DBManager.closeConnection(connection);
     }
 
-    private static PaymentRecordDao getPaymentRecordDao(Connection connection) throws DBException {
+    private static Dao<PaymentRecord> getPaymentRecordDao(Connection connection) throws DBException {
         return DBManager.getDaoFactory().getPaymentRecordDao(connection);
     }
 
-    private static RequestDao getRequestDao(Connection connection) throws DBException {
+    private static Dao<Request> getRequestDao(Connection connection) throws DBException {
         return DBManager.getDaoFactory().getRequestDao(connection);
     }
 
-    private static UserDao getUserDao(Connection connection) throws DBException {
+    private static Dao<User> getUserDao(Connection connection) throws DBException {
         return DBManager.getDaoFactory().getUserDao(connection);
     }
 
@@ -338,7 +310,7 @@ public class EntityManager {
             throws DBException {
         Connection connection = startTransaction();
         Manager manager = new Manager(login, password);
-        UserDao userDao = getUserDao(connection);
+        Dao<User> userDao = getUserDao(connection);
         int managerId = userDao.addEntity(manager);
         completeTransaction(connection);
         manager.setId(managerId);
@@ -349,7 +321,7 @@ public class EntityManager {
             throws DBException {
         Connection connection = startTransaction();
         Master master = new Master(login, password);
-        UserDao userDao = getUserDao(connection);
+        Dao<User> userDao = getUserDao(connection);
         int masterId = userDao.addEntity(master);
         completeTransaction(connection);
         master.setId(masterId);
@@ -360,7 +332,7 @@ public class EntityManager {
             throws DBException {
         Connection connection = startTransaction();
         Client client = new Client(login, password);
-        UserDao userDao = getUserDao(connection);
+        Dao<User> userDao = getUserDao(connection);
         int clientId = userDao.addEntity(client);
         completeTransaction(connection);
         client.setId(clientId);

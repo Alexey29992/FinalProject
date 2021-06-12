@@ -1,15 +1,18 @@
 package com.repairagency.database.dao;
 
+import com.repairagency.bean.User;
+import com.repairagency.bean.data.PaymentRecord;
+import com.repairagency.bean.data.Request;
 import com.repairagency.exception.DBException;
 
 import java.sql.Connection;
 
 public interface DaoFactory {
 
-    PaymentRecordDao getPaymentRecordDao(Connection connection) throws DBException;
+    Dao<PaymentRecord> getPaymentRecordDao(Connection connection) throws DBException;
 
-    RequestDao getRequestDao(Connection connection) throws DBException;
+    Dao<Request> getRequestDao(Connection connection) throws DBException;
 
-    UserDao getUserDao(Connection connection) throws DBException;
+    Dao<User> getUserDao(Connection connection) throws DBException;
 
 }

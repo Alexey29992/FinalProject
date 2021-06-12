@@ -13,46 +13,41 @@
 </head>
 <body>
 <my:navBar/>
-<c:if test="${}">
 
+<form method="get" action="${pageContext.request.contextPath}/controller">
+    <input type="hidden" name="command" value="get-user-by-login"/>
+    <label>
+        Find by login:
+        <input type="text" name="user-login" placeholder="User login..." value="${requestScope.user.login}"/>
+    </label>
+    <input type="submit" value="Submit">
+</form>
+<form method="get" action="${pageContext.request.contextPath}/controller">
+    <input type="hidden" name="command" value="get-user-by-id"/>
+    <label>
+        Find by id:
+        <input type="text" name="user-id" placeholder="User id..." value="${requestScope.user.id}"/>
+    </label>
+    <input type="submit" value="Submit">
+</form>
+
+<c:if test="${not empty requestScope.user}">
+    User: ${requestScope.user.id}
+    Login: ${requestScope.user.login}
+    Role: ${requestScope.user.role}
+    <c:if test="${requestScope.user.role == 'CLIENT'}">
+        Phone: ${requestScope.user.phNumber}
+        <form method="post" action="${pageContext.request.contextPath}/controller">
+            <input type="hidden" name="command" value="top-up-balance"/>
+            <input type="hidden" name="client-id" value="${requestScope.user.id}"/>
+            <label>
+                Top-up balance:
+                <input type="text" name="amount" placeholder="Sum..."/>
+            </label>
+        </form>
+        Active Requests
+    </c:if>
 </c:if>
-<c:choose>
-    <c:when test="${not empty requestScope.user}">
-        User: ${requestScope.user.id}
-        Login: ${requestScope.user.login}
-        Role: ${requestScope.user.role}
-        <c:if test="${requestScope.user.role == 'CLIENT'}">
-            Phone: ${requestScope.user.phNumber}
-            <form method="post" action="${pageContext.request.contextPath}/controller">
-                <input type="hidden" name="command" value="top-up-balance"/>
-                <input type="hidden" name="client-id" value="${requestScope.user.id}"/>
-                <label>
-                    Top-up balance:
-                    <input type="text" name="amount" placeholder="Sum..."/>
-                </label>
-            </form>
-            Active Requests
-        </c:if>
-    </c:when>
-    <c:otherwise>
-        <form method="get" action="${pageContext.request.contextPath}/controller">
-            <input type="hidden" name="command" value="get-user-by-login"/>
-            <label>
-                Find by login:
-                <input type="text" name="user-login" placeholder="User login..."/>
-            </label>
-            <input type="submit" value="Submit">
-        </form>
-        <form method="get" action="${pageContext.request.contextPath}/controller">
-            <input type="hidden" name="command" value="get-user-by-id"/>
-            <label>
-                Find by id:
-                <input type="text" name="user-id" placeholder="User id..."/>
-            </label>
-            <input type="submit" value="Submit">
-        </form>
-    </c:otherwise>
-</c:choose>
 <my:error/>
 </body>
 </html>

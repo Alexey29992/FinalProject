@@ -231,44 +231,38 @@
                 <th scope="col">Completion Date</th>
                 <th scope="col">Description</th>
                 <th scope="col">Feedback</th>
+                <th scope="col">Actions</th>
             </tr>
-            <c:forEach var="row" items="${requestScope.requestData}">
+            <c:forEach var="row" items="${requestScope.requests}">
                 <tr>
-                    <td>${row.request.id}</td>
+                    <td>${row.id}</td>
                     <td>
-                        <c:if test="${row.request.price > 0}">
-                            ${row.request.price}$
+                        <c:if test="${row.price > 0}">
+                            ${row.price}$
+                        </c:if>
+                    </td>
+                    <td>${row.status}</td>
+                    <td>${row.creationDate}</td>
+                    <td>${row.completionDate}</td>
+                    <td><my:modalShow content="${row.description}" buttonStyle="table-cell-button"/></td>
+                    <td>
+                        <c:if test="${not empty row.userReview}">
+                            <my:modalShow content="${row.userReview}" buttonStyle="table-cell-button"/>
                         </c:if>
                     </td>
                     <td>
-                        <form method="post" action="${pageContext.request.requestURI}">
-                            <input type="hidden" name="command" value="make-payment"/>
-                            <input type="hidden" name="request-id" value="${row.request.id}"/>
-                            <button class="pay-button"
-                                    <c:if test="${row.request.status.name() != 'WAIT_FOR_PAYMENT'}">
-                                        disabled
-                                    </c:if>>
-                                    ${row.request.status}
-                            </button>
-                        </form>
-                    </td>
-                    <td>${row.request.creationDate}</td>
-                    <td>${row.request.completionDate}</td>
-                    <td><my:modalShow content="${row.request.description}" buttonStyle="table-cell-button"/></td>
-                    <td>
-                        <c:choose>
-                            <c:when test="${not empty row.request.userReview}">
-                                <my:modalShow content="${row.request.userReview}" buttonStyle="table-cell-button"/>
-                            </c:when>
-                            <c:otherwise>
-                                <c:if test="${row.request.status.name() == 'DONE' && empty row.request.userReview}">
-                                    <form method="get" action="feedback.jsp">
-                                        <input type="hidden" name="request-id" value="${row.request.id}"/>
-                                        <button>Leave Feedback</button>
-                                    </form>
-                                </c:if>
-                            </c:otherwise>
-                        </c:choose>
+                        <c:if test="${row.status.name() == 'WAIT_FOR_PAYMENT'}">
+                            <form method="post" action="${pageContext.request.requestURI}">
+                                <input type="hidden" name="command" value="make-payment"/>
+                                <button name="request-id" value="${row.id}" class="action-button">Pay</button>
+                            </form>
+                        </c:if>
+                        <c:if test="${row.status.name() == 'DONE' && empty row.userReview}">
+                            <form method="get" action="feedback.jsp">
+                                <input type="hidden" name="request-id" value="${row.id}"/>
+                                <button class="action-button">Leave Feedback</button>
+                            </form>
+                        </c:if>
                     </td>
                 </tr>
             </c:forEach>

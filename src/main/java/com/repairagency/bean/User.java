@@ -1,6 +1,6 @@
-package com.repairagency.entity;
+package com.repairagency.bean;
 
-public abstract class User extends PersistentEntity {
+public abstract class User extends AbstractBean {
 
     private Role role;
     private String login;

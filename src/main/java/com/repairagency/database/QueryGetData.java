@@ -1,9 +1,9 @@
-package com.repairagency.database.wrapper;
+package com.repairagency.database;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class QueryData {
+public class QueryGetData {
 
     private final Map<String, String> filterFactors = new HashMap<>();
     private String sortFactor;
@@ -50,8 +50,5 @@ public class QueryData {
     public void setOffsetFactor(int offsetFactor) {
         this.offsetFactor = offsetFactor;
     }
-
-
-
 
 }

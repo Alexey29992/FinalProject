@@ -1,7 +1,7 @@
 package com.repairagency.database;
 
 import com.repairagency.database.dao.DaoFactory;
-import com.repairagency.database.dao.mysql.DaoFactoryMysql;
+import com.repairagency.database.dao.impl.mysql.DaoFactoryMysql;
 import com.repairagency.exception.DBException;
 import com.repairagency.exception.ErrorMessages;
 import org.apache.logging.log4j.LogManager;

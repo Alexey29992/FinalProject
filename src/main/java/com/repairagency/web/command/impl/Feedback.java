@@ -1,8 +1,9 @@
 package com.repairagency.web.command.impl;
 
+import com.repairagency.exception.InvalidOperationException;
 import com.repairagency.web.command.PagePath;
-import com.repairagency.entity.EntityManager;
-import com.repairagency.entity.bean.Request;
+import com.repairagency.bean.EntityManager;
+import com.repairagency.bean.data.Request;
 import com.repairagency.exception.DBException;
 import com.repairagency.exception.ErrorMessages;
 import com.repairagency.util.Validator;
@@ -39,7 +40,7 @@ public class Feedback implements Command {
             logger.error("Cannot set feedback", ex);
             req.getSession().setAttribute("error", ex.getPublicMessage());
             return req.getContextPath() + PagePath.ERROR;
-        } catch (NumberFormatException ex) {
+        } catch (NumberFormatException | InvalidOperationException ex) {
             logger.error("Invalid request-id", ex);
             req.getSession().setAttribute("error", ErrorMessages.UNEXPECTED);
             return req.getContextPath() + PagePath.ERROR;

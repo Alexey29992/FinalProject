@@ -1,6 +1,6 @@
 package com.repairagency.web.command.impl;
 
-import com.repairagency.database.wrapper.QueryData;
+import com.repairagency.database.QueryGetData;
 import com.repairagency.web.command.impl.parser.Parser;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -30,7 +30,7 @@ public abstract class GetTable {
         req.setAttribute("hasPrevPage", hasPrevPage);
     }
 
-    protected void parseTableParams(QueryData queryData, HttpServletRequest req) {
+    protected void parseTableParams(QueryGetData queryData, HttpServletRequest req) {
         String sortFactorAttr = req.getParameter("sort-factor");
         logger.trace("sort-factor : {}", sortFactorAttr);
         String sortOrderAttr = req.getParameter("sort-order");

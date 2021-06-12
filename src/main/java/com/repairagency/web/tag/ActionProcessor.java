@@ -1,6 +1,6 @@
 package com.repairagency.web.tag;
 
-import com.repairagency.entity.User;
+import com.repairagency.bean.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

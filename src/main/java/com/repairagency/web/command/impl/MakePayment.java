@@ -1,8 +1,8 @@
 package com.repairagency.web.command.impl;
 
 import com.repairagency.web.command.PagePath;
-import com.repairagency.entity.EntityManager;
-import com.repairagency.entity.user.Client;
+import com.repairagency.bean.EntityManager;
+import com.repairagency.bean.user.Client;
 import com.repairagency.exception.DBException;
 import com.repairagency.exception.ErrorMessages;
 import com.repairagency.exception.InvalidOperationException;

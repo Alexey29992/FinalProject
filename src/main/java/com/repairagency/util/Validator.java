@@ -1,8 +1,8 @@
 package com.repairagency.util;
 
 import com.repairagency.config.Config;
-import com.repairagency.entity.bean.Request;
-import com.repairagency.entity.user.Client;
+import com.repairagency.bean.data.Request;
+import com.repairagency.bean.user.Client;
 import com.repairagency.exception.ErrorMessages;
 import com.repairagency.exception.InvalidOperationException;
 import org.apache.logging.log4j.LogManager;
@@ -15,7 +15,7 @@ public class Validator {
 
     private static final Logger logger = LogManager.getLogger();
 
-    private static final Pattern allowedCharsPattern = Pattern.compile("^[\\p{L}0-9-_]+$");
+    private static final Pattern allowedCharsPattern = Pattern.compile("^[\\p{L}0-9_]+$");
 
     private Validator() {
     }

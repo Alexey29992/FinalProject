@@ -1,6 +1,6 @@
-package com.repairagency.database;
+package com.repairagency.database.dao.impl.mysql;
 
-import com.repairagency.database.wrapper.QueryData;
+import com.repairagency.database.QueryGetData;
 
 import java.util.Iterator;
 import java.util.Map;
@@ -8,15 +8,14 @@ import java.util.Set;
 
 public class QueryGetGenerator {
 
-    private final String queryBase;
-    private StringBuilder query;
+    private final QueryGetData data;
+    protected String queryBase;
+    protected StringBuilder query;
 
-    public QueryGetGenerator(String queryBase, QueryData data) {
+    public QueryGetGenerator(String queryBase, QueryGetData data) {
         this.queryBase = queryBase;
         this.data = data;
     }
-
-    private final QueryData data;
 
     public String generateQuery() {
         query = new StringBuilder(queryBase);

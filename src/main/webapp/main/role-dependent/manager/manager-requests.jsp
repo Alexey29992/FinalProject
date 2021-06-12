@@ -39,12 +39,6 @@
             document.getElementById("page").value = 0;
             submitForm();
         }
-
-        <c:if test="${requestScope.requestData == null}">
-        window.onload = function () {
-            submitForm();
-        }
-        </c:if>
     </script>
     <jsp:include page="/WEB-INF/jspf/modal-box-scripts.jspf"/>
 </head>
@@ -267,25 +261,16 @@
                 <th scope="col">Completion Date</th>
                 <th scope="col">Description</th>
                 <th scope="col">Feedback</th>
+                <th scope="col">Actions</th>
             </tr>
-            <c:forEach var="row" items="${requestScope.requestData}">
+            <c:forEach var="row" items="${requestScope.requests}">
                 <tr>
-                    <td>
-                        <form method="get" action="${pageContext.request.requestURI}">
-                            <input type="hidden" name="command" value="get-request-info">
-                            <label>
-                                <button name="request-id" value="${row.request.id}">
-                                        ${row.request.id}
-                                </button>
-                            </label>
-                        </form>
-                            ${row.request.id}
-                    </td>
+                    <td>${row.id}</td>
                     <td>
                         <form method="get" action="${pageContext.request.requestURI}">
                             <input type="hidden" name="command" value="get-user-by-id">
                             <label>
-                                <button name="user-id" value="${row.request.clientId}">
+                                <button name="user-id" value="${row.clientId}">
                                         ${row.clientLogin}
                                 </button>
                             </label>
@@ -293,11 +278,11 @@
                     </td>
                     <td>
                         <c:choose>
-                            <c:when test="${not empty row.request.masterId}">
+                            <c:when test="${not empty row.masterId}">
                                 <form method="get" action="${pageContext.request.requestURI}">
                                     <input type="hidden" name="command" value="get-user-by-id">
                                     <label>
-                                        <button name="user-id" value="${row.request.masterId}">
+                                        <button name="user-id" value="${row.masterId}">
                                                 ${row.masterLogin}
                                         </button>
                                     </label>
@@ -324,17 +309,27 @@
                         </c:choose>
                     </td>
                     <td>
-                        <c:if test="${row.request.price > 0}">
-                            ${row.request.price}$
+                        <c:if test="${row.price > 0}">
+                            ${row.price}$
                         </c:if>
                     </td>
                     <td>
-                            ${row.request.status}
+                            ${row.status}
                     </td>
-                    <td>${row.request.creationDate}</td>
-                    <td>${row.request.completionDate}</td>
-                    <td><my:modalShow content="${row.request.description}" buttonStyle="table-cell-button"/></td>
-                    <td><my:modalShow content="${row.request.userReview}" buttonStyle="table-cell-button"/></td>
+                    <td>${row.creationDate}</td>
+                    <td>${row.completionDate}</td>
+                    <td><my:modalShow content="${row.description}" buttonStyle="table-cell-button"/></td>
+                    <td><my:modalShow content="${row.userReview}" buttonStyle="table-cell-button"/></td>
+                    <td>
+                        <form method="get" action="${pageContext.request.requestURI}">
+                            <input type="hidden" name="command" value="get-request-info">
+                            <label>
+                                <button class="action-button" name="request-id" value="${row.id}">
+                                    Edit
+                                </button>
+                            </label>
+                        </form>
+                    </td>
                 </tr>
             </c:forEach>
         </table>

@@ -1,13 +1,15 @@
-package com.repairagency.entity.bean;
+package com.repairagency.bean.data;
 
-import com.repairagency.entity.PersistentEntity;
+import com.repairagency.bean.AbstractBean;
 
 import java.time.LocalDateTime;
 
-public class Request extends PersistentEntity {
+public class Request extends AbstractBean {
 
     private int clientId;
     private int masterId;
+    private String clientLogin;
+    private String masterLogin;
     private int price;
     private LocalDateTime creationDate;
     private LocalDateTime completionDate;
@@ -64,6 +66,22 @@ public class Request extends PersistentEntity {
 
     public void setMasterId(int masterId) {
         this.masterId = masterId;
+    }
+
+    public String getClientLogin() {
+        return clientLogin;
+    }
+
+    public void setClientLogin(String clientLogin) {
+        this.clientLogin = clientLogin;
+    }
+
+    public String getMasterLogin() {
+        return masterLogin;
+    }
+
+    public void setMasterLogin(String masterLogin) {
+        this.masterLogin = masterLogin;
     }
 
     public int getPrice() {

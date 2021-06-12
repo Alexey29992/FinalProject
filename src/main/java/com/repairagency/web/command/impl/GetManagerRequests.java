@@ -3,7 +3,7 @@ package com.repairagency.web.command.impl;
 import com.repairagency.web.command.Command;
 import com.repairagency.web.command.PagePath;
 
-import com.repairagency.database.wrapper.QueryData;
+import com.repairagency.database.QueryGetData;
 import com.repairagency.web.command.impl.parser.Parser;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -22,7 +22,7 @@ public class GetManagerRequests extends GetRequestTable implements Command {
     }
 
     @Override
-    protected void parseFilters(HttpServletRequest req, QueryData data) {
+    protected void parseFilters(HttpServletRequest req, QueryGetData data) {
         String statusFilterAttr = req.getParameter("filter-status");
         logger.trace("filter-status : {}", statusFilterAttr);
         String masterFilterAttr = req.getParameter("filter-master");

@@ -1,8 +1,9 @@
 package com.repairagency.web.command.impl;
 
-import com.repairagency.entity.EntityManager;
+import com.repairagency.bean.EntityManager;
 import com.repairagency.exception.DBException;
 import com.repairagency.exception.ErrorMessages;
+import com.repairagency.exception.InvalidOperationException;
 import com.repairagency.web.command.Command;
 import com.repairagency.web.command.PagePath;
 import org.apache.logging.log4j.LogManager;
@@ -26,9 +27,16 @@ public class TopUpBalance implements Command {
         logger.trace("Client#{}", idAttr);
         ServletContext appContext = req.getServletContext();
         Map<Integer, Integer> updates = (Map<Integer, Integer>) appContext.getAttribute("user-balance-updates");
+        int clientId;
+        try {
+             clientId = Integer.parseInt(idAttr);
+        } catch (NumberFormatException ex) {
+            logger.error("Invalid attributes", ex);
+            req.getSession().setAttribute("error", ErrorMessages.UNEXPECTED);
+            return req.getContextPath() + PagePath.ERROR;
+        }
         try {
             int amount = Integer.parseInt(amountAttr);
-            int clientId = Integer.parseInt(idAttr);
             int newBalance = EntityManager.topUpClientBalance(clientId, amount);
             updates.put(clientId, newBalance);
             req.getSession().setAttribute("action", "top-up-success");
@@ -38,8 +46,12 @@ public class TopUpBalance implements Command {
             req.getSession().setAttribute("error", ex.getPublicMessage());
             return req.getContextPath() + PagePath.ERROR;
         } catch (NumberFormatException ex) {
-            logger.error("Invalid attributes", ex);
+            logger.error("Invalid money amount", ex);
             req.getSession().setAttribute("error", ErrorMessages.MANAGER_INVALID_TOP_UP);
+            return req.getContextPath() + PagePath.ERROR;
+        } catch (InvalidOperationException ex) {
+            logger.error("Invalid client id", ex);
+            req.getSession().setAttribute("error", ErrorMessages.UNEXPECTED);
             return req.getContextPath() + PagePath.ERROR;
         }
     }

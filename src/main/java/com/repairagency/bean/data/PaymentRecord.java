@@ -1,10 +1,10 @@
-package com.repairagency.entity.bean;
+package com.repairagency.bean.data;
 
-import com.repairagency.entity.PersistentEntity;
+import com.repairagency.bean.AbstractBean;
 
 import java.time.LocalDateTime;
 
-public class PaymentRecord extends PersistentEntity {
+public class PaymentRecord extends AbstractBean {
 
     private int sum;
     private int clientId;
