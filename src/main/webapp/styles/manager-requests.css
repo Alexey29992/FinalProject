@@ -180,3 +180,7 @@
     display: inline-block;
     max-width: 70%;
 }
+
+.center-btn {
+    text-align: center !important;
+}

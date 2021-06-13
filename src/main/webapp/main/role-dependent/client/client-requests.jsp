@@ -242,7 +242,16 @@
                         </c:if>
                     </td>
                     <td>
-                            ${row.status}
+                        <c:choose>
+                            <c:when test="${row.status.name().equals('CANCELLED') && not empty row.cancelReason}">
+                                <my:modal content="${row.cancelReason}"
+                                          buttonLable="${row.status.toString()}"
+                                          buttonStyle="table-cell-button center-btn"/>
+                            </c:when>
+                            <c:otherwise>
+                                ${row.status}
+                            </c:otherwise>
+                        </c:choose>
                     </td>
                     <td>${row.creationDate}</td>
                     <td>${row.completionDate}</td>

@@ -1,0 +1,13 @@
+textarea {
+    background: linear-gradient(to top, #FAFAFAFF 0%, #efefef 100%);
+    padding: 12px 20px;
+    box-sizing: border-box;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    resize: none;
+    font-size: 18px;
+}
+
+textarea:focus {
+    border-radius: 0;
+}

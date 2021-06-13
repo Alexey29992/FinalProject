@@ -1,7 +1,10 @@
 package com.repairagency.web.command;
 
-import com.repairagency.web.command.impl.*;
 import com.repairagency.web.command.impl.client.*;
+import com.repairagency.web.command.impl.common.ChangePassword;
+import com.repairagency.web.command.impl.common.GetRequest;
+import com.repairagency.web.command.impl.common.InvalidCommand;
+import com.repairagency.web.command.impl.common.Login;
 import com.repairagency.web.command.impl.manager.*;
 import com.repairagency.web.command.impl.master.GetRequestsMaster;
 import com.repairagency.web.command.impl.master.SetStatusMaster;

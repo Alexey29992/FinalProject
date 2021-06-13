@@ -1,4 +1,4 @@
-package com.repairagency.web.command.impl;
+package com.repairagency.web.command.impl.common;
 
 import com.repairagency.bean.EntityManager;
 import com.repairagency.bean.User;

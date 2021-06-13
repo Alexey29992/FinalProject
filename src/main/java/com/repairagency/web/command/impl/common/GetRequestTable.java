@@ -1,4 +1,4 @@
-package com.repairagency.web.command.impl;
+package com.repairagency.web.command.impl.common;
 
 import com.repairagency.bean.data.Request;
 import com.repairagency.database.QueryGetData;

@@ -13,6 +13,7 @@ import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.time.LocalDateTime;
 
 public class SetStatusMaster implements Command {
 
@@ -25,7 +26,7 @@ public class SetStatusMaster implements Command {
         logger.trace("Status : {}", statusAttr);
         String requestIdAttr = req.getParameter("request-id");
         logger.trace("Request id : {}", requestIdAttr);
-        String reasonAttr = req.getParameter("cancel-reason");
+
         String statusStr = Util.parseStatusMaster(statusAttr);
         if (statusStr == null) {
             logger.error("Invalid status");
@@ -37,9 +38,7 @@ public class SetStatusMaster implements Command {
             Request request = EntityManager.getRequest(requestId);
             Request.Status status = Request.Status.valueOf(statusStr);
             request.setStatus(status);
-            if (status.equals(Request.Status.CANCELLED)) {
-                request.setCancelReason(reasonAttr);
-            }
+            request.setCompletionDate(LocalDateTime.now());
             EntityManager.updateRequest(request);
         } catch (DBException ex) {
             logger.error("Cannot set status", ex);

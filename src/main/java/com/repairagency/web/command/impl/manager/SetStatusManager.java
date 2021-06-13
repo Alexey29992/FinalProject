@@ -13,7 +13,7 @@ import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+import java.time.LocalDateTime;
 
 public class SetStatusManager implements Command {
 
@@ -40,6 +40,7 @@ public class SetStatusManager implements Command {
             request.setStatus(status);
             if (status.equals(Request.Status.CANCELLED)) {
                 request.setCancelReason(reasonAttr);
+                request.setCompletionDate(LocalDateTime.now());
             }
             EntityManager.updateRequest(request);
         } catch (DBException ex) {

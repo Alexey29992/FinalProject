@@ -11,8 +11,8 @@
     <link rel="icon" href="${pageContext.request.contextPath}/resources/title.png" type="image/icon">
     <title>Request Info</title>
     <script>
-        function cancelArea() {
-            document.getElementById('cancel-area').hidden = false;
+        function hideCancelArea(x) {
+            document.getElementById('cancel-area').hidden = x;
         }
     </script>
     <jsp:include page="/WEB-INF/jspf/modal-box-scripts.jspf"/>
@@ -73,7 +73,18 @@
                 </tr>
                 <tr>
                     <td>Status:</td>
-                    <td>${req.status}</td>
+                    <td>
+                        <c:choose>
+                            <c:when test="${req.status.name().equals('CANCELLED') && not empty req.cancelReason}">
+                                <my:modal content="${req.cancelReason}"
+                                          buttonLable="${req.status.toString()}"
+                                          buttonStyle="table-cell-button center-btn"/>
+                            </c:when>
+                            <c:otherwise>
+                                ${req.status}
+                            </c:otherwise>
+                        </c:choose>
+                    </td>
                 </tr>
                 <c:if test="${req.status.name().equals('CANCELLED')}">
                     <tr>
@@ -126,17 +137,18 @@
                     <label>
                         Set status:<br/>
                         <select name="status">
-                            <option value="" selected>none</option>
-                            <option value="wait-for-payment">Wait for payment</option>
-                            <option value="paid">Paid</option>
-                            <option value="cancelled" onclick="cancelArea()">Cancelled</option>
+                            <option value="" selected onclick="hideCancelArea(true)">none</option>
+                            <option value="wait-for-payment" onclick="hideCancelArea(true)">Wait for payment</option>
+                            <option value="paid" onclick="hideCancelArea(true)">Paid</option>
+                            <option value="cancelled" onclick="hideCancelArea(false)">Cancelled</option>
                         </select>
                     </label>
-                    <label>
-                    <textarea id="cancel-area" name="cancel-reason"
-                              placeholder="Cancel reason..." hidden></textarea>
-                    </label>
                     <input type="submit" value="Set">
+                    <label>
+                        <textarea id="cancel-area" name="cancel-reason"
+                                  placeholder="Cancel reason..."
+                                  hidden></textarea>
+                    </label>
                 </form>
             </c:if>
         </div>

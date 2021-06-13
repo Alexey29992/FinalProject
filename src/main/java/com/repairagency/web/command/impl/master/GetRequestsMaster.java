@@ -5,7 +5,7 @@ import com.repairagency.database.QueryGetData;
 import com.repairagency.web.command.Command;
 import com.repairagency.web.command.PagePath;
 import com.repairagency.web.command.Util;
-import com.repairagency.web.command.impl.GetRequestTable;
+import com.repairagency.web.command.impl.common.GetRequestTable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

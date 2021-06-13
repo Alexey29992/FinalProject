@@ -1,11 +1,12 @@
 @import "elements/error.css";
-@import "elements/tables.css";
+@import "elements/table.css";
 @import "elements/submit.css";
 @import "elements/text.css";
 @import "elements/select.css";
-@import "elements/modal-box.css";
+@import "elements/modal.css";
 @import "elements/toggle-radio.css";
-@import "elements/tables.css";
+@import "elements/table.css";
+@import "elements/textarea.css";
 
 @font-face {
     font-family: main-font;

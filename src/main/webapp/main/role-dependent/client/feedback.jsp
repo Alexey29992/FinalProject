@@ -5,7 +5,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link href="${pageContext.request.contextPath}/styles/text-form.css" rel="stylesheet" type="text/css">
+    <link href="${pageContext.request.contextPath}/styles/new-request.css" rel="stylesheet" type="text/css">
     <link href="${pageContext.request.contextPath}/styles/common.css" rel="stylesheet" type="text/css">
     <link rel="icon" href="${pageContext.request.contextPath}/resources/title.png" type="image/icon">
     <title>Leave feedback</title>

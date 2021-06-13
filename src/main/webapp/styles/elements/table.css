@@ -107,13 +107,16 @@ table th {
     display: inline-block;
     color: inherit;
     width: 100%;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    white-space: nowrap;
 }
 
 .table-cell-button:hover {
     background-color: #70C9E3AB;
+}
+
+.table-cell-button div {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
 }
 
 .action-button {

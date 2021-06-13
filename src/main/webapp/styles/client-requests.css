@@ -82,3 +82,7 @@
     min-height: 42px;
     width: 26%;
 }
+
+.center-btn {
+    text-align: center !important;
+}

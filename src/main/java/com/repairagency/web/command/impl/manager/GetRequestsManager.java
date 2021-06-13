@@ -4,7 +4,7 @@ import com.repairagency.web.command.Command;
 import com.repairagency.web.command.PagePath;
 
 import com.repairagency.database.QueryGetData;
-import com.repairagency.web.command.impl.GetRequestTable;
+import com.repairagency.web.command.impl.common.GetRequestTable;
 import com.repairagency.web.command.Util;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -41,7 +41,5 @@ public class GetRequestsManager extends GetRequestTable implements Command {
             data.setFilterFactor("client.login", clientFilterAttr);
         }
     }
-
-
 
 }
