@@ -19,27 +19,12 @@ public class Request extends AbstractBean {
     private String cancelReason;
 
     public enum Status {
-        NEW(Type.OPEN),
-        WAIT_FOR_PAYMENT(Type.OPEN),
-        PAID(Type.OPEN),
-        CANCELLED(Type.CLOSED),
-        IN_PROCESS(Type.OPEN),
-        DONE(Type.CLOSED);
-
-        public enum Type {
-            OPEN,
-            CLOSED
-        }
-
-        private final Type type;
-
-        Status(Type type) {
-            this.type = type;
-        }
-
-        public Type getType() {
-            return type;
-        }
+        NEW(),
+        WAIT_FOR_PAYMENT(),
+        PAID(),
+        CANCELLED(),
+        IN_PROCESS(),
+        DONE()
     }
 
     public Request() {
@@ -146,6 +131,8 @@ public class Request extends AbstractBean {
                 super.toString() +
                 ", clientId=" + clientId +
                 ", masterId=" + masterId +
+                ", clientLogin" + clientLogin +
+                ", masterLogin" + masterLogin +
                 ", price=" + price +
                 ", creationDate=" + creationDate +
                 ", completionDate=" + completionDate +

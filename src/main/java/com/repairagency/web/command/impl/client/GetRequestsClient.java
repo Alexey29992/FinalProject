@@ -1,17 +1,18 @@
-package com.repairagency.web.command.impl;
+package com.repairagency.web.command.impl.client;
 
 import com.repairagency.web.command.Command;
 import com.repairagency.web.command.PagePath;
 import com.repairagency.database.QueryGetData;
 import com.repairagency.bean.User;
-import com.repairagency.web.command.impl.parser.Parser;
+import com.repairagency.web.command.impl.GetRequestTable;
+import com.repairagency.web.command.Util;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class GetClientRequests extends GetRequestTable implements Command {
+public class GetRequestsClient extends GetRequestTable implements Command {
 
     private static final Logger logger = LogManager.getLogger();
 
@@ -26,8 +27,8 @@ public class GetClientRequests extends GetRequestTable implements Command {
         logger.trace("filter-status : {}", statusFilterAttr);
         User user = (User) req.getSession().getAttribute("user");
         logger.trace("client : {}", user);
-        Parser.parseRequestStatusFilter(statusFilterAttr);
-        String statusFilter = Parser.parseRequestStatusFilter(statusFilterAttr);
+        Util.parseStatus(statusFilterAttr);
+        String statusFilter = Util.parseStatus(statusFilterAttr);
         if (statusFilter != null) {
             data.setFilterFactor("status_name", statusFilter);
         }

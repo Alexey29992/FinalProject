@@ -1,4 +1,4 @@
-package com.repairagency.web.command.impl;
+package com.repairagency.web.command.impl.client;
 
 import com.repairagency.web.command.PagePath;
 import com.repairagency.bean.EntityManager;

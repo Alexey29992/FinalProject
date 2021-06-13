@@ -17,7 +17,11 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.sql.Connection;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class EntityManager {
 
@@ -149,13 +153,24 @@ public class EntityManager {
         return users;
     }
 
+    public static Map<Integer, String> getMasterLogins() throws DBException {
+        Connection connection = startTransaction();
+        QueryGetData queryData = new QueryGetData();
+        queryData.setFilterFactor("role_name", "MASTER");
+        List<User> masters = EntityManager.getUserList(queryData);
+        Map<Integer, String> logins = masters.stream()
+                .collect(Collectors.toMap(User::getId, User::getLogin));
+        completeTransaction(connection);
+        return logins;
+    }
+
     public static void updateUser(User request) throws DBException {
         Connection connection = startTransaction();
         getUserDao(connection).updateEntity(request);
         completeTransaction(connection);
     }
 
-    public static void userRemove(User user) throws DBException {
+    public static void removeUser(User user) throws DBException {
         Connection connection = startTransaction();
         Dao<User> dao = getUserDao(connection);
         dao.removeEntity(user);

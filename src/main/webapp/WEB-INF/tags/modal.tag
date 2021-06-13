@@ -7,9 +7,8 @@
 </c:if>
 <c:set var="suffix" value="${requestScope.suffix + 1}" scope="request"/>
 <c:if test="${not empty content}">
-    <button class="${buttonStyle}" id="modal-button${requestScope.suffix}" onclick="openModal(${requestScope.suffix})">
-${content}
-    </button>
+    <button class="${buttonStyle}" id="modal-button${requestScope.suffix}"
+            onclick="openModal(${requestScope.suffix})">${content}</button>
     <div id="modal-box${requestScope.suffix}" class="modal-box">
         <div class="modal-frame">
             <div class="modal-close" onclick="closeModal(${requestScope.suffix})">

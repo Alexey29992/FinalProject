@@ -1,0 +1,82 @@
+body {
+    text-align: center;
+}
+
+.global-frame {
+    display: inline-block;
+    width: 100%;
+}
+
+.find-form {
+    width: 500px;
+    padding: 15px;
+    margin: 25px auto 0 auto;
+    border: 1px solid #9a9a9a;
+    border-radius: 10px;
+    text-align: left;
+    display: inline-block;
+}
+
+.find-form label{
+    font-size: 18px;
+}
+
+.find-form input[type=text] {
+    width: 270px;
+    padding: 7px 10px;
+    margin: 5px 0;
+}
+
+.result {
+    width: 500px;
+    padding: 15px;
+    margin: 25px auto 0 auto;
+    border: 1px solid #9a9a9a;
+    border-radius: 10px;
+    text-align: left;
+    display: block;
+}
+
+.result table {
+    width: 100%;
+    line-height: 1.5;
+}
+
+.result table td:nth-child(1),
+.result table td:nth-child(2) {
+    max-width: 150px;
+    width: 50%;
+    line-height: 1.5;
+}
+
+.result label{
+    font-size: 18px;
+}
+
+.result form {
+    margin-top: 7px;
+}
+
+.result input[type=text] {
+    width: 270px;
+    padding: 7px 10px;
+    margin: 5px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.result select {
+    width: 270px;
+}
+
+.result input[type=text]:focus {
+    border-radius: 0;
+}
+
+.table-cell-button {
+    padding: 5px 5px 5px 6px;
+    margin-top: -10px;
+    margin-bottom: -10px;
+}

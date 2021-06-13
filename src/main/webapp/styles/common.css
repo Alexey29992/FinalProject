@@ -1,5 +1,11 @@
-@import "error.css";
-@import "tables.css";
+@import "elements/error.css";
+@import "elements/tables.css";
+@import "elements/submit.css";
+@import "elements/text.css";
+@import "elements/select.css";
+@import "elements/modal-box.css";
+@import "elements/toggle-radio.css";
+@import "elements/tables.css";
 
 @font-face {
     font-family: main-font;
@@ -32,23 +38,9 @@ button {
     background-color: #ddd;
 }
 
-input[type=submit] {
-    padding: 0 10px 5px 10px;
-    font-size: 25px;
-    font-family: main-font, serif;
-    transition-duration: 0.4s;
-    border: 1px solid #9a9a9a;
-    border-radius: 7px;
-    background-color: #ddd;
-}
-
 button:hover {
     background-color: #bce2e0;
     border-color:  #306fff;
-}
-
-button:disabled:hover {
-
 }
 
 .head {

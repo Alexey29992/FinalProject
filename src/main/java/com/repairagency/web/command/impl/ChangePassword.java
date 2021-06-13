@@ -8,6 +8,7 @@ import com.repairagency.exception.ErrorMessages;
 import com.repairagency.exception.InvalidOperationException;
 import com.repairagency.util.Validator;
 import com.repairagency.web.command.Command;
+import com.repairagency.web.command.Util;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -36,12 +37,12 @@ public class ChangePassword implements Command {
             } catch (InvalidOperationException | DBException ex) {
                 logger.error("Cannot change user password", ex);
                 session.setAttribute("error", ex.getPublicMessage());
-                return req.getContextPath() + PagePath.CHANGE_USER_SETTINGS;
             }
+        } else {
+            logger.error("Cannot change user password. Password confirmation failed");
+            session.setAttribute("error", ErrorMessages.USER_PASSWORD_INCORRECT);
         }
-        logger.error("Cannot change user password. Password confirmation failed");
-        session.setAttribute("error", ErrorMessages.USER_PASSWORD_INCORRECT);
-        return req.getContextPath() + PagePath.CHANGE_USER_SETTINGS;
+        return Util.getRoleDependentAddress(user.getRole(), req.getContextPath(), PagePath.SETTINGS);
     }
 
 }

@@ -106,7 +106,7 @@ public class UserDaoMysql extends AbstractDao<User> {
             case ADMIN:
                 return new Admin(id, login, password);
             default:
-                logger.fatal("User with illegal role was received from DB. Illegal role was received");
+                logger.fatal("User with unknown role was received from DB.");
                 throw new IllegalStateException(ErrorMessages.DB_FATAL);
         }
     }

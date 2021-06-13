@@ -37,9 +37,6 @@ public class ActionProcessor extends TagSupport {
             case "payment-success":
                 result = ActionProcessorMessages.PAYMENT_SUCCESS;
                 break;
-            case "top-up-success":
-                result = ActionProcessorMessages.TOP_UP_SUCCESS;
-                break;
             case "password-success":
                 result = ActionProcessorMessages.PASSWORD_SUCCESS;
                 break;

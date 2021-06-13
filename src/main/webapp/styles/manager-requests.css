@@ -1,7 +1,3 @@
-@import "select.css";
-@import "toggle-radio.css";
-@import "modal-box.css";
-
 * {
     box-sizing: border-box;
 }
@@ -29,9 +25,6 @@
 }
 
 @media (min-width: 1300px) {
-    .column-left, .column-right {
-        display: initial;
-    }
     .column-middle {
         width: 70%;
     }

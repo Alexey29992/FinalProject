@@ -267,62 +267,43 @@
                 <tr>
                     <td>${row.id}</td>
                     <td>
-                        <form method="get" action="${pageContext.request.requestURI}">
-                            <input type="hidden" name="command" value="get-user-by-id">
+                        <form method="get"
+                              action="${pageContext.request.contextPath}/main/role-dependent/manager/user-info.jsp">
+                            <input type="hidden" name="command" value="get-user">
                             <label>
-                                <button name="user-id" value="${row.clientId}">
+                                <button class="table-cell-button" name="user-id" value="${row.clientId}">
                                         ${row.clientLogin}
                                 </button>
                             </label>
                         </form>
                     </td>
                     <td>
-                        <c:choose>
-                            <c:when test="${not empty row.masterId}">
-                                <form method="get" action="${pageContext.request.requestURI}">
-                                    <input type="hidden" name="command" value="get-user-by-id">
-                                    <label>
-                                        <button name="user-id" value="${row.masterId}">
-                                                ${row.masterLogin}
-                                        </button>
-                                    </label>
-                                </form>
-                            </c:when>
-                            <c:otherwise>
-                                <form method="get" action="${pageContext.request.requestURI}">
-                                    <input type="hidden" name="command" value="assign-master">
-                                    <label>
-                                        <select name="master-id">
-                                            <c:if test="${empty requestScope.masters}">
-                                                <%--<jsp:forward page=""></jsp:forward>--%>
-                                            </c:if>
-
-                                            <c:forEach var="master" items="${requestScope.masters}">
-                                                <option value="${master.id}">
-                                                        ${master.login}
-                                                </option>
-                                            </c:forEach>
-                                        </select>
-                                    </label>
-                                </form>
-                            </c:otherwise>
-                        </c:choose>
+                        <c:if test="${row.masterId != 0}">
+                            <form method="get"
+                                  action="${pageContext.request.contextPath}/main/role-dependent/manager/user-info.jsp">
+                                <input type="hidden" name="command" value="get-user">
+                                <label>
+                                    <button class="table-cell-button" name="user-id" value="${row.masterId}">
+                                            ${row.masterLogin}
+                                    </button>
+                                </label>
+                            </form>
+                        </c:if>
                     </td>
                     <td>
                         <c:if test="${row.price > 0}">
                             ${row.price}$
                         </c:if>
                     </td>
-                    <td>
-                            ${row.status}
-                    </td>
+                    <td>${row.status}</td>
                     <td>${row.creationDate}</td>
                     <td>${row.completionDate}</td>
-                    <td><my:modalShow content="${row.description}" buttonStyle="table-cell-button"/></td>
-                    <td><my:modalShow content="${row.userReview}" buttonStyle="table-cell-button"/></td>
+                    <td><my:modal content="${row.description}" buttonStyle="table-cell-button"/></td>
+                    <td><my:modal content="${row.userReview}" buttonStyle="table-cell-button"/></td>
                     <td>
-                        <form method="get" action="${pageContext.request.requestURI}">
-                            <input type="hidden" name="command" value="get-request-info">
+                        <form method="get"
+                              action="${pageContext.request.contextPath}/main/role-dependent/manager/request-info.jsp">
+                            <input type="hidden" name="command" value="get-request">
                             <label>
                                 <button class="action-button" name="request-id" value="${row.id}">
                                     Edit

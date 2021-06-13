@@ -244,10 +244,10 @@
                     <td>${row.status}</td>
                     <td>${row.creationDate}</td>
                     <td>${row.completionDate}</td>
-                    <td><my:modalShow content="${row.description}" buttonStyle="table-cell-button"/></td>
+                    <td><my:modal content="${row.description}" buttonStyle="table-cell-button"/></td>
                     <td>
                         <c:if test="${not empty row.userReview}">
-                            <my:modalShow content="${row.userReview}" buttonStyle="table-cell-button"/>
+                            <my:modal content="${row.userReview}" buttonStyle="table-cell-button"/>
                         </c:if>
                     </td>
                     <td>

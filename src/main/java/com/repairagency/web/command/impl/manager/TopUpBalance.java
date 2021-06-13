@@ -1,4 +1,4 @@
-package com.repairagency.web.command.impl;
+package com.repairagency.web.command.impl.manager;
 
 import com.repairagency.bean.EntityManager;
 import com.repairagency.exception.DBException;
@@ -31,29 +31,25 @@ public class TopUpBalance implements Command {
         try {
              clientId = Integer.parseInt(idAttr);
         } catch (NumberFormatException ex) {
-            logger.error("Invalid attributes", ex);
+            logger.error("Invalid client id", ex);
             req.getSession().setAttribute("error", ErrorMessages.UNEXPECTED);
-            return req.getContextPath() + PagePath.ERROR;
+            return req.getContextPath() + PagePath.MANAGER_USER_INFO;
         }
         try {
             int amount = Integer.parseInt(amountAttr);
             int newBalance = EntityManager.topUpClientBalance(clientId, amount);
             updates.put(clientId, newBalance);
-            req.getSession().setAttribute("action", "top-up-success");
-            return req.getContextPath() + PagePath.HOME;
         } catch (DBException ex) {
             logger.error("Cannot top up balance", ex);
             req.getSession().setAttribute("error", ex.getPublicMessage());
-            return req.getContextPath() + PagePath.ERROR;
         } catch (NumberFormatException ex) {
             logger.error("Invalid money amount", ex);
-            req.getSession().setAttribute("error", ErrorMessages.MANAGER_INVALID_TOP_UP);
-            return req.getContextPath() + PagePath.ERROR;
+            req.getSession().setAttribute("error", ErrorMessages.INVALID_INPUT);
         } catch (InvalidOperationException ex) {
             logger.error("Invalid client id", ex);
             req.getSession().setAttribute("error", ErrorMessages.UNEXPECTED);
-            return req.getContextPath() + PagePath.ERROR;
         }
+        return req.getContextPath() + PagePath.MANAGER_USER_INFO;
     }
 
 }

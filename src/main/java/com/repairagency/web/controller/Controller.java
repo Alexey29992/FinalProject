@@ -23,7 +23,7 @@ public class Controller extends HttpServlet {
         String command = req.getParameter(COMMAND);
         logger.trace("{} : {}", COMMAND, command);
         String address = CommandContainer.getCommand(command).execute(req, resp);
-        logger.trace("forward to : {}", address);
+        logger.trace("Forward to : {}", address);
         req.getRequestDispatcher(address).forward(req, resp);
     }
 
@@ -34,7 +34,7 @@ public class Controller extends HttpServlet {
         String command = req.getParameter(COMMAND);
         logger.trace("{} : {}", COMMAND, command);
         String address = CommandContainer.getCommand(command).execute(req, resp);
-        logger.trace("sendRedirect to : {}", address);
+        logger.trace("Send redirect to : {}", address);
         resp.sendRedirect(address);
     }
 

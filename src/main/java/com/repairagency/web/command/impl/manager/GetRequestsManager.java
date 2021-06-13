@@ -1,17 +1,18 @@
-package com.repairagency.web.command.impl;
+package com.repairagency.web.command.impl.manager;
 
 import com.repairagency.web.command.Command;
 import com.repairagency.web.command.PagePath;
 
 import com.repairagency.database.QueryGetData;
-import com.repairagency.web.command.impl.parser.Parser;
+import com.repairagency.web.command.impl.GetRequestTable;
+import com.repairagency.web.command.Util;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class GetManagerRequests extends GetRequestTable implements Command {
+public class GetRequestsManager extends GetRequestTable implements Command {
 
     private static final Logger logger = LogManager.getLogger();
 
@@ -30,7 +31,7 @@ public class GetManagerRequests extends GetRequestTable implements Command {
         String clientFilterAttr = req.getParameter("filter-client");
         logger.trace("filter-client : {}", clientFilterAttr);
 
-        String statusName = Parser.parseRequestStatusFilter(statusFilterAttr);
+        String statusName = Util.parseStatus(statusFilterAttr);
 
         if (statusName != null) {
             data.setFilterFactor("status_name", statusName);

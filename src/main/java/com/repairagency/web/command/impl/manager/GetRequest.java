@@ -1,7 +1,7 @@
-package com.repairagency.web.command.impl;
+package com.repairagency.web.command.impl.manager;
 
 import com.repairagency.bean.EntityManager;
-import com.repairagency.bean.User;
+import com.repairagency.bean.data.Request;
 import com.repairagency.exception.DBException;
 import com.repairagency.exception.ErrorMessages;
 import com.repairagency.exception.InvalidOperationException;
@@ -13,30 +13,31 @@ import org.apache.logging.log4j.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class GetUserById implements Command {
+
+public class GetRequest implements Command {
 
     private static final Logger logger = LogManager.getLogger();
 
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) {
-        logger.debug("Executing command : get-user-by-id");
-        logger.trace("Parsing HTTP parameters for Request query");
-        String userIdAttr = req.getParameter("user-id");
-        logger.trace("User id : {}", userIdAttr);
+        logger.debug("Executing command : get-request-edit");
+        String requestIdAttr = req.getParameter("request-id");
+        logger.trace("Request id : {}", requestIdAttr);
         try {
-            int userId = Integer.parseInt(userIdAttr);
-            User user = EntityManager.getUser(userId);
-            req.setAttribute("user", user);
-            return PagePath.MANAGER_USER_INFO;
+            int requestId = Integer.parseInt(requestIdAttr);
+            Request request = EntityManager.getRequest(requestId);
+            req.setAttribute("currentRequest", request);
+            req.getSession().setAttribute("requestId", request.getId());
         } catch (DBException | InvalidOperationException ex) {
-            logger.error("Cannot get user", ex);
+            logger.error("Cannot get request", ex);
+            req.getSession().removeAttribute("requestId");
             req.getSession().setAttribute("error", ex.getPublicMessage());
-            return PagePath.ERROR;
-        }  catch (NumberFormatException ex) {
+        } catch (NumberFormatException ex) {
             logger.error("Invalid id attribute", ex);
+            req.getSession().removeAttribute("requestId");
             req.getSession().setAttribute("error", ErrorMessages.INVALID_INPUT);
-            return PagePath.ERROR;
         }
+        return PagePath.MANAGER_REQUEST_INFO;
     }
 
 }

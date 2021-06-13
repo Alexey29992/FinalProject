@@ -15,6 +15,10 @@ public class Names {
     public static final String GET_MANAGER_REQUESTS = "get-manager-requests";
     public static final String MAKE_PAYMENT = "make-payment";
     public static final String TOP_UP_BALANCE = "top-up-balance";
-    public static final String GET_USER_BY_ID = "get-user-by-id";
+    public static final String GET_USER = "get-user";
+    public static final String GET_REQUEST = "get-request";
+    public static final String SET_MASTER = "set-master";
+    public static final String SET_PRICE = "set-price";
+    public static final String SET_STATUS = "set-status";
 
 }

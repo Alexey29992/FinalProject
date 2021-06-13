@@ -1,4 +1,4 @@
-package com.repairagency.web.command.impl;
+package com.repairagency.web.command.impl.client;
 
 import com.repairagency.exception.InvalidOperationException;
 import com.repairagency.web.command.PagePath;

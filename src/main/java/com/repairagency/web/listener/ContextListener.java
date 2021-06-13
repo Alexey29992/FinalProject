@@ -1,6 +1,8 @@
-package com.repairagency.web.context;
+package com.repairagency.web.listener;
 
+import com.repairagency.bean.EntityManager;
 import com.repairagency.database.DBManager;
+import com.repairagency.exception.DBException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -17,9 +19,15 @@ public class ContextListener implements ServletContextListener {
     @Override
     public void contextInitialized(ServletContextEvent sce) {
         logger.debug("Initializing context");
-        sce.getServletContext().setAttribute("user-balance-updates", new HashMap<Integer, Integer>());
         DBManager.initDataSource();
         DBManager.defaultDaoFactory();
+        sce.getServletContext().setAttribute("user-balance-updates", new HashMap<Integer, Integer>());
+        try {
+            sce.getServletContext().setAttribute("masterList", EntityManager.getMasterLogins());
+        } catch (DBException ex) {
+            logger.fatal("Cannot initialize master list");
+            throw new IllegalStateException(ex);
+        }
     }
 
 }

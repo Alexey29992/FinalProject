@@ -30,21 +30,23 @@
 </head>
 <body>
 <my:homeButton/>
-<form method="post" action="${pageContext.request.contextPath}/controller" class="login-form">
-    <input type="hidden" name="command" value="login"/>
-    <label for="login">Login:</label><br/>
-    <input type="text" id="login" name="login" class="input-text-form"/><br/>
-    <label for="pass">Password:</label><br/>
-    <input type="password" id="pass" name="password" class="input-text-form"/><br/>
-    <label for="visibility">Visible:</label>
-    <input type="checkbox" id="visibility" onclick="togglePassVisibility()"/><br/><br/>
-    <label for="sign-up">Sign Up:</label>
-    <input type="radio" id="sign-up" name="type" value="sign-up" onclick="setButtonLabel('Sign up');"/>
-    <label for="sign-in">Sign In:</label>
-    <input type="radio" id="sign-in" name="type" value="sign-in" onclick="setButtonLabel('Sign in');" checked/>
-    <br/>
-    <input type="submit" id="submit" value="Sign in" class="submit-button"/>
-</form>
+<div class="login-form">
+    <form method="post" action="${pageContext.request.contextPath}/controller">
+        <input type="hidden" name="command" value="login"/>
+        <label for="login">Login:</label><br/>
+        <input type="text" id="login" name="login" placeholder="Login..."/><br/>
+        <label for="pass">Password:</label><br/>
+        <input type="password" id="pass" name="password" placeholder="Password..."/><br/>
+        <label for="visibility">Visible:</label>
+        <input type="checkbox" id="visibility" onclick="togglePassVisibility()"/><br/><br/>
+        <label for="sign-up">Sign Up:</label>
+        <input type="radio" id="sign-up" name="type" value="sign-up" onclick="setButtonLabel('Sign up');"/>
+        <label for="sign-in">Sign In:</label>
+        <input type="radio" id="sign-in" name="type" value="sign-in" onclick="setButtonLabel('Sign in');" checked/>
+        <br/>
+        <input type="submit" id="submit" value="Sign in"/>
+    </form>
+</div>
 <my:error/>
 </body>
 </html>

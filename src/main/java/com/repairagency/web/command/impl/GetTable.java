@@ -1,7 +1,7 @@
 package com.repairagency.web.command.impl;
 
 import com.repairagency.database.QueryGetData;
-import com.repairagency.web.command.impl.parser.Parser;
+import com.repairagency.web.command.Util;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -40,10 +40,10 @@ public abstract class GetTable {
         String pageAttr = req.getParameter("page");
         logger.trace("page : {}", pageAttr);
 
-        String sortFactor = Parser.parseSort(sortFactorAttr);
-        String sortOrder = Parser.parseOrder(sortOrderAttr);
-        size = Parser.parseSize(sizeAttr);
-        page = Parser.parsePage(pageAttr);
+        String sortFactor = Util.parseSort(sortFactorAttr);
+        String sortOrder = Util.parseOrder(sortOrderAttr);
+        size = Util.parseSize(sizeAttr);
+        page = Util.parsePage(pageAttr);
 
         queryData.setSortFactor(sortFactor);
         queryData.setSortOrder(sortOrder);

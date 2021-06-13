@@ -1,12 +1,17 @@
-package com.repairagency.web.command.impl.parser;
+package com.repairagency.web.command;
 
+import com.repairagency.bean.User;
 import com.repairagency.config.Config;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class Parser {
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
-    private Parser(){
+public class Util {
+
+    private Util(){
     }
 
     private static final Logger logger = LogManager.getLogger();
@@ -28,25 +33,14 @@ public class Parser {
         return order;
     }
 
+    private static final Set<String> sizes = new HashSet<>(Arrays.asList("5", "10", "20", "40"));
+
     public static int parseSize(String sizeAttr) {
         int size = Config.DEFAULT_TABLE_SIZE;
-        if (sizeAttr != null) {
-            switch (sizeAttr) {
-                case "5":
-                    size = 5;
-                    break;
-                case "10":
-                    size = 10;
-                    break;
-                case "20":
-                    size = 20;
-                    break;
-                case "40":
-                    size = 40;
-                    break;
-                default:
-                    logger.trace("Unexpected 'size' parameter");
-            }
+        if (sizes.contains(sizeAttr)) {
+            size = Integer.parseInt(sizeAttr);
+        } else {
+            logger.trace("Unexpected 'size' parameter");
         }
         return size;
     }
@@ -94,7 +88,7 @@ public class Parser {
         return sortFactor;
     }
 
-    public static String parseRequestStatusFilter(String statusFilterAttr) {
+    public static String parseStatus(String statusFilterAttr) {
         String statusName = null;
         if (statusFilterAttr != null) {
             switch (statusFilterAttr) {
@@ -123,6 +117,28 @@ public class Parser {
             }
         }
         return statusName;
+    }
+
+    public static String getRoleDependentAddress(User.Role role, String prefix, String suffix) {
+        StringBuilder address = new StringBuilder(prefix);
+        switch (role) {
+            case CLIENT:
+                address.append(PagePath.CLIENT);
+                break;
+            case MANAGER:
+                address.append(PagePath.MANAGER);
+                break;
+            case MASTER:
+                address.append(PagePath.MASTER);
+                break;
+            case ADMIN:
+                address.append(PagePath.ADMIN);
+                break;
+            default:
+                logger.error("Cannot determine path. Invalid role given.");
+                return address.append(PagePath.ERROR).toString();
+        }
+        return address.append(suffix).toString();
     }
 
 }

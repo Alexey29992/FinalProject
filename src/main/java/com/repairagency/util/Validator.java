@@ -33,7 +33,6 @@ public class Validator {
         }
     }
 
-    // some character restrictions should be added
     public static void validateLogin(String login)
             throws InvalidOperationException {
         logger.debug("Validating Login {}", login);
@@ -45,7 +44,6 @@ public class Validator {
         validateCharacters(login);
     }
 
-    // some character restrictions should be added
     public static void validatePassword(String password)
             throws InvalidOperationException {
         logger.debug("Validating password");

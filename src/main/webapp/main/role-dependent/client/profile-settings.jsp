@@ -5,7 +5,7 @@
 <html lang="en">
 <head>
     <link href="${pageContext.request.contextPath}/styles/common.css" rel="stylesheet" type="text/css">
-    <link href="${pageContext.request.contextPath}/styles/client-settings.css" rel="stylesheet" type="text/css">
+    <link href="${pageContext.request.contextPath}/styles/settings.css" rel="stylesheet" type="text/css">
     <link rel="icon" href="${pageContext.request.contextPath}/resources/title.png" type="image/icon">
     <title>Profile Settings</title>
 </head>

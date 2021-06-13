@@ -7,47 +7,142 @@
 <html lang="en">
 <head>
     <link href="${pageContext.request.contextPath}/styles/common.css" rel="stylesheet" type="text/css">
-    <link href="${pageContext.request.contextPath}/styles/user-info.css" rel="stylesheet" type="text/css">
+    <link href="${pageContext.request.contextPath}/styles/info.css" rel="stylesheet" type="text/css">
     <link rel="icon" href="${pageContext.request.contextPath}/resources/title.png" type="image/icon">
     <title>User Info</title>
+    <script>
+        function cancelArea() {
+            document.getElementById('cancel-area').hidden = false;
+        }
+    </script>
+    <jsp:include page="/WEB-INF/jspf/modal-box-scripts.jspf"/>
 </head>
 <body>
 <my:navBar/>
-
-<form method="get" action="${pageContext.request.contextPath}/controller">
-    <input type="hidden" name="command" value="get-user-by-login"/>
-    <label>
-        Find by login:
-        <input type="text" name="user-login" placeholder="User login..." value="${requestScope.user.login}"/>
-    </label>
-    <input type="submit" value="Submit">
-</form>
-<form method="get" action="${pageContext.request.contextPath}/controller">
-    <input type="hidden" name="command" value="get-user-by-id"/>
-    <label>
-        Find by id:
-        <input type="text" name="user-id" placeholder="User id..." value="${requestScope.user.id}"/>
-    </label>
-    <input type="submit" value="Submit">
-</form>
-
-<c:if test="${not empty requestScope.user}">
-    User: ${requestScope.user.id}
-    Login: ${requestScope.user.login}
-    Role: ${requestScope.user.role}
-    <c:if test="${requestScope.user.role == 'CLIENT'}">
-        Phone: ${requestScope.user.phNumber}
-        <form method="post" action="${pageContext.request.contextPath}/controller">
-            <input type="hidden" name="command" value="top-up-balance"/>
-            <input type="hidden" name="client-id" value="${requestScope.user.id}"/>
-            <label>
-                Top-up balance:
-                <input type="text" name="amount" placeholder="Sum..."/>
-            </label>
-        </form>
-        Active Requests
-    </c:if>
+<ralib:onRequest/>
+<c:if test="${not empty sessionScope.requestId && empty requestScope.currentRequest}">
+    <jsp:forward page="/controller?command=get-request&request-id=${sessionScope.requestId}"/>
 </c:if>
+<div class="global-frame">
+    <div class="find-form">
+        <form method="get" action="${pageContext.request.requestURI}">
+            <input type="hidden" name="command" value="get-request"/>
+            <label>
+                Find by id:<br/>
+                <input type="text" name="request-id" placeholder="Request id..."
+                       value="${requestScope.currentRequest.id}"/>
+            </label>
+            <input type="submit" value="Find">
+        </form>
+    </div>
+    <c:set var="req" value="${requestScope.currentRequest}"/>
+    <c:if test="${not empty req}">
+        <div class="result">
+            <table>
+                <tr>
+                    <td>Request:</td>
+                    <td>#${req.id}</td>
+                </tr>
+                <tr>
+                    <td>Client:</td>
+                    <td>${req.clientLogin}#${req.clientId}</td>
+                </tr>
+                <tr>
+                    <td>Master:</td>
+                    <td>
+                        <c:if test="${req.masterId != 0}">
+                            ${req.masterLogin}#${req.masterId}
+                        </c:if>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Price:</td>
+                    <td>
+                        <c:if test="${req.price != 0}">
+                            ${req.price}
+                        </c:if>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Creation date:</td>
+                    <td>${req.creationDate}</td>
+                </tr>
+                <tr>
+                    <td>Completion date:</td>
+                    <td>${req.completionDate}</td>
+                </tr>
+                <tr>
+                    <td>Status:</td>
+                    <td>${req.status}</td>
+                </tr>
+                <c:if test="${req.status.name().equals('CANCELLED')}">
+                    <tr>
+                        <td>Cancel reason:</td>
+                        <td><my:modal content="${req.cancelReason}" buttonStyle="table-cell-button"/></td>
+                    </tr>
+                </c:if>
+                <tr>
+                    <td>Description:</td>
+                    <td><my:modal content="${req.description}" buttonStyle="table-cell-button"/></td>
+                </tr>
+                <tr>
+                    <td>Feedback:</td>
+                    <td><my:modal content="${req.userReview}" buttonStyle="table-cell-button"/></td>
+                </tr>
+            </table>
+            <c:if test="${req.status.name().equals('PAID')}">
+                <form method="post" action="${pageContext.request.contextPath}/controller">
+                    <input type="hidden" name="command" value="set-master"/>
+                    <input type="hidden" name="request-id" value="${req.id}"/>
+                    <label>
+                        Assign master:<br/>
+                        <select name="master-id">
+                            <option value="" selected>none</option>
+                            <c:forEach var="master" items="${applicationScope.masterList}">
+                                <option value="${master.key}">
+                                        ${master.value}
+                                </option>
+                            </c:forEach>
+                        </select>
+                    </label>
+                    <input type="submit" value="Assign">
+                </form>
+            </c:if>
+            <c:if test="${req.status.name().equals('NEW')}">
+                <form method="post" action="${pageContext.request.contextPath}/controller">
+                    <input type="hidden" name="command" value="set-price"/>
+                    <input type="hidden" name="request-id" value="${req.id}"/>
+                    <label>
+                        Set price:<br/>
+                        <input type="text" name="price" placeholder="Price..."/>
+                    </label>
+                    <input type="submit" value="Set">
+                </form>
+            </c:if>
+            <c:if test="${req.status.name().equals('NEW') || req.status.name().equals('WAIT_FOR_PAYMENT')}">
+                <form method="post" action="${pageContext.request.contextPath}/controller">
+                    <input type="hidden" name="command" value="set-status"/>
+                    <input type="hidden" name="request-id" value="${req.id}"/>
+                    <label>
+                        Set status:<br/>
+                        <select name="status">
+                            <option value="" selected>none</option>
+                            <option value="wait-for-payment">Wait for payment</option>
+                            <option value="paid">Paid</option>
+                            <option value="cancelled" onclick="cancelArea()">Cancelled</option>
+                        </select>
+                    </label>
+                    <label>
+                    <textarea id="cancel-area" name="cancel-reason"
+                              placeholder="Cancel reason..." hidden></textarea>
+                    </label>
+                    <input type="submit" value="Set">
+                </form>
+            </c:if>
+        </div>
+    </c:if>
+</div>
 <my:error/>
 </body>
 </html>
+

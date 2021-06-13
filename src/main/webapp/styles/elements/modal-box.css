@@ -1,4 +1,6 @@
 .modal-box {
+    text-align: left;
+    line-height: initial;
     display: none;
     position: fixed;
     z-index: 1;
