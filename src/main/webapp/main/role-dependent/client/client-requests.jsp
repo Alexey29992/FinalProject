@@ -241,7 +241,9 @@
                             ${row.price}$
                         </c:if>
                     </td>
-                    <td>${row.status}</td>
+                    <td>
+                            ${row.status}
+                    </td>
                     <td>${row.creationDate}</td>
                     <td>${row.completionDate}</td>
                     <td><my:modal content="${row.description}" buttonStyle="table-cell-button"/></td>

@@ -88,10 +88,10 @@ public class Util {
         return sortFactor;
     }
 
-    public static String parseStatus(String statusFilterAttr) {
+    public static String parseStatus(String statusAttr) {
         String statusName = null;
-        if (statusFilterAttr != null) {
-            switch (statusFilterAttr) {
+        if (statusAttr != null) {
+            switch (statusAttr) {
                 case "none":
                     break;
                 case "new":
@@ -113,7 +113,7 @@ public class Util {
                     statusName = "DONE";
                     break;
                 default:
-                    logger.trace("Unexpected 'filter-status' parameter");
+                    logger.trace("Unexpected 'status' parameter");
             }
         }
         return statusName;
@@ -141,4 +141,44 @@ public class Util {
         return address.append(suffix).toString();
     }
 
+    public static String parseStatusManager(String statusAttr) {
+        String statusName = null;
+        if (statusAttr != null) {
+            switch (statusAttr) {
+                case "none":
+                    break;
+                case "wait-for-payment":
+                    statusName = "WAIT_FOR_PAYMENT";
+                    break;
+                case "paid":
+                    statusName = "PAID";
+                    break;
+                case "cancelled":
+                    statusName = "CANCELLED";
+                    break;
+                default:
+                    logger.trace("Unexpected 'status' parameter");
+            }
+        }
+        return statusName;
+    }
+
+    public static String parseStatusMaster(String statusAttr) {
+        String statusName = null;
+        if (statusAttr != null) {
+            switch (statusAttr) {
+                case "none":
+                    break;
+                case "in-process":
+                    statusName = "IN_PROCESS";
+                    break;
+                case "done":
+                    statusName = "DONE";
+                    break;
+                default:
+                    logger.trace("Unexpected 'status' parameter");
+            }
+        }
+        return statusName;
+    }
 }

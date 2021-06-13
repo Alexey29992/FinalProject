@@ -10,11 +10,6 @@
     <link href="${pageContext.request.contextPath}/styles/info.css" rel="stylesheet" type="text/css">
     <link rel="icon" href="${pageContext.request.contextPath}/resources/title.png" type="image/icon">
     <title>Request Info</title>
-    <script>
-        function cancelArea() {
-            document.getElementById('cancel-area').hidden = false;
-        }
-    </script>
     <jsp:include page="/WEB-INF/jspf/modal-box-scripts.jspf"/>
 </head>
 <body>
@@ -75,12 +70,6 @@
                     <td>Status:</td>
                     <td>${req.status}</td>
                 </tr>
-                <c:if test="${req.status.name().equals('CANCELLED')}">
-                    <tr>
-                        <td>Cancel reason:</td>
-                        <td><my:modal content="${req.cancelReason}" buttonStyle="table-cell-button"/></td>
-                    </tr>
-                </c:if>
                 <tr>
                     <td>Description:</td>
                     <td><my:modal content="${req.description}" buttonStyle="table-cell-button"/></td>
@@ -90,51 +79,17 @@
                     <td><my:modal content="${req.userReview}" buttonStyle="table-cell-button"/></td>
                 </tr>
             </table>
-            <c:if test="${req.status.name().equals('PAID')}">
+            <c:if test="${req.status.name().equals('PAID') || req.status.name().equals('IN_PROCESS')}">
                 <form method="post" action="${pageContext.request.contextPath}/controller">
-                    <input type="hidden" name="command" value="set-master"/>
-                    <input type="hidden" name="request-id" value="${req.id}"/>
-                    <label>
-                        Assign master:<br/>
-                        <select name="master-id">
-                            <option value="" selected>none</option>
-                            <c:forEach var="master" items="${applicationScope.masterList}">
-                                <option value="${master.key}">
-                                        ${master.value}
-                                </option>
-                            </c:forEach>
-                        </select>
-                    </label>
-                    <input type="submit" value="Assign">
-                </form>
-            </c:if>
-            <c:if test="${req.status.name().equals('NEW')}">
-                <form method="post" action="${pageContext.request.contextPath}/controller">
-                    <input type="hidden" name="command" value="set-price"/>
-                    <input type="hidden" name="request-id" value="${req.id}"/>
-                    <label>
-                        Set price:<br/>
-                        <input type="text" name="price" placeholder="Price..."/>
-                    </label>
-                    <input type="submit" value="Set">
-                </form>
-            </c:if>
-            <c:if test="${req.status.name().equals('NEW') || req.status.name().equals('WAIT_FOR_PAYMENT')}">
-                <form method="post" action="${pageContext.request.contextPath}/controller">
-                    <input type="hidden" name="command" value="set-status-manager"/>
+                    <input type="hidden" name="command" value="set-status-master"/>
                     <input type="hidden" name="request-id" value="${req.id}"/>
                     <label>
                         Set status:<br/>
                         <select name="status">
                             <option value="" selected>none</option>
-                            <option value="wait-for-payment">Wait for payment</option>
-                            <option value="paid">Paid</option>
-                            <option value="cancelled" onclick="cancelArea()">Cancelled</option>
+                            <option value="in-process">In process</option>
+                            <option value="done">Done</option>
                         </select>
-                    </label>
-                    <label>
-                    <textarea id="cancel-area" name="cancel-reason"
-                              placeholder="Cancel reason..." hidden></textarea>
                     </label>
                     <input type="submit" value="Set">
                 </form>

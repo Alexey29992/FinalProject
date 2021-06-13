@@ -30,9 +30,7 @@ public class GetRequestsManager extends GetRequestTable implements Command {
         logger.trace("filter-master : {}", masterFilterAttr);
         String clientFilterAttr = req.getParameter("filter-client");
         logger.trace("filter-client : {}", clientFilterAttr);
-
         String statusName = Util.parseStatus(statusFilterAttr);
-
         if (statusName != null) {
             data.setFilterFactor("status_name", statusName);
         }

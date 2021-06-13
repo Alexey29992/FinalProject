@@ -15,19 +15,19 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-public class SetStatus implements Command {
+public class SetStatusManager implements Command {
 
     private static final Logger logger = LogManager.getLogger();
 
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) {
-        logger.debug("Executing command : set-status");
+        logger.debug("Executing command : set-status-manager");
         String statusAttr = req.getParameter("status");
         logger.trace("Status : {}", statusAttr);
         String requestIdAttr = req.getParameter("request-id");
         logger.trace("Request id : {}", requestIdAttr);
         String reasonAttr = req.getParameter("cancel-reason");
-        String statusStr = Util.parseStatus(statusAttr);
+        String statusStr = Util.parseStatusManager(statusAttr);
         if (statusStr == null) {
             logger.error("Invalid status");
             req.getSession().setAttribute("error", ErrorMessages.INVALID_INPUT);

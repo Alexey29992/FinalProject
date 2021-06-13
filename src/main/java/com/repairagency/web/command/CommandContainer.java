@@ -3,6 +3,8 @@ package com.repairagency.web.command;
 import com.repairagency.web.command.impl.*;
 import com.repairagency.web.command.impl.client.*;
 import com.repairagency.web.command.impl.manager.*;
+import com.repairagency.web.command.impl.master.GetRequestsMaster;
+import com.repairagency.web.command.impl.master.SetStatusMaster;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -26,6 +28,7 @@ public class CommandContainer {
         commandMap.put(Names.CHANGE_PASSWORD, new ChangePassword());
         commandMap.put(Names.GET_CLIENT_REQUESTS, new GetRequestsClient());
         commandMap.put(Names.GET_MANAGER_REQUESTS, new GetRequestsManager());
+        commandMap.put(Names.GET_MASTER_REQUESTS, new GetRequestsMaster());
         commandMap.put(Names.FEEDBACK, new Feedback());
         commandMap.put(Names.MAKE_PAYMENT, new MakePayment());
         commandMap.put(Names.TOP_UP_BALANCE, new TopUpBalance());
@@ -33,7 +36,8 @@ public class CommandContainer {
         commandMap.put(Names.GET_REQUEST, new GetRequest());
         commandMap.put(Names.SET_MASTER, new SetMaster());
         commandMap.put(Names.SET_PRICE, new SetPrice());
-        commandMap.put(Names.SET_STATUS, new SetStatus());
+        commandMap.put(Names.SET_STATUS_MANAGER, new SetStatusManager());
+        commandMap.put(Names.SET_STATUS_MASTER, new SetStatusMaster());
     }
 
     public static Command getCommand(String key) {

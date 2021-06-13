@@ -1,17 +1,20 @@
-package com.repairagency.web.command.impl.manager;
+package com.repairagency.web.command.impl;
 
 import com.repairagency.bean.EntityManager;
+import com.repairagency.bean.User;
 import com.repairagency.bean.data.Request;
 import com.repairagency.exception.DBException;
 import com.repairagency.exception.ErrorMessages;
 import com.repairagency.exception.InvalidOperationException;
 import com.repairagency.web.command.Command;
 import com.repairagency.web.command.PagePath;
+import com.repairagency.web.command.Util;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 
 public class GetRequest implements Command {
@@ -37,7 +40,8 @@ public class GetRequest implements Command {
             req.getSession().removeAttribute("requestId");
             req.getSession().setAttribute("error", ErrorMessages.INVALID_INPUT);
         }
-        return PagePath.MANAGER_REQUEST_INFO;
+        User user = (User) req.getSession().getAttribute("user");
+        return Util.getRoleDependentAddress(user.getRole(), "", PagePath.REQUEST_INFO);
     }
 
 }
