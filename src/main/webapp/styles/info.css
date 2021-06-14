@@ -39,14 +39,14 @@ body {
 
 .result table {
     width: 100%;
-    line-height: 1.5;
+    vertical-align: middle;
 }
 
 .result table td:nth-child(1),
 .result table td:nth-child(2) {
     max-width: 150px;
     width: 50%;
-    line-height: 1.5;
+    line-height: 1.7;
 }
 
 .result label{
@@ -73,12 +73,6 @@ body {
 
 .result input[type=text]:focus {
     border-radius: 0;
-}
-
-.table-cell-button {
-    padding: 5px 5px 5px 6px;
-    margin-top: -10px;
-    margin-bottom: -10px;
 }
 
 textarea {

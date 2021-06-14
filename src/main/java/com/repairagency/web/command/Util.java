@@ -62,7 +62,7 @@ public class Util {
 
     ////////////////////////////////////////////////////////
 
-    public static String parseSort(String sortFactorAttr) {
+    public static String parseSortRequest(String sortFactorAttr) {
         String sortFactor = Config.DEFAULT_TABLE_SORT;
         if (sortFactorAttr != null) {
             switch (sortFactorAttr) {
@@ -80,6 +80,26 @@ public class Util {
                     break;
                 case "completion-date":
                     sortFactor = "completion_date";
+                    break;
+                default:
+                    logger.trace("Unexpected 'sorting' parameter");
+            }
+        }
+        return sortFactor;
+    }
+
+    public static String parseSortPaymentRecord(String sortFactorAttr) {
+        String sortFactor = Config.DEFAULT_TABLE_SORT;
+        if (sortFactorAttr != null) {
+            switch (sortFactorAttr) {
+                case "id":
+                    sortFactor = "id";
+                    break;
+                case "date":
+                    sortFactor = "date";
+                    break;
+                case "sum":
+                    sortFactor = "sum";
                     break;
                 default:
                     logger.trace("Unexpected 'sorting' parameter");

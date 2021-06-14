@@ -30,6 +30,7 @@ public class CommandContainer {
         commandMap.put(Names.CHANGE_CLIENT_SETTINGS, new ChangeClientSettings());
         commandMap.put(Names.CHANGE_PASSWORD, new ChangePassword());
         commandMap.put(Names.GET_CLIENT_REQUESTS, new GetRequestsClient());
+        commandMap.put(Names.GET_CLIENT_PAYMENT_RECORDS, new GetPaymentRecords());
         commandMap.put(Names.GET_MANAGER_REQUESTS, new GetRequestsManager());
         commandMap.put(Names.GET_MASTER_REQUESTS, new GetRequestsMaster());
         commandMap.put(Names.FEEDBACK, new Feedback());

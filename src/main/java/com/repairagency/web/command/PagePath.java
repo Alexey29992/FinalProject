@@ -19,6 +19,7 @@ public class PagePath {
     public static final String REQUEST_INFO = "/request-info.jsp";
 
     public static final String CLIENT_REQUESTS = "/main/role-dependent/client/client-requests.jsp";
+    public static final String CLIENT_PAYMENT_HISTORY = "/main/role-dependent/client/payment-history.jsp";
     public static final String MANAGER_REQUESTS = "/main/role-dependent/manager/manager-requests.jsp";
     public static final String MASTER_REQUESTS = "/main/role-dependent/master/master-requests.jsp";
     public static final String MANAGER_REQUEST_INFO = "/main/role-dependent/manager/request-info.jsp";

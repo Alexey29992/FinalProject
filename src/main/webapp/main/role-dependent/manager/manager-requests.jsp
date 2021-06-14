@@ -169,84 +169,16 @@
 
                 </div>
                 <div class="order-frame toggle-radio">
-                    <c:set var="sortOrder" value="${pageContext.request.getParameter('sort-order')}"/>
-                    <input type="radio" id="desc" name="sort-order" value="desc" onclick="this.form.submit()"
-                            <c:if test="${sortOrder == 'desc' || empty sortOrder}">
-                                checked
-                            </c:if>/>
-                    <label for="desc">DSC:</label>
-                    <input type="radio" id="asc" name="sort-order" value="asc" onclick="this.form.submit()"
-                            <c:if test="${sortOrder == 'asc'}">
-                                checked
-                            </c:if>/>
-                    <label for="asc">АSC:</label>
+                    <my:tableSortOrder/>
                 </div>
             </form>
         </div>
         <div class="column-middle-right table-control">
             <div class="page-frame">
-                <label>
-                    <button onclick="setPage(0)"
-                            <c:if test="${!requestScope.hasPrevPage}">
-                                disabled
-                            </c:if>>
-                        1
-                    </button>
-                </label>
-                <label>
-                    <button onclick="prevPage()"
-                            <c:if test="${!requestScope.hasPrevPage}">
-                                disabled
-                            </c:if>>
-                        <
-                    </button>
-                </label>
-                <div class="page-number">
-                    ${requestScope.page + 1}
-                </div>
-                <label>
-                    <button onclick="nextPage()"
-                            <c:if test="${!requestScope.hasNextPage}">
-                                disabled
-                            </c:if>>
-                        >
-                    </button>
-                </label>
+                <my:tablePageNav/>
             </div>
             <div class="size-frame">
-                <c:set var="size" value="${pageContext.request.getParameter('size')}"/>
-                <label>
-                    <button onclick="setSize(5)"
-                            <c:if test="${size == '5'}">
-                                disabled
-                            </c:if>>
-                        5
-                    </button>
-                </label>
-                <label>
-                    <button onclick="setSize(10)"
-                            <c:if test="${size == '10'}">
-                                disabled
-                            </c:if>>
-                        10
-                    </button>
-                </label>
-                <label>
-                    <button onclick="setSize(20)"
-                            <c:if test="${size == '20' || empty size}">
-                                disabled
-                            </c:if>>
-                        20
-                    </button>
-                </label>
-                <label>
-                    <button onclick="setSize(40)"
-                            <c:if test="${size == '40'}">
-                                disabled
-                            </c:if>>
-                        40
-                    </button>
-                </label>
+                <my:tablePageSize/>
             </div>
         </div>
         <table class="req-table">

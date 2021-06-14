@@ -12,6 +12,7 @@ public class Names {
     public static final String CHANGE_CLIENT_SETTINGS = "change-client-settings";
     public static final String CHANGE_PASSWORD = "change-password";
     public static final String GET_CLIENT_REQUESTS = "get-client-requests";
+    public static final String GET_CLIENT_PAYMENT_RECORDS = "get-payment-records";
     public static final String GET_MANAGER_REQUESTS = "get-manager-requests";
     public static final String GET_MASTER_REQUESTS = "get-master-requests";
     public static final String MAKE_PAYMENT = "make-payment";

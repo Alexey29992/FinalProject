@@ -19,7 +19,7 @@ public abstract class GetTable {
         boolean hasNextPage = false;
         boolean hasPrevPage = false;
         if (data.size() == size + 1) {
-            data.remove(size - 1);
+            data.remove(size);
             hasNextPage = true;
         }
         if (page > 0) {
@@ -31,8 +31,6 @@ public abstract class GetTable {
     }
 
     protected void parseTableParams(QueryGetData queryData, HttpServletRequest req) {
-        String sortFactorAttr = req.getParameter("sort-factor");
-        logger.trace("sort-factor : {}", sortFactorAttr);
         String sortOrderAttr = req.getParameter("sort-order");
         logger.trace("sort-order : {}", sortOrderAttr);
         String sizeAttr = req.getParameter("size");
@@ -40,12 +38,10 @@ public abstract class GetTable {
         String pageAttr = req.getParameter("page");
         logger.trace("page : {}", pageAttr);
 
-        String sortFactor = Util.parseSort(sortFactorAttr);
         String sortOrder = Util.parseOrder(sortOrderAttr);
         size = Util.parseSize(sizeAttr);
         page = Util.parsePage(pageAttr);
 
-        queryData.setSortFactor(sortFactor);
         queryData.setSortOrder(sortOrder);
         queryData.setLimitFactor(size + 1);
         queryData.setOffsetFactor(page * size);

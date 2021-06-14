@@ -235,7 +235,7 @@ public class EntityManager {
         requestDao.updateEntity(request);
 
         logger.trace("Creating new PaymentRecord for Client");
-        PaymentRecord paymentRecord = new PaymentRecord(amount, client.getId(),
+        PaymentRecord paymentRecord = new PaymentRecord(-amount, client.getId(),
                 Text.PAYMENT_RECORD_PAY_MONEY + request.getId());
         paymentRecordDao.addEntity(paymentRecord);
 

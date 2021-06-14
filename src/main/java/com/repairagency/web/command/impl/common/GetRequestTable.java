@@ -5,6 +5,7 @@ import com.repairagency.database.QueryGetData;
 import com.repairagency.bean.EntityManager;
 import com.repairagency.exception.DBException;
 import com.repairagency.web.command.PagePath;
+import com.repairagency.web.command.Util;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -17,8 +18,12 @@ public abstract class GetRequestTable extends GetTable {
 
     public String getRequestTable(HttpServletRequest req, String address) {
         logger.trace("Parsing HTTP parameters for Request query");
+        String sortFactorAttr = req.getParameter("sort-factor");
+        logger.trace("sort-factor : {}", sortFactorAttr);
+        String sortFactor = Util.parseSortRequest(sortFactorAttr);
         QueryGetData queryData = new QueryGetData();
         parseTableParams(queryData, req);
+        queryData.setSortFactor(sortFactor);
         parseFilters(req, queryData);
         List<Request> requests;
         try {
