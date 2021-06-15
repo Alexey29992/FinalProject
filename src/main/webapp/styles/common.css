@@ -5,8 +5,8 @@
 @import "elements/select.css";
 @import "elements/modal.css";
 @import "elements/toggle-radio.css";
-@import "elements/table.css";
 @import "elements/textarea.css";
+@import "elements/nav-bar.css";
 
 @font-face {
     font-family: main-font;
@@ -15,33 +15,39 @@
 
 html {
     font-family: main-font, serif;
-    min-width: 820px;
-    overflow-y: scroll;
+    min-width: 880px;
+    overflow-y: auto;
 }
 
-.center {
+body {
+    margin: 0;
     position: fixed;
-    top: 0;
-    left: 0;
     width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    top: 154px;
+    bottom: 0;
+    overflow-y:scroll;
 }
 
 button {
+    display:inline-block;
+    border: initial;
+    border-radius: 10px;
+    cursor: pointer;
     padding: 5px 10px 5px 10px;
-    font-family: main-font, serif;
-    transition-duration: 0.4s;
-    border: 1px solid #9a9a9a;
-    border-radius: 7px;
-    background-color: #ddd;
+    font-weight: 700;
+    text-align: center;
+    text-shadow:0 1px 1px rgba(0, 0, 0, 0.5);
+    background:#10bc98;
+    color:#fff;
+    transition: initial;
 }
 
 button:hover {
-    background-color: #bce2e0;
-    border-color:  #306fff;
+    background:#13d7ae;
+}
+
+button:active, button:focus{
+    background:#0fae8d;
 }
 
 .head {
@@ -58,32 +64,8 @@ button:hover {
     }
 }
 
-.large-text {
-    font-size: 30px;
-}
-
-.main-text {
-    font-size: 25px;
-}
-
 .medium-text {
     font-size: 18px;
-}
-
-.small-text {
-    font-size: 12px;
-}
-
-.text-center-align {
-    text-align: center;
-}
-
-.text-right-align {
-    text-align: right;
-}
-
-.text-left-align {
-    text-align: left;
 }
 
 .button-img {
@@ -125,3 +107,6 @@ button:hover {
     color: white;
 }
 
+.btn-left {
+    text-align: left;
+}

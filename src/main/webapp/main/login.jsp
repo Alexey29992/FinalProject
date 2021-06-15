@@ -29,7 +29,9 @@
     <title>Login page</title>
 </head>
 <body>
-<my:homeButton/>
+<div class="nav-bar">
+    <my:homeButton/>
+</div>
 <div class="login-form">
     <form method="post" action="${pageContext.request.contextPath}/controller">
         <input type="hidden" name="command" value="login"/>

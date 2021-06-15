@@ -26,7 +26,9 @@
     <input type="hidden" name="command" value="change-client-settings"/>
     Phone number:<br/>
     <label>
-        <input type="text" name="ph-number" class="input-text-form" value="${sessionScope.user.phNumber}"/>
+        <input type="text" name="ph-number" class="input-text-form"
+               value="${sessionScope.user.phNumber}"
+               placeholder="Phone number..."/>
     </label><br/>
     <input type="submit" value="Submit" class="submit-button">
 </form>

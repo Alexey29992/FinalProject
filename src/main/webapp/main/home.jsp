@@ -15,9 +15,4 @@
 <article class="home-form">
     <ralib:processAction/>
 </article>
-<%--
-<div class="home-img-pos">
-    <img src="${pageContext.request.contextPath}/resources/home.png" class="home-img" alt="out-button"/>
-</div>
---%>
 </body>

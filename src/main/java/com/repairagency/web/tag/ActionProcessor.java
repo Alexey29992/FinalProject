@@ -18,6 +18,7 @@ public class ActionProcessor extends TagSupport {
         logger.debug("Tag ActionProcessor invoked");
         HttpSession session = pageContext.getSession();
         String action = (String) session.getAttribute("action");
+        User user = (User) session.getAttribute("user");
         logger.trace("action : {}", action);
         if (action == null) {
             action = "";
@@ -28,8 +29,7 @@ public class ActionProcessor extends TagSupport {
                 result = ActionProcessorMessages.SIGN_UP;
                 break;
             case "sign-in":
-                result = String.format(ActionProcessorMessages.SIGN_IN,
-                        ((User) session.getAttribute("user")).getRole().toLowerCaseString());
+                result = String.format(ActionProcessorMessages.SIGN_IN, user.getRole().toLowerCaseString());
                 break;
             case "request-success":
                 result = ActionProcessorMessages.REQUEST_SUCCESS;
@@ -47,7 +47,7 @@ public class ActionProcessor extends TagSupport {
                 result = ActionProcessorMessages.FEEDBACK_SUCCESS;
                 break;
             default:
-                result = ActionProcessorMessages.DEFAULT;
+                result = ActionProcessorMessages.defaultHome(user);
         }
         session.removeAttribute("action");
         try {

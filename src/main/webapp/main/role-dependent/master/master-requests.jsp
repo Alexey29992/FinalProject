@@ -148,8 +148,8 @@
                     <td>${row.status}</td>
                     <td>${row.creationDate}</td>
                     <td>${row.completionDate}</td>
-                    <td><my:modal content="${row.description}" buttonStyle="table-cell-button"/></td>
-                    <td><my:modal content="${row.userReview}" buttonStyle="table-cell-button"/></td>
+                    <td><my:modal content="${row.description}" buttonStyle="table-cell-button btn-left"/></td>
+                    <td><my:modal content="${row.userReview}" buttonStyle="table-cell-button btn-left"/></td>
                     <td>
                         <form method="get"
                               action="${pageContext.request.contextPath}/main/role-dependent/master/request-info.jsp">

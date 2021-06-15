@@ -8,7 +8,7 @@ public class Config {
     public static final int PASSWORD_LENGTH_MIN = 4;
     public static final int PASSWORD_LENGTH_MAX = 20;
     public static final int LOGIN_LENGTH_MIN = 3;
-    public static final int LOGIN_LENGTH_MAX = 20;
+    public static final int LOGIN_LENGTH_MAX = 12;
 
     public static final int DEFAULT_TABLE_SIZE = 20;
     public static final int DEFAULT_TABLE_PAGE = 0;

@@ -232,7 +232,7 @@
                             <c:when test="${row.status.name().equals('CANCELLED') && not empty row.cancelReason}">
                                 <my:modal content="${row.cancelReason}"
                                           buttonLable="${row.status.toString()}"
-                                          buttonStyle="table-cell-button center-btn"/>
+                                          buttonStyle="table-cell-button"/>
                             </c:when>
                             <c:otherwise>
                                 ${row.status}
@@ -241,8 +241,8 @@
                     </td>
                     <td>${row.creationDate}</td>
                     <td>${row.completionDate}</td>
-                    <td><my:modal content="${row.description}" buttonStyle="table-cell-button"/></td>
-                    <td><my:modal content="${row.userReview}" buttonStyle="table-cell-button"/></td>
+                    <td><my:modal content="${row.description}" buttonStyle="table-cell-button btn-left"/></td>
+                    <td><my:modal content="${row.userReview}" buttonStyle="table-cell-button btn-left"/></td>
                     <td>
                         <form method="get"
                               action="${pageContext.request.contextPath}/main/role-dependent/manager/request-info.jsp">
