@@ -45,8 +45,10 @@ public class RequestDaoMysql extends AbstractDao<Request> {
     }
 
     @Override
-    public void removeEntity(Request req) throws DBException {
-        removeEntity(req, QUERY_DELETE);
+    public void removeEntity(int id) throws DBException {
+        logger.debug("Removing request");
+        logger.trace("request id = {}", id);
+        removeEntity(id, QUERY_DELETE);
     }
 
     @Override

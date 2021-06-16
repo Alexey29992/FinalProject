@@ -46,6 +46,12 @@ public class ActionProcessor extends TagSupport {
             case "feedback-success":
                 result = ActionProcessorMessages.FEEDBACK_SUCCESS;
                 break;
+            case "create-user-success":
+                result = ActionProcessorMessages.CREATE_USER_SUCCESS;
+                break;
+            case "remove-user-success":
+                result = ActionProcessorMessages.REMOVE_USER_SUCCESS;
+                break;
             default:
                 result = ActionProcessorMessages.defaultHome(user);
         }

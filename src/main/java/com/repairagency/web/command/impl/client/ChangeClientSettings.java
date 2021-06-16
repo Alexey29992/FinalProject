@@ -28,11 +28,11 @@ public class ChangeClientSettings implements Command {
             client.setPhNumber(phNumber);
             EntityManager.updateUser(client);
             session.setAttribute("action", "settings-client-success");
-            return req.getContextPath() + PagePath.HOME;
+            return PagePath.HOME;
         } catch (DBException ex) {
             logger.error("Cannot change user settings", ex);
             session.setAttribute("error", ex.getPublicMessage());
-            return req.getContextPath() + PagePath.ERROR;
+            return PagePath.ERROR;
         }
     }
 

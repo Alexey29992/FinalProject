@@ -7,7 +7,7 @@ body {
     width: 100%;
 }
 
-.find-form {
+.text-form {
     width: 500px;
     padding: 15px;
     margin: 25px auto 0 auto;
@@ -17,11 +17,11 @@ body {
     display: inline-block;
 }
 
-.find-form label{
+.text-form label{
     font-size: 18px;
 }
 
-.find-form input[type=text] {
+.text-form input[type=text] {
     width: 270px;
     padding: 7px 10px;
     margin: 5px 0;
@@ -73,6 +73,10 @@ body {
 
 .result input[type=text]:focus {
     border-radius: 0;
+}
+
+.table-cell-button {
+    text-align: left;
 }
 
 textarea {

@@ -37,13 +37,4 @@
 
 .submit-button {
     margin: 20px 0 25px 0;
-    font-size: 25px;
-    transition-duration: 0.4s;
-    border: 1px solid #c2c2c2;
-    border-radius: 5px;
-}
-
-.submit-button:hover {
-    background-color: #bce2e0;
-    border-color:  #306fff;
 }

@@ -1,13 +1,15 @@
-package com.repairagency.web.command.impl.manager;
+package com.repairagency.web.command.impl.common;
 
 import com.repairagency.bean.EntityManager;
 import com.repairagency.bean.User;
+import com.repairagency.config.Config;
 import com.repairagency.exception.DBException;
 import com.repairagency.exception.ErrorMessages;
 import com.repairagency.exception.InvalidOperationException;
 import com.repairagency.util.Validator;
 import com.repairagency.web.command.Command;
 import com.repairagency.web.command.PagePath;
+import com.repairagency.web.command.Util;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -33,8 +35,14 @@ public class GetUser implements Command {
                 int userId = Integer.parseInt(userIdAttr);
                 user = EntityManager.getUser(userId);
             }
-            req.setAttribute("currentUser", user);
-            req.getSession().setAttribute("userId", user.getId());
+            if (Config.ADMIN_LOGIN.equals(user.getLogin())) {
+                logger.trace("Attempt to retrieve Admin");
+                req.getSession().removeAttribute("userId");
+                req.getSession().setAttribute("error", ErrorMessages.NO_SUCH_USER);
+            } else {
+                req.setAttribute("currentUser", user);
+                req.getSession().setAttribute("userId", user.getId());
+            }
         } catch (DBException | InvalidOperationException ex) {
             logger.error("Cannot get user", ex);
             req.getSession().removeAttribute("userId");
@@ -44,7 +52,8 @@ public class GetUser implements Command {
             req.getSession().removeAttribute("userId");
             req.getSession().setAttribute("error", ErrorMessages.INVALID_INPUT);
         }
-        return PagePath.MANAGER_USER_INFO;
+        User user = (User) req.getSession().getAttribute("user");
+        return Util.getRoleDependentAddress(user.getRole(), "", PagePath.USER_INFO);
     }
 
 }

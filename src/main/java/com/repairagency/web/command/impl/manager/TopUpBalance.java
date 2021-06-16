@@ -33,7 +33,7 @@ public class TopUpBalance implements Command {
         } catch (NumberFormatException ex) {
             logger.error("Invalid client id", ex);
             req.getSession().setAttribute("error", ErrorMessages.UNEXPECTED);
-            return req.getContextPath() + PagePath.MANAGER_USER_INFO;
+            return PagePath.MANAGER_USER_INFO;
         }
         try {
             int amount = Integer.parseInt(amountAttr);
@@ -49,7 +49,7 @@ public class TopUpBalance implements Command {
             logger.error("Invalid client id", ex);
             req.getSession().setAttribute("error", ErrorMessages.UNEXPECTED);
         }
-        return req.getContextPath() + PagePath.MANAGER_USER_INFO;
+        return PagePath.MANAGER_USER_INFO;
     }
 
 }

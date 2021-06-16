@@ -36,15 +36,15 @@
     clear: both;
 }
 
-.req-table td:nth-child(1) {
+table td:nth-child(1) {
     width: 50px;
 }
 
-.req-table td:nth-child(n+2):nth-child(-n+6) {
+table td:nth-child(n+2):nth-child(-n+6) {
     width: 180px;
 }
 
-.req-table td:nth-child(7) {
+table td:nth-child(7) {
     padding: 2px;
     text-align: center;
 }

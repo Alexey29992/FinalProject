@@ -4,6 +4,7 @@ import com.repairagency.bean.data.Request;
 import com.repairagency.database.QueryGetData;
 import com.repairagency.bean.EntityManager;
 import com.repairagency.exception.DBException;
+import com.repairagency.exception.InvalidOperationException;
 import com.repairagency.web.command.PagePath;
 import com.repairagency.web.command.Util;
 import org.apache.logging.log4j.LogManager;
@@ -16,15 +17,16 @@ public abstract class GetRequestTable extends GetTable {
 
     private static final Logger logger = LogManager.getLogger();
 
-    public String getRequestTable(HttpServletRequest req, String address) {
+    public String getRequestTable(HttpServletRequest req, String address)
+            throws InvalidOperationException {
         logger.trace("Parsing HTTP parameters for Request query");
         String sortFactorAttr = req.getParameter("sort-factor");
         logger.trace("sort-factor : {}", sortFactorAttr);
-        String sortFactor = Util.parseSortRequest(sortFactorAttr);
         QueryGetData queryData = new QueryGetData();
         parseTableParams(queryData, req);
+        String sortFactor = Util.parseSortRequest(sortFactorAttr);
         queryData.setSortFactor(sortFactor);
-        parseFilters(req, queryData);
+        setFilters(req, queryData);
         List<Request> requests;
         try {
             requests = EntityManager.getRequestList(queryData);
@@ -38,6 +40,7 @@ public abstract class GetRequestTable extends GetTable {
         return address;
     }
 
-    protected abstract void parseFilters(HttpServletRequest request, QueryGetData outputData);
+    protected abstract void setFilters(HttpServletRequest request, QueryGetData outputData)
+            throws InvalidOperationException;
 
 }

@@ -19,17 +19,17 @@ public class CreateRequest implements Command {
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) {
         logger.debug("Executing command : create-request");
-        String description = req.getParameter("description");
+        String descriptionAttr = req.getParameter("description");
         User user = (User) req.getSession().getAttribute("user");
         try {
-            description = Validator.escapeHTMLSpecial(description);
+            String description = Validator.escapeHTMLSpecial(descriptionAttr);
             EntityManager.newRequest(description, user.getId());
             req.getSession().setAttribute("action", "request-success");
-            return req.getContextPath() + PagePath.HOME;
+            return PagePath.HOME;
         } catch (DBException ex) {
             logger.error("Cannot create request", ex);
             req.getSession().setAttribute("error", ex.getPublicMessage());
-            return req.getContextPath() + PagePath.ERROR;
+            return PagePath.ERROR;
         }
 
     }

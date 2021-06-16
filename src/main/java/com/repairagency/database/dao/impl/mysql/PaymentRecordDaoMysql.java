@@ -73,17 +73,10 @@ public class PaymentRecordDaoMysql extends AbstractDao<PaymentRecord> {
     }
 
     @Override
-    public void removeEntity(PaymentRecord paymentRecord) throws DBException {
-        try (PreparedStatement statement = connection.prepareStatement(QUERY_DELETE)) {
-            statement.setInt(1, paymentRecord.getId());
-            statement.executeUpdate();
-        } catch (SQLException ex) {
-            String message = "PaymentRecord#" + paymentRecord.getId() + " cannot be deleted";
-            logger.error(message, ex);
-            DBManager.rollbackTransaction(connection);
-            DBManager.closeConnection(connection);
-            throw new DBException(message, ErrorMessages.DB_INTERNAL, ex);
-        }
+    public void removeEntity(int id) throws DBException {
+        logger.debug("Removing user");
+        logger.trace("user id = {}", id);
+        removeEntity(id, QUERY_DELETE);
     }
 
     @Override

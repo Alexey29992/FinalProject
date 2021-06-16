@@ -1,6 +1,7 @@
 package com.repairagency.web.controller;
 
 import com.repairagency.web.command.CommandContainer;
+import com.repairagency.web.command.PagePath;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -34,6 +35,7 @@ public class Controller extends HttpServlet {
         String command = req.getParameter(COMMAND);
         logger.trace("{} : {}", COMMAND, command);
         String address = CommandContainer.getCommand(command).execute(req, resp);
+        address = req.getContextPath() + address;
         logger.trace("Send redirect to : {}", address);
         resp.sendRedirect(address);
     }

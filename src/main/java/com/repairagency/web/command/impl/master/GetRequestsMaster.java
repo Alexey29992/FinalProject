@@ -2,6 +2,7 @@ package com.repairagency.web.command.impl.master;
 
 import com.repairagency.bean.User;
 import com.repairagency.database.QueryGetData;
+import com.repairagency.exception.InvalidOperationException;
 import com.repairagency.web.command.Command;
 import com.repairagency.web.command.PagePath;
 import com.repairagency.web.command.Util;
@@ -19,11 +20,17 @@ public class GetRequestsMaster extends GetRequestTable implements Command {
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) {
         logger.debug("Executing command : get-master-requests");
-        return getRequestTable(req, PagePath.MASTER_REQUESTS);
+        try {
+            return getRequestTable(req, PagePath.MASTER_REQUESTS);
+        } catch (InvalidOperationException ex) {
+            logger.error("Invalid filter values", ex);
+            req.getSession().setAttribute("error", ex.getPublicMessage());
+            return PagePath.ERROR;
+        }
     }
 
     @Override
-    protected void parseFilters(HttpServletRequest req, QueryGetData data) {
+    protected void setFilters(HttpServletRequest req, QueryGetData data) {
         String statusFilterAttr = req.getParameter("filter-status");
         logger.trace("filter-status : {}", statusFilterAttr);
         User master = (User) req.getSession().getAttribute("user");
@@ -33,7 +40,6 @@ public class GetRequestsMaster extends GetRequestTable implements Command {
         }
         data.setFilterFactor("master_id", String.valueOf(master.getId()));
     }
-
 
 
 }

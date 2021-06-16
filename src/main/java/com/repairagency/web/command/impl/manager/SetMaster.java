@@ -43,7 +43,7 @@ public class SetMaster implements Command {
             logger.error("Invalid request id", ex);
             req.getSession().setAttribute("error", ErrorMessages.UNEXPECTED);
         }
-        return req.getContextPath() + PagePath.MANAGER_REQUEST_INFO;
+        return PagePath.MANAGER_REQUEST_INFO;
     }
 
 }

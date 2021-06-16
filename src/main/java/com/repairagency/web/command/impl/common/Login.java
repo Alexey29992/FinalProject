@@ -43,16 +43,16 @@ public class Login implements Command {
             if (user == null) {
                 logger.trace("Cannot log in");
                 session.setAttribute("error", ErrorMessages.UNEXPECTED);
-                return req.getContextPath() + PagePath.ERROR;
+                return PagePath.ERROR;
             }
             logger.trace("Logged as (role) : {}", user.getRole());
             session.setAttribute("user", user);
             session.setAttribute("action", type);
-            return req.getContextPath() + PagePath.HOME;
+            return PagePath.HOME;
         } catch (DBException | InvalidOperationException ex) {
             logger.error("Cannot log in", ex);
             req.getSession().setAttribute("error", ex.getPublicMessage());
-            return req.getContextPath() + PagePath.LOGIN;
+            return PagePath.LOGIN;
         }
     }
 

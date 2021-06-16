@@ -12,7 +12,7 @@ public interface Dao<T extends AbstractBean> {
 
     void updateEntity(T entity) throws DBException;
 
-    void removeEntity(T entity) throws DBException;
+    void removeEntity(int id) throws DBException;
 
     List<T> getEntityList(QueryGetData queryData) throws DBException;
 

@@ -6,10 +6,11 @@ public class ErrorMessages {
 
     private ErrorMessages() {
     }
+
     public static final Object INVALID_INPUT = "Invalid input";
     public static final String INVALID_COMMAND = "Invalid command";
-    public static final Object INVALID_MASTER = "Invalid master";
     public static final String UNEXPECTED = "Unexpected error";
+    public static final Object INSUFFICIENT_PERMISSIONS = "Insufficient permissions to view this page";
 
     public static final String USER_CREATE_INVALID_ROLE = "User with given role cannot be created";
     public static final String USER_CREATE_LOGIN_REGISTERED = "Entered login is already registered";
@@ -19,7 +20,8 @@ public class ErrorMessages {
     public static final String USER_LOGIN_NOT_FOUND = "Login not registered";
     public static final String USER_LOGIN_INVALID_LENGTH = "Invalid login. Login should contain from "
             + Config.LOGIN_LENGTH_MIN + " to " + Config.LOGIN_LENGTH_MAX + " characters";
-    public static final String USER_FORBIDDEN_INPUT_CHARS = "Only letters, numbers, '-' and '_' allowed here";
+    public static final String USER_FORBIDDEN_INPUT_CHARS =
+            "Only letters, numbers and '_' allowed in login/password clause";
     public static final String USER_UNABLE_FEEDBACK = "This request is not done yet";
     public static final String USER_UNABLE_PAY_STATUS = "You cannot pay for this request";
     public static final String USER_UNABLE_PAY_MONEY = "Not enough money";

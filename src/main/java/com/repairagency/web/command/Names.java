@@ -23,4 +23,8 @@ public class Names {
     public static final String SET_PRICE = "set-price";
     public static final String SET_STATUS_MANAGER = "set-status-manager";
     public static final String SET_STATUS_MASTER = "set-status-master";
+    public static final String GET_ADMIN_USERS = "get-admin-users";
+    public static final String CREATE_USER = "create-user";
+    public static final String REMOVE_USER = "remove-user";
+
 }

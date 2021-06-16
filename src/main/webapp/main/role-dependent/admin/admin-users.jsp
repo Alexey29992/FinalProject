@@ -6,10 +6,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link href="${pageContext.request.contextPath}/styles/master-requests.css" rel="stylesheet" type="text/css">
+    <link href="${pageContext.request.contextPath}/styles/admin-users.css" rel="stylesheet" type="text/css">
     <link href="${pageContext.request.contextPath}/styles/common.css" rel="stylesheet" type="text/css">
     <link rel="icon" href="${pageContext.request.contextPath}/resources/title.png" type="image/icon">
-    <title>Assigned Requests</title>
+    <title>User Management</title>
     <script>
         function submitForm() {
             document.getElementById("request-query").submit();
@@ -44,43 +44,43 @@
 </head>
 <body>
 <my:navBar/>
-<ralib:onRequest command="get-master-requests"/>
+<ralib:onRequest command="get-admin-users"/>
 <div class="row">
     <div class="column-middle">
         <div class="column-middle-left">
             <form method="get" action="${pageContext.request.requestURI}" id="request-query">
-                <input type="hidden" name="command" value="get-manager-requests"/>
+                <input type="hidden" name="command" value="get-admin-users"/>
                 <input type="hidden" id="size" name="size" value="${pageContext.request.getParameter('size')}"/>
                 <input type="hidden" id="page" name="page" value="${pageContext.request.getAttribute('page')}"/>
                 <div class="dropdown-filters-outer">
-                    <div class="filter-status-frame">
+                    <div class="filter-role-frame">
                         <label>
-                            Filter by status:
-                            <select name="filter-status" class="select-css" onchange="this.form.submit()">
-                                <c:set var="filter" value="${pageContext.request.getParameter('filter-status')}"/>
+                            Filter by role:
+                            <select name="filter-role" class="select-css" onchange="this.form.submit()">
+                                <c:set var="filter" value="${pageContext.request.getParameter('filter-role')}"/>
                                 <option value="none"
                                         <c:if test="${filter == 'none'}">
                                             selected
                                         </c:if>>
                                     none
                                 </option>
-                                <option value="paid"
-                                        <c:if test="${filter == 'paid'}">
+                                <option value="client"
+                                        <c:if test="${filter == 'client'}">
                                             selected
                                         </c:if>>
-                                    Paid
+                                    Client
                                 </option>
-                                <option value="in-process"
-                                        <c:if test="${filter == 'in-process'}">
+                                <option value="master"
+                                        <c:if test="${filter == 'master'}">
                                             selected
                                         </c:if>>
-                                    In process
+                                    Master
                                 </option>
-                                <option value="done"
-                                        <c:if test="${filter == 'done'}">
+                                <option value="manager"
+                                        <c:if test="${filter == 'manager'}">
                                             selected
                                         </c:if>>
-                                    Done
+                                    Manager
                                 </option>
                             </select>
                         </label>
@@ -96,23 +96,17 @@
                                         </c:if>>
                                     ID
                                 </option>
-                                <option value="creation-date"
-                                        <c:if test="${sortFactor == 'creation-date'}">
+                                <option value="login"
+                                        <c:if test="${sortFactor == 'login'}">
                                             selected
                                         </c:if>>
-                                    Creation Date
+                                    Login
                                 </option>
-                                <option value="status"
-                                        <c:if test="${sortFactor == 'status'}">
+                                <option value="role"
+                                        <c:if test="${sortFactor == 'role'}">
                                             selected
                                         </c:if>>
-                                    Status
-                                </option>
-                                <option value="completion-date"
-                                        <c:if test="${sortFactor == 'completion-date'}">
-                                            selected
-                                        </c:if>>
-                                    Completion Date
+                                    Role
                                 </option>
                             </select>
                         </label>
@@ -132,43 +126,53 @@
             </div>
         </div>
         <table>
-            <caption>Request history:</caption>
+            <caption>Users</caption>
             <tr>
                 <th scope="col">Id</th>
-                <th scope="col">Status</th>
-                <th scope="col">Creation Date</th>
-                <th scope="col">Completion Date</th>
-                <th scope="col">Description</th>
-                <th scope="col">Feedback</th>
+                <th scope="col">Login</th>
+                <th scope="col">Role</th>
+                <th scope="col">Phone number</th>
+                <th scope="col">Balance</th>
                 <th scope="col">Actions</th>
             </tr>
-            <c:forEach var="row" items="${requestScope.requests}">
-                <tr>
-                    <td>${row.id}</td>
-                    <td>${row.status}</td>
-                    <td>${row.creationDate}</td>
-                    <td>${row.completionDate}</td>
-                    <td><my:modal content="${row.description}" buttonStyle="table-cell-button btn-left"/></td>
-                    <td><my:modal content="${row.userReview}" buttonStyle="table-cell-button btn-left"/></td>
-                    <td>
-                        <form method="get"
-                              action="${pageContext.request.contextPath}/main/role-dependent/master/request-info.jsp">
-                            <input type="hidden" name="command" value="get-request">
-                            <label>
-                                <button class="action-button" name="request-id" value="${row.id}">
-                                    <c:choose>
-                                        <c:when test="${row.status.name().equals('DONE')}">
-                                            Info
-                                        </c:when>
-                                        <c:otherwise>
-                                            Edit
-                                        </c:otherwise>
-                                    </c:choose>
-                                </button>
-                            </label>
-                        </form>
-                    </td>
-                </tr>
+            <c:forEach var="row" items="${requestScope.users}">
+                <c:if test="${!row.role.name().equals('ADMIN')}">
+                    <tr>
+                        <td>${row.id}</td>
+                        <td>
+                            <form method="get"
+                                  action="${pageContext.request.contextPath}/main/role-dependent/manager/user-info.jsp">
+                                <input type="hidden" name="command" value="get-user">
+                                <label>
+                                    <button class="table-cell-button" name="user-id" value="${row.id}">
+                                            ${row.login}
+                                    </button>
+                                </label>
+                            </form>
+                        </td>
+                        <td>${row.role}</td>
+                        <td>
+                            <c:if test="${row.role.name().equals('CLIENT')}">
+                                ${row.phNumber}
+                            </c:if>
+                        </td>
+                        <td>
+                            <c:if test="${row.role.name().equals('CLIENT')}">
+                                ${row.balance}
+                            </c:if>
+                        </td>
+                        <td>
+                            <form method="post" action="${pageContext.request.contextPath}/controller">
+                                <input type="hidden" name="command" value="remove-user">
+                                <label>
+                                    <button class="action-button" name="user-id" value="${row.id}">
+                                        Delete
+                                    </button>
+                                </label>
+                            </form>
+                        </td>
+                    </tr>
+                </c:if>
             </c:forEach>
         </table>
     </div>

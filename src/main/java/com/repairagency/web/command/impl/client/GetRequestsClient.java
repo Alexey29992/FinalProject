@@ -1,5 +1,6 @@
 package com.repairagency.web.command.impl.client;
 
+import com.repairagency.exception.InvalidOperationException;
 import com.repairagency.web.command.Command;
 import com.repairagency.web.command.PagePath;
 import com.repairagency.database.QueryGetData;
@@ -19,10 +20,17 @@ public class GetRequestsClient extends GetRequestTable implements Command {
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) {
         logger.debug("Executing command : get-client-requests");
-        return getRequestTable(req, PagePath.CLIENT_REQUESTS);
+        try {
+            return getRequestTable(req, PagePath.CLIENT_REQUESTS);
+        } catch (InvalidOperationException ex) {
+            logger.error("Invalid filter values", ex);
+            req.getSession().setAttribute("error", ex.getPublicMessage());
+            return PagePath.ERROR;
+        }
     }
 
-    protected void parseFilters(HttpServletRequest req, QueryGetData data) {
+    @Override
+    protected void setFilters(HttpServletRequest req, QueryGetData data) {
         String statusFilterAttr = req.getParameter("filter-status");
         logger.trace("filter-status : {}", statusFilterAttr);
         User user = (User) req.getSession().getAttribute("user");

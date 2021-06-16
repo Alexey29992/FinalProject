@@ -29,7 +29,7 @@ public class UserDaoMysql extends AbstractDao<User> {
             " client.ph_number, client.balance" +
             " FROM user" +
             " JOIN role ON role_id = role.id" +
-            " JOIN client ON user.id = client.id";
+            " LEFT JOIN client ON user.id = client.id";
 
     public UserDaoMysql(Connection connection) {
         super(connection);
@@ -69,18 +69,10 @@ public class UserDaoMysql extends AbstractDao<User> {
     }
 
     @Override
-    public void removeEntity(User user) throws DBException {
+    public void removeEntity(int id) throws DBException {
         logger.debug("Removing user");
-        try (PreparedStatement statement = connection.prepareStatement(QUERY_DELETE)) {
-            statement.setInt(1, user.getId());
-            statement.executeUpdate();
-        } catch (SQLException ex) {
-            String message = "User#" + user.getId() + " cannot be deleted";
-            logger.error(message, ex);
-            DBManager.rollbackTransaction(connection);
-            DBManager.closeConnection(connection);
-            throw new DBException(message, ErrorMessages.DB_INTERNAL, ex);
-        }
+        logger.trace("user id = {}", id);
+        removeEntity(id, QUERY_DELETE);
     }
 
     @Override

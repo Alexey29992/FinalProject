@@ -19,7 +19,7 @@
     <jsp:forward page="/controller?command=get-request&request-id=${sessionScope.requestId}"/>
 </c:if>
 <div class="global-frame">
-    <div class="find-form">
+    <div class="text-form">
         <form method="get" action="${pageContext.request.requestURI}">
             <input type="hidden" name="command" value="get-request"/>
             <label>

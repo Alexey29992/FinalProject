@@ -26,12 +26,11 @@ public class SetStatusMaster implements Command {
         logger.trace("Status : {}", statusAttr);
         String requestIdAttr = req.getParameter("request-id");
         logger.trace("Request id : {}", requestIdAttr);
-
         String statusStr = Util.parseStatusMaster(statusAttr);
         if (statusStr == null) {
             logger.error("Invalid status");
             req.getSession().setAttribute("error", ErrorMessages.INVALID_INPUT);
-            return req.getContextPath() + PagePath.MASTER_REQUEST_INFO;
+            return PagePath.MASTER_REQUEST_INFO;
         }
         try {
             int requestId = Integer.parseInt(requestIdAttr);
@@ -50,7 +49,7 @@ public class SetStatusMaster implements Command {
             logger.error("Invalid request", ex);
             req.getSession().setAttribute("error", ErrorMessages.UNEXPECTED);
         }
-        return req.getContextPath() + PagePath.MASTER_REQUEST_INFO;
+        return PagePath.MASTER_REQUEST_INFO;
     }
 
 }

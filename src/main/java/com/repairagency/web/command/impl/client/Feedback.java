@@ -30,20 +30,20 @@ public class Feedback implements Command {
             Request request = EntityManager.getRequest(id);
             if (request.getStatus() != Request.Status.DONE && request.getUserReview() == null) {
                 req.getSession().setAttribute("error", ErrorMessages.USER_UNABLE_FEEDBACK);
-                return req.getContextPath() + PagePath.ERROR;
+                return PagePath.ERROR;
             }
             request.setUserReview(feedback);
             EntityManager.updateRequest(request);
             req.getSession().setAttribute("action", "feedback-success");
-            return req.getContextPath() + PagePath.HOME;
+            return PagePath.HOME;
         } catch (DBException ex) {
             logger.error("Cannot set feedback", ex);
             req.getSession().setAttribute("error", ex.getPublicMessage());
-            return req.getContextPath() + PagePath.ERROR;
+            return PagePath.ERROR;
         } catch (NumberFormatException | InvalidOperationException ex) {
             logger.error("Invalid request-id", ex);
             req.getSession().setAttribute("error", ErrorMessages.UNEXPECTED);
-            return req.getContextPath() + PagePath.ERROR;
+            return PagePath.ERROR;
         }
     }
 

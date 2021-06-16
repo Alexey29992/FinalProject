@@ -33,7 +33,7 @@ public class ChangePassword implements Command {
                 user.setPassword(newPass);
                 EntityManager.updateUser(user);
                 session.setAttribute("action", "password-success");
-                return req.getContextPath() + PagePath.HOME;
+                return PagePath.HOME;
             } catch (InvalidOperationException | DBException ex) {
                 logger.error("Cannot change user password", ex);
                 session.setAttribute("error", ex.getPublicMessage());
@@ -42,7 +42,7 @@ public class ChangePassword implements Command {
             logger.error("Cannot change user password. Password confirmation failed");
             session.setAttribute("error", ErrorMessages.USER_PASSWORD_INCORRECT);
         }
-        return Util.getRoleDependentAddress(user.getRole(), req.getContextPath(), PagePath.SETTINGS);
+        return PagePath.SETTINGS;
     }
 
 }

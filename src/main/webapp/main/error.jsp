@@ -12,6 +12,9 @@
 </head>
 <body>
 <my:navBar/>
+<c:if test="${empty sessionScope.error}">
+    <c:redirect url="home.jsp"/>
+</c:if>
 <div class="error-page">
     <my:error/>
 </div>

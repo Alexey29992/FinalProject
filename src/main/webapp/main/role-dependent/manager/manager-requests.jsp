@@ -181,8 +181,8 @@
                 <my:tablePageSize/>
             </div>
         </div>
-        <table class="req-table">
-            <caption>Request history:</caption>
+        <table>
+            <caption>Request Management:</caption>
             <tr>
                 <th scope="col">Id</th>
                 <th scope="col">Client</th>

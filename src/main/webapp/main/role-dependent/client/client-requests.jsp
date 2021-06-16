@@ -153,7 +153,7 @@
                 <my:tablePageSize/>
             </div>
         </div>
-        <table class="req-table">
+        <table>
             <caption>Request history:</caption>
             <tr>
                 <th scope="col">Id</th>

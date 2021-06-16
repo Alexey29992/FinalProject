@@ -18,7 +18,7 @@
     <jsp:forward page="/controller?command=get-user&user-id=${sessionScope.userId}"/>
 </c:if>
 <div class="global-frame">
-    <div class="find-form">
+    <div class="text-form">
         <form method="get" action="${pageContext.request.requestURI}">
             <input type="hidden" name="command" value="get-user"/>
             <label>

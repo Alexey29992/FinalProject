@@ -82,7 +82,27 @@ public class Util {
                     sortFactor = "completion_date";
                     break;
                 default:
-                    logger.trace("Unexpected 'sorting' parameter");
+                    logger.trace("Unexpected request sort parameter");
+            }
+        }
+        return sortFactor;
+    }
+
+    public static String parseSortUser(String sortFactorAttr) {
+        String sortFactor = Config.DEFAULT_TABLE_SORT;
+        if (sortFactorAttr != null) {
+            switch (sortFactorAttr) {
+                case "id":
+                    sortFactor = "id";
+                    break;
+                case "login":
+                    sortFactor = "login";
+                    break;
+                case "role":
+                    sortFactor = "role_id";
+                    break;
+                default:
+                    logger.trace("Unexpected user sort parameter");
             }
         }
         return sortFactor;
@@ -102,11 +122,13 @@ public class Util {
                     sortFactor = "sum";
                     break;
                 default:
-                    logger.trace("Unexpected 'sorting' parameter");
+                    logger.trace("Unexpected payment record sort parameter");
             }
         }
         return sortFactor;
     }
+
+    ////////////////////////////////////////////////////////
 
     public static String parseStatus(String statusAttr) {
         String statusName = null;
@@ -133,33 +155,13 @@ public class Util {
                     statusName = "DONE";
                     break;
                 default:
-                    logger.trace("Unexpected 'status' parameter");
+                    logger.trace("Unexpected status parameter");
             }
         }
         return statusName;
     }
 
-    public static String getRoleDependentAddress(User.Role role, String prefix, String suffix) {
-        StringBuilder address = new StringBuilder(prefix);
-        switch (role) {
-            case CLIENT:
-                address.append(PagePath.CLIENT);
-                break;
-            case MANAGER:
-                address.append(PagePath.MANAGER);
-                break;
-            case MASTER:
-                address.append(PagePath.MASTER);
-                break;
-            case ADMIN:
-                address.append(PagePath.ADMIN);
-                break;
-            default:
-                logger.error("Cannot determine path. Invalid role given.");
-                return address.append(PagePath.ERROR).toString();
-        }
-        return address.append(suffix).toString();
-    }
+
 
     public static String parseStatusManager(String statusAttr) {
         String statusName = null;
@@ -177,7 +179,7 @@ public class Util {
                     statusName = "CANCELLED";
                     break;
                 default:
-                    logger.trace("Unexpected 'status' parameter");
+                    logger.trace("Unexpected manager status parameter");
             }
         }
         return statusName;
@@ -196,9 +198,53 @@ public class Util {
                     statusName = "DONE";
                     break;
                 default:
-                    logger.trace("Unexpected 'status' parameter");
+                    logger.trace("Unexpected master status parameter");
             }
         }
         return statusName;
     }
+
+    public static String parseUserRole(String userRoleAttr) {
+        String userRole = null;
+        if (userRoleAttr != null) {
+            switch(userRoleAttr) {
+                case "none":
+                    break;
+                case "master":
+                    userRole = "MASTER";
+                    break;
+                case "client":
+                    userRole = "CLIENT";
+                    break;
+                case "manager":
+                    userRole = "MANAGER";
+                    break;
+                default:
+                    logger.trace("Unexpected user role parameter");
+            }
+        }
+        return userRole;
+    }
+
+
+    public static String getRoleDependentAddress(User.Role role, String prefix, String suffix) {
+        StringBuilder address = new StringBuilder(prefix);
+        switch (role) {
+            case CLIENT:
+                address.append(PagePath.CLIENT);
+                break;
+            case MANAGER:
+            case ADMIN:
+                address.append(PagePath.MANAGER);
+                break;
+            case MASTER:
+                address.append(PagePath.MASTER);
+                break;
+            default:
+                logger.error("Cannot determine path. Invalid role given.");
+                return address.append(PagePath.ERROR).toString();
+        }
+        return address.append(suffix).toString();
+    }
+
 }

@@ -168,10 +168,10 @@ public class EntityManager {
         completeTransaction(connection);
     }
 
-    public static void removeUser(User user) throws DBException {
+    public static void removeUser(int id) throws DBException {
         Connection connection = startTransaction();
         Dao<User> dao = getUserDao(connection);
-        dao.removeEntity(user);
+        dao.removeEntity(id);
         completeTransaction(connection);
     }
 

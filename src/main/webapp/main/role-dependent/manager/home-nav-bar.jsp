@@ -6,16 +6,7 @@
                 <c:if test="${pageContext.request.requestURI.equals(link)}">
                     class="active"
                 </c:if>>
-            Request Management
-        </a>
-    </li>
-    <li>
-        <c:set var="link" value="${pageContext.request.contextPath}/main/role-dependent/manager/user-info.jsp"/>
-        <a href="${link}"
-                <c:if test="${pageContext.request.requestURI.equals(link)}">
-                    class="active"
-                </c:if>>
-            User Info
+            Request Table
         </a>
     </li>
     <li>
@@ -28,7 +19,16 @@
         </a>
     </li>
     <li>
-        <c:set var="link" value="${pageContext.request.contextPath}/main/role-dependent/manager/profile-settings.jsp"/>
+        <c:set var="link" value="${pageContext.request.contextPath}/main/role-dependent/manager/user-info.jsp"/>
+        <a href="${link}"
+                <c:if test="${pageContext.request.requestURI.equals(link)}">
+                    class="active"
+                </c:if>>
+            User Info
+        </a>
+    </li>
+    <li>
+        <c:set var="link" value="${pageContext.request.contextPath}/main/role-dependent/profile-settings.jsp"/>
         <a href="${link}"
                 <c:if test="${pageContext.request.requestURI.equals(link)}">
                     class="active"

@@ -16,6 +16,8 @@ public class ActionProcessorMessages {
     public static final String SIGN_IN = "You have been successfully entered as a %s.";
     public static final String FEEDBACK_SUCCESS = "Thanks for your feedback!";
     public static final String PAYMENT_SUCCESS = "Payment successfully received.";
+    public static final String CREATE_USER_SUCCESS = "User successfully created";
+    public static final String REMOVE_USER_SUCCESS = "User successfully removed";
 
     public static String defaultHome(User user) {
         String message = "Hello, Guest! We are happy to see you on out site. " +

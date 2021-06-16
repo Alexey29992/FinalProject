@@ -30,15 +30,15 @@ public class MakePayment implements Command {
             int newBalance = EntityManager.makePayment(client, requestId);
             client.setBalance(newBalance);
             req.getSession().setAttribute("action", "payment-success");
-            return req.getContextPath() + PagePath.HOME;
+            return PagePath.HOME;
         } catch (DBException | InvalidOperationException ex) {
             logger.error("Cannot make payment", ex);
             req.getSession().setAttribute("error", ex.getPublicMessage());
-            return req.getContextPath() + PagePath.ERROR;
+            return PagePath.ERROR;
         } catch (NumberFormatException ex) {
             logger.error("Invalid request-id", ex);
             req.getSession().setAttribute("error", ErrorMessages.UNEXPECTED);
-            return req.getContextPath() + PagePath.ERROR;
+            return PagePath.ERROR;
         }
     }
 

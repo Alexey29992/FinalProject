@@ -14,14 +14,14 @@ import java.util.Set;
 public class BalanceUpdater implements Filter {
 
     @Override
-    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+    public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain)
             throws IOException, ServletException {
-        HttpServletRequest httpRequest = (HttpServletRequest) request;
+        HttpServletRequest httpRequest = (HttpServletRequest) req;
         Map<Integer, Integer> updates = (Map<Integer, Integer>) httpRequest.getServletContext()
                 .getAttribute("user-balance-updates");
         User user = (User) httpRequest.getSession().getAttribute("user");
         if (!(user instanceof Client)) {
-            chain.doFilter(request, response);
+            chain.doFilter(req, resp);
             return;
         }
         Client client = (Client) user;
@@ -34,7 +34,7 @@ public class BalanceUpdater implements Filter {
                 break;
             }
         }
-        chain.doFilter(request, response);
+        chain.doFilter(req, resp);
     }
 
 }

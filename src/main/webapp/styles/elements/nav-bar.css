@@ -26,9 +26,9 @@
 }
 
 .nav-bar li a:hover:not(.active) {
-    background-color: #111;
+    background-color: #27A2C1;
 }
 
 .active {
-    background-color: #04AA6D;
+    background-color: #1E8299 !important;
 }

@@ -19,7 +19,7 @@
         </a>
     </li>
     <li>
-        <c:set var="link" value="${pageContext.request.contextPath}/main/role-dependent/master/profile-settings.jsp"/>
+        <c:set var="link" value="${pageContext.request.contextPath}/main/role-dependent/profile-settings.jsp"/>
         <a href="${link}"
                 <c:if test="${pageContext.request.requestURI.equals(link)}">
                     class="active"

@@ -5,6 +5,7 @@ import com.repairagency.bean.data.Request;
 import com.repairagency.exception.DBException;
 import com.repairagency.exception.ErrorMessages;
 import com.repairagency.exception.InvalidOperationException;
+import com.repairagency.util.Validator;
 import com.repairagency.web.command.Command;
 import com.repairagency.web.command.PagePath;
 import com.repairagency.web.command.Util;
@@ -27,11 +28,12 @@ public class SetStatusManager implements Command {
         String requestIdAttr = req.getParameter("request-id");
         logger.trace("Request id : {}", requestIdAttr);
         String reasonAttr = req.getParameter("cancel-reason");
+        logger.trace("Cancel reason : {}", reasonAttr);
         String statusStr = Util.parseStatusManager(statusAttr);
         if (statusStr == null) {
             logger.error("Invalid status");
             req.getSession().setAttribute("error", ErrorMessages.INVALID_INPUT);
-            return req.getContextPath() + PagePath.MANAGER_REQUEST_INFO;
+            return PagePath.MANAGER_REQUEST_INFO;
         }
         try {
             int requestId = Integer.parseInt(requestIdAttr);
@@ -39,7 +41,8 @@ public class SetStatusManager implements Command {
             Request.Status status = Request.Status.valueOf(statusStr);
             request.setStatus(status);
             if (status.equals(Request.Status.CANCELLED)) {
-                request.setCancelReason(reasonAttr);
+                String reason = Validator.escapeHTMLSpecial(reasonAttr);
+                request.setCancelReason(reason);
                 request.setCompletionDate(LocalDateTime.now());
             }
             EntityManager.updateRequest(request);
@@ -53,7 +56,7 @@ public class SetStatusManager implements Command {
             logger.error("Invalid request", ex);
             req.getSession().setAttribute("error", ErrorMessages.UNEXPECTED);
         }
-        return req.getContextPath() + PagePath.MANAGER_REQUEST_INFO;
+        return PagePath.MANAGER_REQUEST_INFO;
     }
 
 }

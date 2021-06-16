@@ -1,10 +1,10 @@
 package com.repairagency.web.command;
 
+import com.repairagency.web.command.impl.admin.CreateUser;
+import com.repairagency.web.command.impl.admin.GetAdminUsers;
+import com.repairagency.web.command.impl.admin.RemoveUser;
 import com.repairagency.web.command.impl.client.*;
-import com.repairagency.web.command.impl.common.ChangePassword;
-import com.repairagency.web.command.impl.common.GetRequest;
-import com.repairagency.web.command.impl.common.InvalidCommand;
-import com.repairagency.web.command.impl.common.Login;
+import com.repairagency.web.command.impl.common.*;
 import com.repairagency.web.command.impl.manager.*;
 import com.repairagency.web.command.impl.master.GetRequestsMaster;
 import com.repairagency.web.command.impl.master.SetStatusMaster;
@@ -42,6 +42,9 @@ public class CommandContainer {
         commandMap.put(Names.SET_PRICE, new SetPrice());
         commandMap.put(Names.SET_STATUS_MANAGER, new SetStatusManager());
         commandMap.put(Names.SET_STATUS_MASTER, new SetStatusMaster());
+        commandMap.put(Names.GET_ADMIN_USERS, new GetAdminUsers());
+        commandMap.put(Names.CREATE_USER, new CreateUser());
+        commandMap.put(Names.REMOVE_USER, new RemoveUser());
     }
 
     public static Command getCommand(String key) {

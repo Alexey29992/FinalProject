@@ -22,9 +22,9 @@ public abstract class AbstractDao<T extends AbstractBean> implements Dao<T> {
 
     protected final Connection connection;
 
-    public void removeEntity(T entity, String query) throws DBException {
+    public void removeEntity(int id, String query) throws DBException {
         try (PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setInt(1, entity.getId());
+            statement.setInt(1, id);
             statement.executeUpdate();
         } catch (SQLException ex) {
             String message = "Entity cannot be deleted";

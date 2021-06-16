@@ -30,7 +30,7 @@ table th {
     white-space: nowrap;
     padding: 14px 10px 14px 10px;
     text-align: center;
-    background-color: #57BBD9FF;
+    background-color: #27a2c1;
     color: #eeeeee;
 }
 
@@ -111,7 +111,7 @@ table th {
     width: 100%;
 }
 
-.table-cell-button:hover {
+.table-cell-button:hover, .table-cell-button:focus {
     background-color: #70C9E3AB;
 }
 

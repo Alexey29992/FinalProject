@@ -37,7 +37,7 @@ CREATE TABLE IF NOT EXISTS master (
     id INT PRIMARY KEY,
     FOREIGN KEY (id)
         REFERENCES user (id)
-        ON UPDATE CASCADE
+        ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS request (
@@ -56,7 +56,7 @@ CREATE TABLE IF NOT EXISTS request (
         ON DELETE CASCADE,
     FOREIGN KEY (status_id)
         REFERENCES status (id)
-        ON DELETE CASCADE,
+        ON DELETE RESTRICT,
     INDEX request_client_id_idx (client_id),
     INDEX request_status_id_idx (status_id),
     INDEX request_master_id_idx (master_id)

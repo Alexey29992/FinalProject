@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="my" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="ralib" uri="http://repairagency.com/taglib" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -23,6 +24,18 @@
     </label><br/>
     <input type="submit" value="Submit" class="submit-button">
 </form>
+<c:if test="${sessionScope.user.role.equals('CLIENT')}">
+    <form method="post" action="${pageContext.request.contextPath}/controller" class="settings-form">
+        <input type="hidden" name="command" value="change-client-settings"/>
+        Phone number:<br/>
+        <label>
+            <input type="text" name="ph-number" class="input-text-form"
+                   value="${sessionScope.user.phNumber}"
+                   placeholder="Phone number..."/>
+        </label><br/>
+        <input type="submit" value="Submit" class="submit-button">
+    </form>
+</c:if>
 <my:error/>
 </body>
 </html>

@@ -24,7 +24,7 @@
     <jsp:forward page="/controller?command=get-request&request-id=${sessionScope.requestId}"/>
 </c:if>
 <div class="global-frame">
-    <div class="find-form">
+    <div class="text-form">
         <form method="get" action="${pageContext.request.requestURI}">
             <input type="hidden" name="command" value="get-request"/>
             <label>
@@ -73,18 +73,7 @@
                 </tr>
                 <tr>
                     <td>Status:</td>
-                    <td>
-                        <c:choose>
-                            <c:when test="${req.status.name().equals('CANCELLED') && not empty req.cancelReason}">
-                                <my:modal content="${req.cancelReason}"
-                                          buttonLable="${req.status.toString()}"
-                                          buttonStyle="table-cell-button center-btn"/>
-                            </c:when>
-                            <c:otherwise>
-                                ${req.status}
-                            </c:otherwise>
-                        </c:choose>
-                    </td>
+                    <td>${req.status}</td>
                 </tr>
                 <c:if test="${req.status.name().equals('CANCELLED')}">
                     <tr>
