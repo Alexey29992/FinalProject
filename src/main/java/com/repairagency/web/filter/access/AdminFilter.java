@@ -5,13 +5,13 @@ import com.repairagency.bean.User;
 import javax.servlet.annotation.WebFilter;
 
 @WebFilter("/main/role-dependent/admin/*")
-public class AdminFilter extends AbstractAccessFilter {
+public class AdminFilter extends BasicAccessFilter {
 
     private static final User.Role accessibleRole = User.Role.ADMIN;
 
     @Override
-    protected User.Role getRole() {
-        return accessibleRole;
+    protected boolean isRoleAppropriate(User.Role role) {
+        return accessibleRole.equals(role);
     }
 
 }
