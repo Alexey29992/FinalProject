@@ -3,6 +3,8 @@
 <%@ taglib prefix="ralib" uri="http://repairagency.com/taglib" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
+<ralib:onRequest/>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,7 +15,7 @@
 </head>
 <body>
 <my:navBar/>
-<ralib:onRequest/>
+
 <div class="text-frame">
     <form method="post" action="${pageContext.request.contextPath}/controller">
         <input type="hidden" name="command" value="create-user"/>

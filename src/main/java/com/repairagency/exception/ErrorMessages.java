@@ -11,6 +11,7 @@ public class ErrorMessages {
     public static final String INVALID_COMMAND = "Invalid command";
     public static final String UNEXPECTED = "Unexpected error";
     public static final Object INSUFFICIENT_PERMISSIONS = "Insufficient permissions to view this page";
+    public static final String URL_NOT_FOUND = "Error 404. Requested resource not found";
 
     public static final String USER_CREATE_INVALID_ROLE = "User with given role cannot be created";
     public static final String USER_CREATE_LOGIN_REGISTERED = "Entered login is already registered";

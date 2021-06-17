@@ -24,6 +24,7 @@ public class RemoveUser implements Command {
             int id = Integer.parseInt(userIdAttr);
             EntityManager.removeUser(id);
             req.getSession().setAttribute("action", "remove-user-success");
+            return PagePath.ADMIN_USERS;
         } catch (DBException ex) {
             logger.error("Cannot remove user", ex);
             req.getSession().setAttribute("error", ex.getPublicMessage());
@@ -31,7 +32,7 @@ public class RemoveUser implements Command {
             logger.error("Cannot remove user", ex);
             req.getSession().setAttribute("error", ErrorMessages.INVALID_INPUT);
         }
-        return PagePath.HOME;
+        return PagePath.ERROR;
     }
 
 }

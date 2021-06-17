@@ -3,6 +3,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="ralib" uri="http://repairagency.com/taglib" %>
 
+<ralib:onRequest command="get-master-requests"/>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -44,7 +46,7 @@
 </head>
 <body>
 <my:navBar/>
-<ralib:onRequest command="get-master-requests"/>
+
 <div class="row">
     <div class="column-middle">
         <div class="column-middle-left">

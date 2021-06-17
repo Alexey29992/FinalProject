@@ -3,6 +3,14 @@
 <%@ taglib prefix="ralib" uri="http://repairagency.com/taglib" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
+<ralib:onRequest/>
+<c:if test="${not empty sessionScope.requestId && empty requestScope.currentRequest}">
+    <jsp:forward page="/controller">
+        <jsp:param name="command" value="get-request"/>
+        <jsp:param name="request-id" value="${sessionScope.requestId}"/>
+    </jsp:forward>
+</c:if>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -14,10 +22,6 @@
 </head>
 <body>
 <my:navBar/>
-<ralib:onRequest/>
-<c:if test="${not empty sessionScope.requestId && empty requestScope.currentRequest}">
-    <jsp:forward page="/controller?command=get-request&request-id=${sessionScope.requestId}"/>
-</c:if>
 <div class="global-frame">
     <div class="text-form">
         <form method="get" action="${pageContext.request.requestURI}">
