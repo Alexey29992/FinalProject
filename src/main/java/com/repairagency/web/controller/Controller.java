@@ -30,7 +30,6 @@ public class Controller extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         logger.debug("Controller receives 'post' request");
-        req.setCharacterEncoding("UTF-8");
         String command = req.getParameter(COMMAND);
         logger.trace("{} : {}", COMMAND, command);
         String address = CommandContainer.getCommand(command).execute(req, resp);

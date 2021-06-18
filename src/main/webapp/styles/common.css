@@ -8,6 +8,7 @@
 @import "elements/textarea.css";
 @import "elements/nav-bar.css";
 @import "elements/dropdown.css";
+@import "elements/lang-switch.css";
 
 @font-face {
     font-family: main-font;

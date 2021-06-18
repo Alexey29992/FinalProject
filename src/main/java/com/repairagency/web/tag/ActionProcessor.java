@@ -52,6 +52,9 @@ public class ActionProcessor extends TagSupport {
             case "remove-user-success":
                 result = ActionProcessorMessages.REMOVE_USER_SUCCESS;
                 break;
+            case "client-no-phone":
+                result = ActionProcessorMessages.CLIENT_PHONE_REQUIRED;
+                break;
             default:
                 result = ActionProcessorMessages.defaultHome(user);
         }

@@ -24,7 +24,10 @@ public class Request extends AbstractBean {
         PAID(),
         CANCELLED(),
         IN_PROCESS(),
-        DONE()
+        DONE();
+        public String toLowerCaseString() {
+            return super.toString().toLowerCase();
+        }
     }
 
     public Request() {

@@ -1,14 +1,18 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="my" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
+<my:langSwitcher/>
+<fmt:setLocale value="${sessionScope.lang}"/>
+<fmt:setBundle basename="i18n"/>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="${sessionScope.lang}">
 <head>
-    <link href="${pageContext.request.contextPath}/styles/elements/error.css" rel="stylesheet" type="text/css">
     <link href="${pageContext.request.contextPath}/styles/common.css" rel="stylesheet" type="text/css">
     <link rel="icon" href="${pageContext.request.contextPath}/resources/title.png" type="image/icon type">
-    <title>Error page</title>
+    <title><fmt:message key="nav_bar.common.error"/></title>
 </head>
 <body>
 <my:navBar/>

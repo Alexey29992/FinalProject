@@ -2,46 +2,21 @@
 <%@ taglib prefix="my" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="ralib" uri="http://repairagency.com/taglib" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
+<my:langSwitcher/>
+<fmt:setLocale value="${sessionScope.lang}"/>
+<fmt:setBundle basename="i18n"/>
 <ralib:onRequest command="get-master-requests"/>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="${sessionScope.lang}">
 <head>
     <link href="${pageContext.request.contextPath}/styles/master-requests.css" rel="stylesheet" type="text/css">
     <link href="${pageContext.request.contextPath}/styles/common.css" rel="stylesheet" type="text/css">
     <link rel="icon" href="${pageContext.request.contextPath}/resources/title.png" type="image/icon">
-    <title>Assigned Requests</title>
-    <script>
-        function submitForm() {
-            document.getElementById("request-query").submit();
-        }
-
-        function setPage(x) {
-            document.getElementById("page").value = x;
-            submitForm();
-        }
-
-        function nextPage() {
-            let page = document.getElementById("page").value;
-            page++;
-            document.getElementById("page").value = page;
-            submitForm();
-        }
-
-        function prevPage() {
-            let page = document.getElementById("page").value;
-            page--;
-            document.getElementById("page").value = page;
-            submitForm();
-        }
-
-        function setSize(x) {
-            document.getElementById("size").value = x;
-            document.getElementById("page").value = 0;
-            submitForm();
-        }
-    </script>
+    <title><fmt:message key="nav_bar.master.assigned_requests"/></title>
+    <jsp:include page="/WEB-INF/jspf/pagination-scripts.jspf"/>
     <jsp:include page="/WEB-INF/jspf/modal-box-scripts.jspf"/>
 </head>
 <body>
@@ -51,70 +26,49 @@
     <div class="column-middle">
         <div class="column-middle-left">
             <form method="get" action="${pageContext.request.requestURI}" id="request-query">
-                <input type="hidden" name="command" value="get-manager-requests"/>
-                <input type="hidden" id="size" name="size" value="${pageContext.request.getParameter('size')}"/>
-                <input type="hidden" id="page" name="page" value="${pageContext.request.getAttribute('page')}"/>
+                <input type="hidden" name="command" value="get-master-requests"/>
+                <input type="hidden" id="size" name="size" value="${param.size}"/>
+                <input type="hidden" id="page" name="page" value="${requestScope.page}"/>
                 <div class="dropdown-filters-outer">
                     <div class="filter-status-frame">
                         <label>
-                            Filter by status:
+                            <fmt:message key="common.filter.status"/>
                             <select name="filter-status" class="select-css" onchange="this.form.submit()">
-                                <c:set var="filter" value="${pageContext.request.getParameter('filter-status')}"/>
-                                <option value="none"
-                                        <c:if test="${filter == 'none'}">
-                                            selected
-                                        </c:if>>
-                                    none
+                                <c:set var="filterStatus" value="${param['filter-status']}"/>
+                                <option value="none" ${filterStatus eq 'none' ? 'selected' : ''}>
+                                    <fmt:message key="common.none"/>
                                 </option>
-                                <option value="paid"
-                                        <c:if test="${filter == 'paid'}">
-                                            selected
-                                        </c:if>>
-                                    Paid
+                                <option value="paid" ${filterStatus eq 'paid' ? 'selected' : ''}>
+                                    <fmt:message key="request.status.paid"/>
                                 </option>
-                                <option value="in-process"
-                                        <c:if test="${filter == 'in-process'}">
-                                            selected
-                                        </c:if>>
-                                    In process
+                                <option value="in-process" ${filterStatus eq 'in-process' ? 'selected' : ''}>
+                                    <fmt:message key="request.status.in_process"/>
                                 </option>
-                                <option value="done"
-                                        <c:if test="${filter == 'done'}">
-                                            selected
-                                        </c:if>>
-                                    Done
+                                <option value="done" ${filterStatus eq 'done' ? 'selected' : ''}>
+                                    <fmt:message key="request.status.done"/>
                                 </option>
                             </select>
                         </label>
                     </div>
                     <div class="sort-frame">
                         <label>
-                            Sort by:
+                            <fmt:message key="common.sort_label"/>
                             <select name="sort-factor" class="select-css" onchange="this.form.submit()">
-                                <c:set var="sortFactor" value="${pageContext.request.getParameter('sort-factor')}"/>
-                                <option value="id"
-                                        <c:if test="${sortFactor == 'id'}">
-                                            selected
-                                        </c:if>>
-                                    ID
+                                <c:set var="sortFactor" value="${param['sort-factor']}"/>
+                                <option value="id" ${sortFactor eq 'id' ? 'selected' : ''}>
+                                    <fmt:message key="common.id"/>
                                 </option>
-                                <option value="creation-date"
-                                        <c:if test="${sortFactor == 'creation-date'}">
-                                            selected
-                                        </c:if>>
-                                    Creation Date
+                                <option value="creation-date" ${sortFactor eq 'creation-date' ? 'selected' : ''}>
+                                    <fmt:message key="request.creation_date"/>
                                 </option>
-                                <option value="status"
-                                        <c:if test="${sortFactor == 'status'}">
-                                            selected
-                                        </c:if>>
-                                    Status
+                                <option value="status" ${sortFactor eq 'status' ? 'selected' : ''}>
+                                    <fmt:message key="request.status"/>
                                 </option>
-                                <option value="completion-date"
-                                        <c:if test="${sortFactor == 'completion-date'}">
-                                            selected
-                                        </c:if>>
-                                    Completion Date
+                                <option value="price" ${sortFactor eq 'price' ? 'selected' : ''}>
+                                    <fmt:message key="request.price"/>
+                                </option>
+                                <option value="completion-date" ${sortFactor eq 'completion-date' ? 'selected' : ''}>
+                                    <fmt:message key="request.completion_date"/>
                                 </option>
                             </select>
                         </label>
@@ -134,22 +88,22 @@
             </div>
         </div>
         <table>
-            <caption>Request history:</caption>
+            <caption></caption>
             <tr>
-                <th scope="col">Id</th>
-                <th scope="col">Status</th>
-                <th scope="col">Creation Date</th>
-                <th scope="col">Completion Date</th>
-                <th scope="col">Description</th>
-                <th scope="col">Feedback</th>
-                <th scope="col">Actions</th>
+                <th scope="col"><fmt:message key="common.id"/></th>
+                <th scope="col"><fmt:message key="request.status"/></th>
+                <th scope="col"><fmt:message key="request.creation_date"/></th>
+                <th scope="col"><fmt:message key="request.completion_date"/></th>
+                <th scope="col"><fmt:message key="request.description"/></th>
+                <th scope="col"><fmt:message key="request.feedback"/></th>
+                <th scope="col"><fmt:message key="common.actions"/></th>
             </tr>
             <c:forEach var="row" items="${requestScope.requests}">
                 <tr>
                     <td>${row.id}</td>
-                    <td>${row.status}</td>
-                    <td>${row.creationDate}</td>
-                    <td>${row.completionDate}</td>
+                    <td><fmt:message key="request.status.${row.status.toLowerCaseString()}"/></td>
+                    <td><ralib:formatDate pattern="dd-MM-yyyy HH:mm:ss" dateTime="${row.creationDate}"/></td>
+                    <td><ralib:formatDate pattern="dd-MM-yyyy HH:mm:ss" dateTime="${row.completionDate}"/></td>
                     <td><my:modal content="${row.description}" buttonStyle="table-cell-button btn-left"/></td>
                     <td><my:modal content="${row.userReview}" buttonStyle="table-cell-button btn-left"/></td>
                     <td>
@@ -159,11 +113,11 @@
                             <label>
                                 <button class="action-button" name="request-id" value="${row.id}">
                                     <c:choose>
-                                        <c:when test="${row.status.name().equals('DONE')}">
-                                            Info
+                                        <c:when test="${row.status eq 'DONE'}">
+                                            <fmt:message key="button.info"/>
                                         </c:when>
                                         <c:otherwise>
-                                            Edit
+                                            <fmt:message key="button.edit"/>
                                         </c:otherwise>
                                     </c:choose>
                                 </button>

@@ -1,0 +1,31 @@
+.lang {
+    float: right !important;
+    position: relative;
+    display: inline-block;
+    min-width: 70px !important;
+}
+
+.lang .dropdown-content {
+    min-width: 70px !important;
+}
+
+.lang button {
+    border: none;
+    border-radius: 0;
+    display: block;
+    width: 100%;
+    background-color: #f9f9f9;
+    font-size: 16px;
+    font-family: main-font, serif;
+    font-weight: initial;
+    text-shadow: initial;
+}
+
+.lang form {
+    width: 70px;
+    text-align: center;
+    display: inline-block;
+    margin: 0;
+    padding: 0;
+    border: none;
+}

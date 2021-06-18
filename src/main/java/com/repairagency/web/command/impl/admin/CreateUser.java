@@ -14,6 +14,7 @@ import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Map;
 
 public class CreateUser implements Command {
 
@@ -38,7 +39,12 @@ public class CreateUser implements Command {
         try {
             Validator.validateLogin(loginAttr);
             Validator.validatePassword(passwordAttr);
-            EntityManager.newUser(loginAttr, passwordAttr, role);
+            User user = EntityManager.newUser(loginAttr, passwordAttr, role);
+            if (user.getRole().equals(User.Role.MASTER)) {
+                Map<Integer, String> map = (Map<Integer, String>)
+                        req.getServletContext().getAttribute("masterMap");
+                map.put(user.getId(), user.getLogin());
+            }
             req.getSession().setAttribute("action", "create-user-success");
         } catch (DBException | InvalidOperationException ex) {
             logger.error("Cannot create user", ex);

@@ -23,5 +23,22 @@
             <type>java.lang.String</type>
         </attribute>
     </tag>
+    <tag>
+        <name>formatDate</name>
+        <tag-class>com.repairagency.web.tag.DateFormatter</tag-class>
+        <body-content>empty</body-content>
+        <attribute>
+            <name>dateTime</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.time.LocalDateTime</type>
+        </attribute>
+        <attribute>
+            <name>pattern</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+    </tag>
 
 </taglib>

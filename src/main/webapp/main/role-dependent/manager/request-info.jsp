@@ -2,7 +2,11 @@
 <%@ taglib prefix="my" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="ralib" uri="http://repairagency.com/taglib" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
+<my:langSwitcher/>
+<fmt:setLocale value="${sessionScope.lang}"/>
+<fmt:setBundle basename="i18n"/>
 <ralib:onRequest/>
 <c:if test="${not empty sessionScope.requestId && empty requestScope.currentRequest}">
     <jsp:forward page="/controller">
@@ -12,12 +16,12 @@
 </c:if>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="${sessionScope.lang}">
 <head>
     <link href="${pageContext.request.contextPath}/styles/common.css" rel="stylesheet" type="text/css">
     <link href="${pageContext.request.contextPath}/styles/info.css" rel="stylesheet" type="text/css">
     <link rel="icon" href="${pageContext.request.contextPath}/resources/title.png" type="image/icon">
-    <title>Request Info</title>
+    <title><fmt:message key="nav_bar.manager.request_info"/></title>
     <script>
         function hideCancelArea(x) {
             document.getElementById('cancel-area').hidden = x;
@@ -32,11 +36,12 @@
         <form method="get" action="${pageContext.request.requestURI}">
             <input type="hidden" name="command" value="get-request"/>
             <label>
-                Find by id:<br/>
-                <input type="text" name="request-id" placeholder="Request id..."
+                <fmt:message key="manager.request_info.find_id.label"/><br/>
+                <input type="text" name="request-id"
+                       placeholder="<fmt:message key="manager.request_info.find_id.placeholder"/>"
                        value="${requestScope.currentRequest.id}"/>
             </label>
-            <input type="submit" value="Find">
+            <input type="submit" value="<fmt:message key="button.find"/>">
         </form>
     </div>
     <c:set var="req" value="${requestScope.currentRequest}"/>
@@ -44,15 +49,15 @@
         <div class="result">
             <table>
                 <tr>
-                    <td>Request:</td>
+                    <td><fmt:message key="request.label"/>:</td>
                     <td>#${req.id}</td>
                 </tr>
                 <tr>
-                    <td>Client:</td>
+                    <td><fmt:message key="request.client"/>:</td>
                     <td>${req.clientLogin}#${req.clientId}</td>
                 </tr>
                 <tr>
-                    <td>Master:</td>
+                    <td><fmt:message key="request.master"/>:</td>
                     <td>
                         <c:if test="${req.masterId != 0}">
                             ${req.masterLogin}#${req.masterId}
@@ -60,86 +65,95 @@
                     </td>
                 </tr>
                 <tr>
-                    <td>Price:</td>
+                    <td><fmt:message key="request.price"/>:</td>
                     <td>
                         <c:if test="${req.price != 0}">
-                            ${req.price}
+                            ${req.price}$
                         </c:if>
                     </td>
                 </tr>
                 <tr>
-                    <td>Creation date:</td>
-                    <td>${req.creationDate}</td>
+                    <td><fmt:message key="request.creation_date"/>:</td>
+                    <td><ralib:formatDate pattern="dd-MM-yyyy HH:mm:ss" dateTime="${req.creationDate}"/></td>
                 </tr>
                 <tr>
-                    <td>Completion date:</td>
-                    <td>${req.completionDate}</td>
+                    <td><fmt:message key="request.completion_date"/>:</td>
+                    <td><ralib:formatDate pattern="dd-MM-yyyy HH:mm:ss" dateTime="${req.completionDate}"/></td>
                 </tr>
                 <tr>
-                    <td>Status:</td>
-                    <td>${req.status}</td>
+                    <td><fmt:message key="request.status"/>:</td>
+                    <td><fmt:message key="request.status.${req.status.toLowerCaseString()}"/></td>
                 </tr>
-                <c:if test="${req.status.name().equals('CANCELLED')}">
+                <c:if test="${req.status eq 'CANCELLED'}">
                     <tr>
-                        <td>Cancel reason:</td>
+                        <td><fmt:message key="request.cancel_reason"/>:</td>
                         <td><my:modal content="${req.cancelReason}" buttonStyle="table-cell-button"/></td>
                     </tr>
                 </c:if>
                 <tr>
-                    <td>Description:</td>
+                    <td><fmt:message key="request.description"/>:</td>
                     <td><my:modal content="${req.description}" buttonStyle="table-cell-button"/></td>
                 </tr>
                 <tr>
-                    <td>Feedback:</td>
+                    <td><fmt:message key="request.feedback"/>:</td>
                     <td><my:modal content="${req.userReview}" buttonStyle="table-cell-button"/></td>
                 </tr>
             </table>
-            <c:if test="${req.status.name().equals('PAID')}">
+            <c:if test="${req.status eq 'PAID'}">
                 <form method="post" action="${pageContext.request.contextPath}/controller">
                     <input type="hidden" name="command" value="set-master"/>
                     <input type="hidden" name="request-id" value="${req.id}"/>
                     <label>
-                        Assign master:<br/>
+                        <fmt:message key="manager.request_info.assign_master"/><br/>
                         <select name="master-id">
-                            <option value="" selected>none</option>
-                            <c:forEach var="master" items="${applicationScope.masterList}">
+                            <option value="" selected><fmt:message key="common.none"/></option>
+                            <c:forEach var="master" items="${applicationScope.masterMap}">
                                 <option value="${master.key}">
                                         ${master.value}
                                 </option>
                             </c:forEach>
                         </select>
                     </label>
-                    <input type="submit" value="Assign">
+                    <input type="submit" value="<fmt:message key="button.assign"/>">
                 </form>
             </c:if>
-            <c:if test="${req.status.name().equals('NEW')}">
+            <c:if test="${req.status eq 'NEW'}">
                 <form method="post" action="${pageContext.request.contextPath}/controller">
                     <input type="hidden" name="command" value="set-price"/>
                     <input type="hidden" name="request-id" value="${req.id}"/>
                     <label>
-                        Set price:<br/>
-                        <input type="text" name="price" placeholder="Price..."/>
+                        <fmt:message key="manager.request_info.set_price.label"/><br/>
+                        <input type="text" name="price"
+                               placeholder="<fmt:message key="manager.request_info.set_price.placeholder"/>"/>
                     </label>
-                    <input type="submit" value="Set">
+                    <input type="submit" value="<fmt:message key="button.set"/>">
                 </form>
             </c:if>
-            <c:if test="${req.status.name().equals('NEW') || req.status.name().equals('WAIT_FOR_PAYMENT')}">
+            <c:if test="${req.status eq 'NEW' || req.status eq 'WAIT_FOR_PAYMENT'}">
                 <form method="post" action="${pageContext.request.contextPath}/controller">
                     <input type="hidden" name="command" value="set-status-manager"/>
                     <input type="hidden" name="request-id" value="${req.id}"/>
                     <label>
-                        Set status:<br/>
+                        <fmt:message key="manager.request_info.set_status"/><br/>
                         <select name="status">
-                            <option value="" selected onclick="hideCancelArea(true)">none</option>
-                            <option value="wait-for-payment" onclick="hideCancelArea(true)">Wait for payment</option>
-                            <option value="paid" onclick="hideCancelArea(true)">Paid</option>
-                            <option value="cancelled" onclick="hideCancelArea(false)">Cancelled</option>
+                            <option value="" selected onclick="hideCancelArea(true)">
+                                <fmt:message key="common.none"/>
+                            </option>
+                            <option value="wait-for-payment" onclick="hideCancelArea(true)">
+                                <fmt:message key="request.status.wait_for_payment"/>
+                            </option>
+                            <option value="paid" onclick="hideCancelArea(true)">
+                                <fmt:message key="request.status.paid"/>
+                            </option>
+                            <option value="cancelled" onclick="hideCancelArea(false)">
+                                <fmt:message key="request.status.cancelled"/>
+                            </option>
                         </select>
                     </label>
-                    <input type="submit" value="Set">
+                    <input type="submit" value="<fmt:message key="button.set"/>">
                     <label>
                         <textarea id="cancel-area" name="cancel-reason"
-                                  placeholder="Cancel reason..."
+                                  placeholder="<fmt:message key="manager.request_info.cancel_reason.placeholder"/>"
                                   hidden></textarea>
                     </label>
                 </form>

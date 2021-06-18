@@ -6,6 +6,7 @@ import com.repairagency.exception.DBException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
@@ -19,15 +20,19 @@ public class ContextListener implements ServletContextListener {
     @Override
     public void contextInitialized(ServletContextEvent sce) {
         logger.debug("Initializing context");
+        ServletContext context = sce.getServletContext();
         DBManager.initDataSource();
         DBManager.defaultDaoFactory();
-        sce.getServletContext().setAttribute("user-balance-updates", new HashMap<Integer, Integer>());
         try {
-            sce.getServletContext().setAttribute("masterList", EntityManager.getMasterLogins());
+            context.setAttribute("masterMap", EntityManager.getMasterLogins());
         } catch (DBException ex) {
             logger.fatal("Cannot initialize master list");
             throw new IllegalStateException(ex);
         }
+        context.setAttribute("user-balance-updates", new HashMap<Integer, Integer>());
+        String defaultLocale = context.getInitParameter("javax.servlet.jsp.jstl.fmt.locale");
+        logger.trace("Default locale: {}", defaultLocale);
+        context.setAttribute("locale", defaultLocale);
     }
 
 }

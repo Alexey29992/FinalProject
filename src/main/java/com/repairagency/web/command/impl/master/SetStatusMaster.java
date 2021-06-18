@@ -37,7 +37,9 @@ public class SetStatusMaster implements Command {
             Request request = EntityManager.getRequest(requestId);
             Request.Status status = Request.Status.valueOf(statusStr);
             request.setStatus(status);
-            request.setCompletionDate(LocalDateTime.now());
+            if (status.equals(Request.Status.DONE)) {
+                request.setCompletionDate(LocalDateTime.now());
+            }
             EntityManager.updateRequest(request);
         } catch (DBException ex) {
             logger.error("Cannot set status", ex);

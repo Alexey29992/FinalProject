@@ -2,10 +2,7 @@ package com.repairagency.web.filter.access;
 
 import com.repairagency.bean.User;
 
-import javax.servlet.annotation.WebFilter;
-
-@WebFilter("/main/role-dependent/manager/*")
-public class ManagerFilter extends BasicAccessFilter {
+public class ManagerFilter extends AbstractRoleAccessFilter {
 
     private static final User.Role accessibleRole1 = User.Role.ADMIN;
     private static final User.Role accessibleRole2 = User.Role.MANAGER;

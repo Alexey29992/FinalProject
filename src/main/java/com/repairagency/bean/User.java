@@ -7,16 +7,13 @@ public abstract class User extends AbstractBean {
     private String password;
 
     public enum Role {
-
         CLIENT(),
         MASTER(),
         MANAGER(),
         ADMIN();
-
         public String toLowerCaseString() {
             return super.toString().toLowerCase();
         }
-
     }
 
     protected User(String login, String password, Role role) {

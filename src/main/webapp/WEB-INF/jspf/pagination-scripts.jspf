@@ -1,0 +1,30 @@
+<script>
+    function submitForm() {
+        document.getElementById("request-query").submit();
+    }
+
+    function setPage(x) {
+        document.getElementById("page").value = x;
+        submitForm();
+    }
+
+    function nextPage() {
+        let page = document.getElementById("page").value;
+        page++;
+        document.getElementById("page").value = page;
+        submitForm();
+    }
+
+    function prevPage() {
+        let page = document.getElementById("page").value;
+        page--;
+        document.getElementById("page").value = page;
+        submitForm();
+    }
+
+    function setSize(x) {
+        document.getElementById("size").value = x;
+        document.getElementById("page").value = 0;
+        submitForm();
+    }
+</script>

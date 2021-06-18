@@ -26,6 +26,7 @@ public class CommandContainer {
     static {
         commandMap.put(Names.INVALID_COMMAND, new InvalidCommand());
         commandMap.put(Names.LOGIN, new Login());
+        commandMap.put(Names.LOGOUT, new Logout());
         commandMap.put(Names.CREATE_REQUEST, new CreateRequest());
         commandMap.put(Names.CHANGE_CLIENT_SETTINGS, new ChangeClientSettings());
         commandMap.put(Names.CHANGE_PASSWORD, new ChangePassword());

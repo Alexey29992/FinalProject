@@ -20,6 +20,7 @@ public class CreateRequest implements Command {
     public String execute(HttpServletRequest req, HttpServletResponse resp) {
         logger.debug("Executing command : create-request");
         String descriptionAttr = req.getParameter("description");
+        logger.trace("Description : {}", descriptionAttr);
         User user = (User) req.getSession().getAttribute("user");
         try {
             String description = Validator.escapeHTMLSpecial(descriptionAttr);

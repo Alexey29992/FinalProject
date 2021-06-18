@@ -7,14 +7,12 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.servlet.*;
-import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-@WebFilter("/main/role-dependent/*")
-public class BasicAccessFilter implements Filter {
+public abstract class AbstractRoleAccessFilter implements Filter {
 
     private static final Logger logger = LogManager.getLogger();
 
@@ -26,13 +24,8 @@ public class BasicAccessFilter implements Filter {
         HttpServletResponse httpResponse = (HttpServletResponse) resp;
         HttpSession session = httpRequest.getSession();
         User user = (User) session.getAttribute("user");
-        if (user == null) {
-            logger.trace("Role access check failed");
-            httpResponse.sendRedirect(httpRequest.getContextPath() + PagePath.LOGIN);
-            return;
-        }
         if (!isRoleAppropriate(user.getRole())) {
-            logger.trace("Role access check failed");
+            logger.trace("Role access check failed. Role is inappropriate to view this page");
             session.setAttribute("error", ErrorMessages.INSUFFICIENT_PERMISSIONS);
             httpResponse.sendRedirect(httpRequest.getContextPath() + PagePath.ERROR);
             return;
@@ -40,8 +33,5 @@ public class BasicAccessFilter implements Filter {
         chain.doFilter(req, resp);
     }
 
-    protected boolean isRoleAppropriate(User.Role role) {
-        return true;
-    }
-
+    protected abstract boolean isRoleAppropriate(User.Role role);
 }
