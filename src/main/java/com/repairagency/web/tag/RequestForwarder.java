@@ -25,9 +25,8 @@ public class RequestForwarder extends TagSupport {
     @Override
     public int doStartTag() throws JspException {
         logger.debug("Forwarding tag start");
-        HttpServletRequest request = (HttpServletRequest)pageContext.getRequest();
-        logger.trace("REQUEST URL : {}?{}", request.getRequestURL(), request.getQueryString());
-        ServletRequest req = pageContext.getRequest();
+        HttpServletRequest req = (HttpServletRequest) pageContext.getRequest();
+        logger.trace("Request URL : {}?{}", req.getRequestURL(), req.getQueryString());
         ServletResponse resp = pageContext.getResponse();
         String parameter = req.getParameter("command");
         logger.trace("Command parameter : {}", parameter);

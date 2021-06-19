@@ -4,7 +4,6 @@ import com.repairagency.bean.User;
 import com.repairagency.bean.user.Client;
 
 import javax.servlet.*;
-import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.Map;

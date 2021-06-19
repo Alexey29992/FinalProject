@@ -32,7 +32,8 @@ public class CommandFilter implements Filter {
         List<String> adminCommands = Arrays.asList(
                 Names.GET_ADMIN_USERS,
                 Names.CREATE_USER,
-                Names.REMOVE_USER
+                Names.REMOVE_USER,
+                Names.REMOVE_REQUEST
         );
         List<String> masterCommands = Arrays.asList(
                 Names.GET_MASTER_REQUESTS,

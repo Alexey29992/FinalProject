@@ -28,8 +28,8 @@
     </filter>
 
     <filter>
-        <filter-name>CommonAccessFilter</filter-name>
-        <filter-class>com.repairagency.web.filter.access.CommonFilter</filter-class>
+        <filter-name>AuthorizationFilter</filter-name>
+        <filter-class>com.repairagency.web.filter.access.AuthorizationFilter</filter-class>
     </filter>
 
     <filter>
@@ -62,6 +62,8 @@
         <filter-class>com.repairagency.web.filter.BalanceUpdater</filter-class>
     </filter>
 
+    <!-- Important to place this filter as first to set
+     encoding before any request parameter queried -->
     <filter-mapping>
         <filter-name>Encoder</filter-name>
         <url-pattern>/*</url-pattern>
@@ -69,7 +71,7 @@
     </filter-mapping>
 
     <filter-mapping>
-        <filter-name>CommonAccessFilter</filter-name>
+        <filter-name>AuthorizationFilter</filter-name>
         <url-pattern>/main/role-dependent/*</url-pattern>
         <dispatcher>REQUEST</dispatcher>
     </filter-mapping>

@@ -13,6 +13,23 @@ public class ActionProcessor extends TagSupport {
 
     private static final Logger logger = LogManager.getLogger();
 
+    private String var;
+    private int scope = 1;
+
+    public void setVar(String var) {
+        this.var = var;
+    }
+
+    public void setScope(String scope) {
+        if ("request".equalsIgnoreCase(scope)) {
+            this.scope = 2;
+        } else if ("session".equalsIgnoreCase(scope)) {
+            this.scope = 3;
+        } else if ("application".equalsIgnoreCase(scope)) {
+            this.scope = 4;
+        }
+    }
+
     @Override
     public int doStartTag() throws JspException {
         logger.debug("Tag ActionProcessor invoked");
@@ -29,7 +46,7 @@ public class ActionProcessor extends TagSupport {
                 result = ActionProcessorMessages.SIGN_UP;
                 break;
             case "sign-in":
-                result = String.format(ActionProcessorMessages.SIGN_IN, user.getRole().toLowerCaseString());
+                result = ActionProcessorMessages.SIGN_IN;
                 break;
             case "request-success":
                 result = ActionProcessorMessages.REQUEST_SUCCESS;
@@ -52,6 +69,9 @@ public class ActionProcessor extends TagSupport {
             case "remove-user-success":
                 result = ActionProcessorMessages.REMOVE_USER_SUCCESS;
                 break;
+            case "remove-request-success":
+                result = ActionProcessorMessages.REMOVE_REQUEST_SUCCESS;
+                break;
             case "client-no-phone":
                 result = ActionProcessorMessages.CLIENT_PHONE_REQUIRED;
                 break;
@@ -60,7 +80,11 @@ public class ActionProcessor extends TagSupport {
         }
         session.removeAttribute("action");
         try {
-            pageContext.getOut().println(result);
+            if (var != null) {
+                pageContext.setAttribute(var, result, scope);
+            } else {
+                pageContext.getOut().println(result);
+            }
         } catch (IOException ex) {
             logger.error("Cannot write on page", ex);
             throw new JspException(ex);

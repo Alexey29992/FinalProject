@@ -46,11 +46,11 @@ public class EntityManager {
         User user = EntityManager.getUser(login);
         if (user == null) {
             logger.debug("Can not enter: '{}' not registered", login);
-            throw new InvalidOperationException(ErrorMessages.USER_LOGIN_NOT_FOUND);
+            throw new InvalidOperationException(ErrorMessages.LOGIN_NOT_FOUND);
         }
         if (!user.getPassword().equals(password)) {
             logger.debug("Can not enter: password not correct");
-            throw new InvalidOperationException(ErrorMessages.USER_PASSWORD_INCORRECT);
+            throw new InvalidOperationException(ErrorMessages.PASSWORD_INCORRECT);
         }
         return user;
     }
@@ -123,6 +123,13 @@ public class EntityManager {
     public static void updateRequest(Request request) throws DBException {
         Connection connection = startTransaction();
         getRequestDao(connection).updateEntity(request);
+        completeTransaction(connection);
+    }
+
+    public static void removeRequest(int id) throws DBException {
+        Connection connection = startTransaction();
+        Dao<Request> dao = getRequestDao(connection);
+        dao.removeEntity(id);
         completeTransaction(connection);
     }
 
@@ -236,7 +243,7 @@ public class EntityManager {
 
         logger.trace("Creating new PaymentRecord for Client");
         PaymentRecord paymentRecord = new PaymentRecord(-amount, client.getId(),
-                Text.PAYMENT_RECORD_PAY_MONEY + request.getId());
+                Text.PAYMENT_RECORD_PAY_MONEY);
         paymentRecordDao.addEntity(paymentRecord);
 
         int newBalance = client.getBalance() - amount;

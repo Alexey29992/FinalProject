@@ -8,7 +8,6 @@ import com.repairagency.exception.ErrorMessages;
 import com.repairagency.exception.InvalidOperationException;
 import com.repairagency.util.Validator;
 import com.repairagency.web.command.Command;
-import com.repairagency.web.command.Util;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -40,7 +39,7 @@ public class ChangePassword implements Command {
             }
         } else {
             logger.error("Cannot change user password. Password confirmation failed");
-            session.setAttribute("error", ErrorMessages.USER_PASSWORD_INCORRECT);
+            session.setAttribute("error", ErrorMessages.PASSWORD_INCORRECT);
         }
         return PagePath.SETTINGS;
     }

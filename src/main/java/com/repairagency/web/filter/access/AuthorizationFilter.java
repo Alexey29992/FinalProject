@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-public class CommonFilter implements Filter {
+public class AuthorizationFilter implements Filter {
 
     private static final Logger logger = LogManager.getLogger();
 

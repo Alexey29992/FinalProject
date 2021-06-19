@@ -12,6 +12,16 @@
         <name>processAction</name>
         <tag-class>com.repairagency.web.tag.ActionProcessor</tag-class>
         <body-content>empty</body-content>
+        <attribute>
+            <name>var</name>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <name>scope</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
     </tag>
     <tag>
         <name>onRequest</name>

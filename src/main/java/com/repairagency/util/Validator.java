@@ -39,7 +39,7 @@ public class Validator {
         if (login == null || login.length() < Config.LOGIN_LENGTH_MIN
                 || login.length() > Config.LOGIN_LENGTH_MAX) {
             logger.error("Login length is invalid");
-            throw new InvalidOperationException(ErrorMessages.USER_LOGIN_INVALID_LENGTH);
+            throw new InvalidOperationException(ErrorMessages.LOGIN_INVALID_LENGTH);
         }
         validateCharacters(login);
     }
@@ -50,7 +50,7 @@ public class Validator {
         if (password == null || password.length() < Config.PASSWORD_LENGTH_MIN
                 || password.length() > Config.PASSWORD_LENGTH_MAX) {
             logger.error("Password length is invalid");
-            throw new InvalidOperationException(ErrorMessages.USER_PASSWORD_INVALID_LENGTH);
+            throw new InvalidOperationException(ErrorMessages.PASSWORD_INVALID_LENGTH);
         }
         validateCharacters(password);
     }
@@ -59,7 +59,7 @@ public class Validator {
             throws InvalidOperationException {
         Matcher matcher = allowedCharsPattern.matcher(input);
         if (!matcher.find()) {
-            throw new InvalidOperationException(ErrorMessages.USER_FORBIDDEN_INPUT_CHARS);
+            throw new InvalidOperationException(ErrorMessages.FORBIDDEN_INPUT_CHARS);
         }
     }
 

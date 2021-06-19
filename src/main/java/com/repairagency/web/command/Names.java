@@ -32,5 +32,6 @@ public class Names {
     public static final String GET_ADMIN_USERS = "get-admin-users";
     public static final String CREATE_USER = "create-user";
     public static final String REMOVE_USER = "remove-user";
+    public static final String REMOVE_REQUEST = "remove-request";
 
 }

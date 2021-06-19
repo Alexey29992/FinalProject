@@ -71,7 +71,7 @@
                     <td>${row.id}</td>
                     <td>${row.sum}$</td>
                     <td><ralib:formatDate pattern="dd-MM-yyyy HH:mm:ss" dateTime="${row.date}"/></td>
-                    <td>${row.destination}</td>
+                    <td><fmt:message key="${row.destination}"/></td>
                 </tr>
             </c:forEach>
         </table>

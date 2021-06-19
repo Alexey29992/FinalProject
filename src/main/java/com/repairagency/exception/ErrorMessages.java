@@ -1,37 +1,32 @@
 package com.repairagency.exception;
 
-import com.repairagency.config.Config;
-
 public class ErrorMessages {
 
     private ErrorMessages() {
     }
 
-    public static final Object INVALID_INPUT = "Invalid input";
-    public static final String INVALID_COMMAND = "Invalid command";
-    public static final String UNEXPECTED = "Unexpected error";
-    public static final Object INSUFFICIENT_PERMISSIONS = "Insufficient permissions to view this page";
-    public static final String URL_NOT_FOUND = "Error 404. Requested resource not found";
+    public static final Object INVALID_INPUT = "error.invalid_input";
+    public static final String INVALID_COMMAND = "error.invalid_command";
+    public static final String UNEXPECTED = "error.unexpected";
+    public static final Object INSUFFICIENT_PERMISSIONS = "error.insufficient_permissions";
+    public static final String URL_NOT_FOUND = "error.url_not_found";
 
-    public static final String USER_CREATE_INVALID_ROLE = "User with given role cannot be created";
-    public static final String USER_CREATE_LOGIN_REGISTERED = "Entered login is already registered";
-    public static final String USER_PASSWORD_INCORRECT = "Entered password not correct";
-    public static final String USER_PASSWORD_INVALID_LENGTH = "Invalid password. Password should contain from "
-            + Config.PASSWORD_LENGTH_MIN + " to " + Config.PASSWORD_LENGTH_MAX + " characters";
-    public static final String USER_LOGIN_NOT_FOUND = "Login not registered";
-    public static final String USER_LOGIN_INVALID_LENGTH = "Invalid login. Login should contain from "
-            + Config.LOGIN_LENGTH_MIN + " to " + Config.LOGIN_LENGTH_MAX + " characters";
-    public static final String USER_FORBIDDEN_INPUT_CHARS =
-            "Only letters, numbers and '_' allowed in login/password clause";
-    public static final String USER_UNABLE_FEEDBACK = "This request is not done yet";
-    public static final String USER_UNABLE_PAY_STATUS = "You cannot pay for this request";
-    public static final String USER_UNABLE_PAY_MONEY = "Not enough money";
+    public static final String USER_CREATE_INVALID_ROLE = "error.user_create_invalid_role";
+    public static final String USER_CREATE_LOGIN_REGISTERED = "error.user_create_login_registered";
+    public static final String PASSWORD_INCORRECT = "error.password_incorrect";
+    public static final String LOGIN_NOT_FOUND = "error.login_not_found";
+    public static final String PASSWORD_INVALID_LENGTH = "error.password_invalid_length";
+    public static final String LOGIN_INVALID_LENGTH = "error.login_invalid_length";
+    public static final String FORBIDDEN_INPUT_CHARS = "error.forbidden_input_chars";
+    public static final String USER_UNABLE_FEEDBACK = "error.user_unable_feedback";
+    public static final String USER_UNABLE_PAY_STATUS = "error.user_unable_pay_status";
+    public static final String USER_UNABLE_PAY_MONEY = "error.user_unable_pay_money";
 
-    public static final String NO_SUCH_USER = "User does not exists";
-    public static final String NO_SUCH_REQUEST = "Request does not exists";
+    public static final String NO_SUCH_USER = "error.no_such_user";
+    public static final String NO_SUCH_REQUEST = "error.no_such_request";
 
-    public static final String DB_INTERNAL = "Your query cannot be processed";
-    public static final String DB_NOT_FOUND = "Queried entity does not exist, or some errors occurred";
+    public static final String DB_INTERNAL = "error.db_internal";
+    public static final String DB_NOT_FOUND = "error.db_not_found";
 
     ////////////////////////////////
 

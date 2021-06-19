@@ -195,6 +195,17 @@
                                 </button>
                             </label>
                         </form>
+                        <c:if test="${sessionScope.user.role eq 'ADMIN'}">
+                            <form method="post"
+                                  action="${pageContext.request.requestURI}">
+                                <input type="hidden" name="command" value="remove-request">
+                                <label>
+                                    <button class="action-button delete-button" name="request-id" value="${row.id}">
+                                        <fmt:message key="button.delete"/>
+                                    </button>
+                                </label>
+                            </form>
+                        </c:if>
                     </td>
                 </tr>
             </c:forEach>

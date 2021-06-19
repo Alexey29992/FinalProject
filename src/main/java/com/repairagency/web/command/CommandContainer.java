@@ -2,6 +2,7 @@ package com.repairagency.web.command;
 
 import com.repairagency.web.command.impl.admin.CreateUser;
 import com.repairagency.web.command.impl.admin.GetAdminUsers;
+import com.repairagency.web.command.impl.admin.RemoveRequest;
 import com.repairagency.web.command.impl.admin.RemoveUser;
 import com.repairagency.web.command.impl.client.*;
 import com.repairagency.web.command.impl.common.*;
@@ -46,6 +47,7 @@ public class CommandContainer {
         commandMap.put(Names.GET_ADMIN_USERS, new GetAdminUsers());
         commandMap.put(Names.CREATE_USER, new CreateUser());
         commandMap.put(Names.REMOVE_USER, new RemoveUser());
+        commandMap.put(Names.REMOVE_REQUEST, new RemoveRequest());
     }
 
     public static Command getCommand(String key) {

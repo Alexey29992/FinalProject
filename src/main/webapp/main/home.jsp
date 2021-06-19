@@ -2,6 +2,7 @@
 <%@ taglib prefix="my" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="ralib" uri="http://repairagency.com/taglib" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <my:langSwitcher/>
 <fmt:setLocale value="${sessionScope.lang}"/>
@@ -17,7 +18,10 @@
 </head>
 <body>
 <my:navBar/>
-<article class="home-form">
-    <ralib:processAction/>
-</article>
+<ralib:processAction var="actionMessage"/>
+<c:if test="${not empty actionMessage}">
+    <h3 class="home-form">
+        <fmt:message key="${actionMessage}"/>
+    </h3>
+</c:if>
 </body>
