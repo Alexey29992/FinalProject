@@ -1,6 +1,7 @@
 package com.repairagency.web.command.impl.manager;
 
 import com.repairagency.bean.EntityManager;
+import com.repairagency.bean.User;
 import com.repairagency.bean.data.Request;
 import com.repairagency.exception.DBException;
 import com.repairagency.exception.ErrorMessages;
@@ -14,6 +15,7 @@ import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.time.LocalDateTime;
 
 public class SetStatusManager implements Command {
@@ -29,10 +31,17 @@ public class SetStatusManager implements Command {
         logger.trace("Request id : {}", requestIdAttr);
         String reasonAttr = req.getParameter("cancel-reason");
         logger.trace("Cancel reason : {}", reasonAttr);
-        String statusStr = Util.parseStatusManager(statusAttr);
+        HttpSession session = req.getSession();
+        User user = (User) session.getAttribute("user");
+        String statusStr;
+        if (user.getRole().equals(User.Role.ADMIN)) {
+            statusStr = Util.parseStatus(statusAttr);
+        } else {
+            statusStr = Util.parseStatusManager(statusAttr);
+        }
         if (statusStr == null) {
             logger.error("Invalid status");
-            req.getSession().setAttribute("error", ErrorMessages.INVALID_INPUT);
+            session.setAttribute("error", ErrorMessages.INVALID_INPUT);
             return PagePath.MANAGER_REQUEST_INFO;
         }
         try {
@@ -48,13 +57,13 @@ public class SetStatusManager implements Command {
             EntityManager.updateRequest(request);
         } catch (DBException ex) {
             logger.error("Cannot set status", ex);
-            req.getSession().setAttribute("error", ex.getPublicMessage());
+            session.setAttribute("error", ex.getPublicMessage());
         } catch (NumberFormatException ex) {
             logger.error("Invalid request id", ex);
-            req.getSession().setAttribute("error", ErrorMessages.UNEXPECTED);
+            session.setAttribute("error", ErrorMessages.UNEXPECTED);
         } catch (InvalidOperationException ex) {
             logger.error("Invalid request", ex);
-            req.getSession().setAttribute("error", ErrorMessages.UNEXPECTED);
+            session.setAttribute("error", ErrorMessages.UNEXPECTED);
         }
         return PagePath.MANAGER_REQUEST_INFO;
     }

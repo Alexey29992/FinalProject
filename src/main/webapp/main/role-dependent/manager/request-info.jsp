@@ -108,7 +108,7 @@
                         <select name="master-id">
                             <option value="" selected><fmt:message key="common.none"/></option>
                             <c:forEach var="master" items="${applicationScope.masterMap}">
-                                <option value="${master.key}">
+                                <option value="${master.key}" ${req.masterId eq master.key ? 'selected' : ''}>
                                         ${master.value}
                                 </option>
                             </c:forEach>
@@ -129,25 +129,47 @@
                     <input type="submit" value="<fmt:message key="button.set"/>">
                 </form>
             </c:if>
-            <c:if test="${req.status eq 'NEW' || req.status eq 'WAIT_FOR_PAYMENT'}">
+            <c:if test="${req.status eq 'NEW'
+                        || req.status eq 'WAIT_FOR_PAYMENT'
+                        || sessionScope.user.role eq 'ADMIN'}">
                 <form method="post" action="${pageContext.request.contextPath}/controller">
                     <input type="hidden" name="command" value="set-status-manager"/>
                     <input type="hidden" name="request-id" value="${req.id}"/>
                     <label>
                         <fmt:message key="manager.request_info.set_status"/><br/>
                         <select name="status">
-                            <option value="" selected onclick="hideCancelArea(true)">
-                                <fmt:message key="common.none"/>
+                            <option value="new"
+                                ${req.status eq 'NEW' ? 'selected' : ''}
+                                    onclick="hideCancelArea(true)">
+                                <fmt:message key="request.status.new"/>
                             </option>
-                            <option value="wait-for-payment" onclick="hideCancelArea(true)">
+                            <option value="wait-for-payment"
+                                ${req.status eq 'WAIT_FOR_PAYMENT' ? 'selected' : ''}
+                                    onclick="hideCancelArea(true)">
                                 <fmt:message key="request.status.wait_for_payment"/>
                             </option>
-                            <option value="paid" onclick="hideCancelArea(true)">
+                            <option value="paid"
+                                ${req.status eq 'PAID' ? 'selected' : ''}
+                                    onclick="hideCancelArea(true)">
                                 <fmt:message key="request.status.paid"/>
                             </option>
-                            <option value="cancelled" onclick="hideCancelArea(false)">
+                            <option value="cancelled"
+                                ${req.status eq 'CANCELLED' ? 'selected' : ''}
+                                    onclick="hideCancelArea(false)">
                                 <fmt:message key="request.status.cancelled"/>
                             </option>
+                            <c:if test="${sessionScope.user.role eq 'ADMIN'}">
+                                <option value="in-process"
+                                    ${req.status eq 'IN_PROCESS' ? 'selected' : ''}
+                                        onclick="hideCancelArea(true)">
+                                    <fmt:message key="request.status.in_process"/>
+                                </option>
+                                <option value="done"
+                                    ${req.status eq 'DONE' ? 'selected' : ''}
+                                        onclick="hideCancelArea(true)">
+                                    <fmt:message key="request.status.done"/>
+                                </option>
+                            </c:if>
                         </select>
                     </label>
                     <input type="submit" value="<fmt:message key="button.set"/>">

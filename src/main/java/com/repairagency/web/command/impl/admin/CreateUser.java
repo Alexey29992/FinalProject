@@ -5,6 +5,7 @@ import com.repairagency.bean.User;
 import com.repairagency.exception.DBException;
 import com.repairagency.exception.ErrorMessages;
 import com.repairagency.exception.InvalidOperationException;
+import com.repairagency.util.PasswordHash;
 import com.repairagency.util.Validator;
 import com.repairagency.web.command.Command;
 import com.repairagency.web.command.PagePath;
@@ -39,7 +40,8 @@ public class CreateUser implements Command {
         try {
             Validator.validateLogin(loginAttr);
             Validator.validatePassword(passwordAttr);
-            User user = EntityManager.newUser(loginAttr, passwordAttr, role);
+            String password = PasswordHash.getHash(passwordAttr);
+            User user = EntityManager.newUser(loginAttr, password, role);
             if (user.getRole().equals(User.Role.MASTER)) {
                 Map<Integer, String> map = (Map<Integer, String>)
                         req.getServletContext().getAttribute("masterMap");

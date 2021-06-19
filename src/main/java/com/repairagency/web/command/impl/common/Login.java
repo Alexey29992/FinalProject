@@ -1,5 +1,6 @@
 package com.repairagency.web.command.impl.common;
 
+import com.repairagency.util.PasswordHash;
 import com.repairagency.web.command.PagePath;
 import com.repairagency.bean.EntityManager;
 import com.repairagency.bean.User;
@@ -26,12 +27,15 @@ public class Login implements Command {
         String type = req.getParameter("type");
         logger.trace("Type : {}", type);
         String login = req.getParameter("login");
+        logger.trace("login : {}", login);
         String password = req.getParameter("password");
+        logger.trace("password : {}", password);
         User user = null;
         try {
             Validator.validateLogin(login);
             login = Validator.escapeHTMLSpecial(login);
             Validator.validatePassword(password);
+            password = PasswordHash.getHash(password);
             if ("sign-up".equals(type)) {
                 logger.trace("Attempt to sign up");
                 user = EntityManager.signUp(login, password);

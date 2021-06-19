@@ -18,15 +18,15 @@ public class UserDaoMysql extends AbstractDao<User> {
     private static final Logger logger = LogManager.getLogger();
 
     private static final String QUERY_DELETE = "DELETE FROM user WHERE id = ?";
-    private static final String QUERY_ADD_USER = "INSERT INTO user (login, password, role_id) VALUES (?, ?, ?)";
+    private static final String QUERY_ADD_USER = "INSERT INTO user (login, password, role_id) VALUES (?, UNHEX(?), ?)";
     private static final String QUERY_ADD_ID_CLIENT = "INSERT INTO client (id) VALUE (?)";
     private static final String QUERY_ADD_ID_MASTER = "INSERT INTO master (id) VALUE (?)";
     private static final String QUERY_GET_ROLE_ID = "SELECT id FROM role WHERE role_name = ?";
     private static final String QUERY_UPDATE_USER =
-            "UPDATE user SET login = ?, password = ?, role_id = ? WHERE id = ?";
+            "UPDATE user SET login = ?, password = UNHEX(?), role_id = ? WHERE id = ?";
     private static final String QUERY_UPDATE_CLIENT = "UPDATE client SET ph_number = ?, balance = ? WHERE id = ?";
-    private static final String GET_BASE = "SELECT user.*, role.role_name," +
-            " client.ph_number, client.balance" +
+    private static final String GET_BASE = "SELECT user.id, user.login, HEX(user.password) as password," +
+            " role.role_name, client.ph_number, client.balance" +
             " FROM user" +
             " JOIN role ON role_id = role.id" +
             " LEFT JOIN client ON user.id = client.id";

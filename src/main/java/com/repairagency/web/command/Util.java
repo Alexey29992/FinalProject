@@ -161,13 +161,12 @@ public class Util {
         return statusName;
     }
 
-
-
     public static String parseStatusManager(String statusAttr) {
         String statusName = null;
         if (statusAttr != null) {
             switch (statusAttr) {
-                case "none":
+                case "new":
+                    statusName = "NEW";
                     break;
                 case "wait-for-payment":
                     statusName = "WAIT_FOR_PAYMENT";

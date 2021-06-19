@@ -1,5 +1,6 @@
 package com.repairagency.web.command.impl.common;
 
+import com.repairagency.util.PasswordHash;
 import com.repairagency.web.command.PagePath;
 import com.repairagency.bean.EntityManager;
 import com.repairagency.bean.User;
@@ -26,9 +27,11 @@ public class ChangePassword implements Command {
         String newPass = req.getParameter("new-password");
         HttpSession session = req.getSession();
         User user = (User) session.getAttribute("user");
+        oldPass = PasswordHash.getHash(oldPass);
         if (user.getPassword().equals(oldPass)) {
             try {
                 Validator.validatePassword(newPass);
+                newPass = PasswordHash.getHash(newPass);
                 user.setPassword(newPass);
                 EntityManager.updateUser(user);
                 session.setAttribute("action", "password-success");

@@ -61,8 +61,6 @@ public class EntityManager {
             throws DBException, InvalidOperationException {
         logger.debug("Creating new {} with login '{}'", role, login);
         User user;
-        Validator.validateLogin(login);
-        Validator.validatePassword(password);
         if (EntityManager.isLoginRegistered(login)) {
             throw new InvalidOperationException(ErrorMessages.USER_CREATE_LOGIN_REGISTERED);
         }

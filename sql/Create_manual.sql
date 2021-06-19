@@ -16,7 +16,7 @@ CREATE TABLE IF NOT EXISTS role (
 CREATE TABLE IF NOT EXISTS user (
     id INT PRIMARY KEY AUTO_INCREMENT,
     login VARCHAR(20) NOT NULL UNIQUE,
-    password VARCHAR(20) NOT NULL,
+    password BINARY(32) NOT NULL,
     role_id INT NOT NULL,
     FOREIGN KEY (role_id)
         REFERENCES role (id)
@@ -37,7 +37,7 @@ CREATE TABLE IF NOT EXISTS master (
     id INT PRIMARY KEY,
     FOREIGN KEY (id)
         REFERENCES user (id)
-        ON DELETE CASCADE
+        ON UPDATE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS request (
@@ -56,7 +56,7 @@ CREATE TABLE IF NOT EXISTS request (
         ON DELETE CASCADE,
     FOREIGN KEY (status_id)
         REFERENCES status (id)
-        ON DELETE RESTRICT,
+        ON DELETE CASCADE,
     INDEX request_client_id_idx (client_id),
     INDEX request_status_id_idx (status_id),
     INDEX request_master_id_idx (master_id)
@@ -86,4 +86,4 @@ INSERT INTO status (status_name) VALUES ('CANCELLED');
 INSERT INTO status (status_name) VALUES ('IN_PROCESS');
 INSERT INTO status (status_name) VALUES ('DONE');
 
-INSERT INTO user (login, password, role_id) VALUES ('admin', 'admin', (SELECT id FROM role WHERE role_name = 'ADMIN'));
+INSERT INTO user (login, password, role_id) VALUES ('admin', UNHEX(SHA2('admin', 256)), (SELECT id FROM role WHERE role_name = 'ADMIN'));

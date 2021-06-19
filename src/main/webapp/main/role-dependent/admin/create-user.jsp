@@ -20,7 +20,7 @@
 <body>
 <my:navBar/>
 <div class="text-frame">
-    <form method="post" action="${pageContext.request.contextPath}/controller">
+    <form method="post" action="${pageContext.request.contextPath}/controller" class="create-form">
         <input type="hidden" name="command" value="create-user"/>
         <table>
             <tr>
