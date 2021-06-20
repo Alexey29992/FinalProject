@@ -18,6 +18,10 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.time.LocalDateTime;
 
+/**
+ * Command of setting Status of the Request via Manager and Admin access page
+ */
+
 public class SetStatusManager implements Command {
 
     private static final Logger logger = LogManager.getLogger();

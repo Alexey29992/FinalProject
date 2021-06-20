@@ -9,6 +9,10 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * Filter that updates {@link User} objects in sessions if User balance was replenished by Manager
+ */
+
 public class BalanceUpdater implements Filter {
 
     @Override

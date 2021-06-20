@@ -9,6 +9,11 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Utility class that contains some common methods to use in
+ * different commands (for example URL parameter parsers)
+ */
+
 public class Util {
 
     private Util(){

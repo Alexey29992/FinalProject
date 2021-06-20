@@ -11,6 +11,10 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
+/**
+ * Filter that performs checking access of not registered user to current page
+ */
+
 public class AuthorizationFilter implements Filter {
 
     private static final Logger logger = LogManager.getLogger();

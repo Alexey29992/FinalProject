@@ -4,7 +4,6 @@ import com.repairagency.bean.EntityManager;
 import com.repairagency.bean.User;
 import com.repairagency.database.QueryGetData;
 import com.repairagency.exception.DBException;
-import com.repairagency.exception.ErrorMessages;
 import com.repairagency.web.command.Command;
 import com.repairagency.web.command.PagePath;
 import com.repairagency.web.command.Util;
@@ -15,6 +14,10 @@ import org.apache.logging.log4j.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
+
+/**
+ *  Command of receiving list of registered users via Admin access page
+ */
 
 public class GetAdminUsers extends GetTable implements Command {
 

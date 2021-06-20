@@ -13,6 +13,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+/**
+ *  Command of changing client specific settings (i.e. phone number) via Client access page
+ */
+
 public class ChangeClientSettings implements Command {
 
     private static final Logger logger = LogManager.getLogger();

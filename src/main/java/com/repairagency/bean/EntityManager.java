@@ -13,6 +13,7 @@ import com.repairagency.exception.DBException;
 import com.repairagency.exception.ErrorMessages;
 import com.repairagency.exception.InvalidOperationException;
 import com.repairagency.util.Validator;
+import com.repairagency.web.command.PagePath;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -20,6 +21,12 @@ import java.sql.Connection;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+
+/**
+ * Utility class that contains top level methods to work with
+ * model. Methods of this class manages database connection
+ * and works with DAO directly.
+ */
 
 public class EntityManager {
 

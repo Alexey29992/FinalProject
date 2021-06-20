@@ -2,6 +2,10 @@ package com.repairagency.web.tag;
 
 import com.repairagency.bean.User;
 
+/**
+ * Messages constants
+ */
+
 public class ActionProcessorMessages {
 
     private ActionProcessorMessages() {

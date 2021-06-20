@@ -11,6 +11,10 @@ import org.apache.logging.log4j.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * Utility class that holds all the methods for validation of user input
+ */
+
 public class Validator {
 
     private static final Logger logger = LogManager.getLogger();
@@ -57,6 +61,7 @@ public class Validator {
 
     public static void validateCharacters(String input)
             throws InvalidOperationException {
+        logger.debug("Validating chars");
         Matcher matcher = allowedCharsPattern.matcher(input);
         if (!matcher.find()) {
             throw new InvalidOperationException(ErrorMessages.FORBIDDEN_INPUT_CHARS);

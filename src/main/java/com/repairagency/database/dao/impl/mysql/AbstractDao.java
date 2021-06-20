@@ -16,6 +16,13 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This class is base for all MySQL realizations of DAO.
+ * It holds the {@link Connection} instance and some common for all the DAO methods.
+ *
+ * @param <T> type of bean that DAO intended to work with
+ */
+
 public abstract class AbstractDao<T extends AbstractBean> implements Dao<T> {
 
     private static final Logger logger = LogManager.getLogger();

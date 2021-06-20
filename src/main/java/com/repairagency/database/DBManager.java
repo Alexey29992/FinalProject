@@ -14,11 +14,16 @@ import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+/**
+ * Utility class that provide methods for initialize {@link DataSource} and {@link DaoFactory},
+ * receive {@link Connection}, commit and rollback transaction etc.
+ */
+
 public class DBManager {
 
     private static final Logger logger = LogManager.getLogger();
-    private static DaoFactory daoFactory;
 
+    private static DaoFactory daoFactory;
     private static DataSource dataSource;
 
     private DBManager() {
@@ -38,12 +43,6 @@ public class DBManager {
             logger.fatal(message, ex);
             throw new IllegalStateException(message);
         }
-//        try (Connection conn = dataSource.getConnection()) {
-//            logger.trace("connection : {}", conn);
-//        } catch (SQLException ex) {
-//            logger.fatal("Unable to get connection from DataSource", ex);
-//            throw new IllegalStateException(ExceptionMessages.DB_NO_CONNECTION);
-//        }
     }
 
     public static DaoFactory getDaoFactory() throws DBException {

@@ -13,6 +13,10 @@ import org.apache.logging.log4j.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+/**
+ * Command of setting price of Request via Manager and Admin access page
+ */
+
 public class SetPrice implements Command {
 
     private static final Logger logger = LogManager.getLogger();
@@ -28,6 +32,10 @@ public class SetPrice implements Command {
             int requestId = Integer.parseInt(requestIdAttr);
             Request request = EntityManager.getRequest(requestId);
             int price = Integer.parseInt(priceAttr);
+            if (price <= 0) {
+                req.getSession().setAttribute("error", ErrorMessages.LOWER_THAN_NULL);
+                return PagePath.MANAGER_REQUEST_INFO;
+            }
             request.setPrice(price);
             EntityManager.updateRequest(request);
         } catch (DBException ex) {

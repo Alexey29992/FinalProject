@@ -15,6 +15,9 @@ import org.apache.logging.log4j.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+/**
+ *  Command of receiving single request info for Admin, Manager and Master roles
+ */
 
 public class GetRequest implements Command {
 

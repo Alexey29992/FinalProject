@@ -16,6 +16,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+/**
+ *  Command of changing password for all roles
+ */
+
 public class ChangePassword implements Command {
 
     private static final Logger logger = LogManager.getLogger();

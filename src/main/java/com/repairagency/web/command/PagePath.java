@@ -1,5 +1,9 @@
 package com.repairagency.web.command;
 
+/**
+ * Page path constants
+ */
+
 public class PagePath {
 
     private PagePath(){

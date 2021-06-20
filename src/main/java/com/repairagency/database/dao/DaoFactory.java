@@ -7,6 +7,11 @@ import com.repairagency.exception.DBException;
 
 import java.sql.Connection;
 
+/**
+ * DaoFactory is an abstract factory that is used to get DAO objects for an appropriate bean.
+ * Realizations of this interface are intended for receiving concrete database-dependent factories
+ */
+
 public interface DaoFactory {
 
     Dao<PaymentRecord> getPaymentRecordDao(Connection connection) throws DBException;

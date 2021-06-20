@@ -14,6 +14,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 
+/**
+ * Command of replenishment Client's balance via Manager and Admin access page
+ */
+
 public class TopUpBalance implements Command {
 
     private static final Logger logger = LogManager.getLogger();
@@ -37,6 +41,10 @@ public class TopUpBalance implements Command {
         }
         try {
             int amount = Integer.parseInt(amountAttr);
+            if (amount <= 0) {
+                req.getSession().setAttribute("error", ErrorMessages.LOWER_THAN_NULL);
+                return PagePath.MANAGER_USER_INFO;
+            }
             int newBalance = EntityManager.topUpClientBalance(clientId, amount);
             updates.put(clientId, newBalance);
         } catch (DBException ex) {

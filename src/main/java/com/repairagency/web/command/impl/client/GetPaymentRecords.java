@@ -17,6 +17,11 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
+/**
+ *  Command of receiving list of payment records via Client access page
+ */
+
+
 public class GetPaymentRecords extends GetTable implements Command {
 
     private static final Logger logger = LogManager.getLogger();

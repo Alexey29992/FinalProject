@@ -13,6 +13,10 @@ import org.apache.logging.log4j.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+/**
+ *  Command of assigning Master to the Request via Manager and Admin access page
+ */
+
 public class SetMaster implements Command {
 
     private static final Logger logger = LogManager.getLogger();

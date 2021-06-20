@@ -6,6 +6,13 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * Objects of this class represents generators of GET query strings for MySQL database.
+ * Instance of this class should be created with prepared {@link QueryGetData} and basic
+ * query string for appropriate DAO. Then desired query can be received by {@link #generateQuery()}.<p>
+ * All input of {@link QueryGetData} should be validated to prevent SQL-injections
+ */
+
 public class QueryGetGenerator {
 
     private final QueryGetData data;

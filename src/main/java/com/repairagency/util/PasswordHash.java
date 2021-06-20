@@ -7,6 +7,10 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+/**
+ * Utility class that is used to hash the password with SHA-256 algorithm
+ */
+
 public class PasswordHash {
 
     private static final Logger logger = LogManager.getLogger();

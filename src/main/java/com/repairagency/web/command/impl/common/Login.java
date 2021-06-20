@@ -16,6 +16,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+/**
+ * Command of sign in or sign up for guests
+ */
+
 public class Login implements Command {
 
     private static final Logger logger = LogManager.getLogger();

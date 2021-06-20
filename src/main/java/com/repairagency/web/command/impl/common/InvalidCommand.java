@@ -1,13 +1,19 @@
 package com.repairagency.web.command.impl.common;
 
+import com.repairagency.web.command.CommandContainer;
 import com.repairagency.web.command.PagePath;
-import com.repairagency.exception.ErrorMessages;
 import com.repairagency.web.command.Command;
+import com.repairagency.exception.ErrorMessages;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+/**
+ *  Command that is called by default to signalize error
+ *  when {@link CommandContainer} can't resolve command identifier
+ */
 
 public class InvalidCommand implements Command {
 

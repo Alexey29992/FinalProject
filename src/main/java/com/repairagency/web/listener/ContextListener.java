@@ -12,6 +12,10 @@ import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
 import java.util.HashMap;
 
+/**
+ * Context Event Listener that initializes all required instances on Application startup
+ */
+
 @WebListener
 public class ContextListener implements ServletContextListener {
 

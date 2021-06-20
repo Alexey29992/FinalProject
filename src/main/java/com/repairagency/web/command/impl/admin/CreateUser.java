@@ -17,6 +17,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 
+/**
+ *  Command of creating user via Admin access page
+ */
+
 public class CreateUser implements Command {
 
     private static final Logger logger = LogManager.getLogger();

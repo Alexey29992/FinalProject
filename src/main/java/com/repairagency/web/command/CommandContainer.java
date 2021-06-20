@@ -15,6 +15,12 @@ import org.apache.logging.log4j.Logger;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * CommandContainer is an utility class that holds static {@link Map} of all available
+ * {@link Command}s and a method to get the desired {@link Command} by its identifier.
+ * In case of unknown identifier was provided CommandContainer will return Invalid Command handler
+ */
+
 public class CommandContainer {
 
     private CommandContainer() {
@@ -25,36 +31,36 @@ public class CommandContainer {
     private static final Map<String, Command> commandMap = new HashMap<>();
 
     static {
-        commandMap.put(Names.INVALID_COMMAND, new InvalidCommand());
-        commandMap.put(Names.LOGIN, new Login());
-        commandMap.put(Names.LOGOUT, new Logout());
-        commandMap.put(Names.CREATE_REQUEST, new CreateRequest());
-        commandMap.put(Names.CHANGE_CLIENT_SETTINGS, new ChangeClientSettings());
-        commandMap.put(Names.CHANGE_PASSWORD, new ChangePassword());
-        commandMap.put(Names.GET_CLIENT_REQUESTS, new GetRequestsClient());
-        commandMap.put(Names.GET_CLIENT_PAYMENT_RECORDS, new GetPaymentRecords());
-        commandMap.put(Names.GET_MANAGER_REQUESTS, new GetRequestsManager());
-        commandMap.put(Names.GET_MASTER_REQUESTS, new GetRequestsMaster());
-        commandMap.put(Names.FEEDBACK, new Feedback());
-        commandMap.put(Names.MAKE_PAYMENT, new MakePayment());
-        commandMap.put(Names.TOP_UP_BALANCE, new TopUpBalance());
-        commandMap.put(Names.GET_USER, new GetUser());
-        commandMap.put(Names.GET_REQUEST, new GetRequest());
-        commandMap.put(Names.SET_MASTER, new SetMaster());
-        commandMap.put(Names.SET_PRICE, new SetPrice());
-        commandMap.put(Names.SET_STATUS_MANAGER, new SetStatusManager());
-        commandMap.put(Names.SET_STATUS_MASTER, new SetStatusMaster());
-        commandMap.put(Names.GET_ADMIN_USERS, new GetAdminUsers());
-        commandMap.put(Names.CREATE_USER, new CreateUser());
-        commandMap.put(Names.REMOVE_USER, new RemoveUser());
-        commandMap.put(Names.REMOVE_REQUEST, new RemoveRequest());
+        commandMap.put(CommandNames.INVALID_COMMAND, new InvalidCommand());
+        commandMap.put(CommandNames.LOGIN, new Login());
+        commandMap.put(CommandNames.LOGOUT, new Logout());
+        commandMap.put(CommandNames.CREATE_REQUEST, new CreateRequest());
+        commandMap.put(CommandNames.CHANGE_CLIENT_SETTINGS, new ChangeClientSettings());
+        commandMap.put(CommandNames.CHANGE_PASSWORD, new ChangePassword());
+        commandMap.put(CommandNames.GET_CLIENT_REQUESTS, new GetRequestsClient());
+        commandMap.put(CommandNames.GET_CLIENT_PAYMENT_RECORDS, new GetPaymentRecords());
+        commandMap.put(CommandNames.GET_MANAGER_REQUESTS, new GetRequestsManager());
+        commandMap.put(CommandNames.GET_MASTER_REQUESTS, new GetRequestsMaster());
+        commandMap.put(CommandNames.FEEDBACK, new Feedback());
+        commandMap.put(CommandNames.MAKE_PAYMENT, new MakePayment());
+        commandMap.put(CommandNames.TOP_UP_BALANCE, new TopUpBalance());
+        commandMap.put(CommandNames.GET_USER, new GetUser());
+        commandMap.put(CommandNames.GET_REQUEST, new GetRequest());
+        commandMap.put(CommandNames.SET_MASTER, new SetMaster());
+        commandMap.put(CommandNames.SET_PRICE, new SetPrice());
+        commandMap.put(CommandNames.SET_STATUS_MANAGER, new SetStatusManager());
+        commandMap.put(CommandNames.SET_STATUS_MASTER, new SetStatusMaster());
+        commandMap.put(CommandNames.GET_ADMIN_USERS, new GetAdminUsers());
+        commandMap.put(CommandNames.CREATE_USER, new CreateUser());
+        commandMap.put(CommandNames.REMOVE_USER, new RemoveUser());
+        commandMap.put(CommandNames.REMOVE_REQUEST, new RemoveRequest());
     }
 
     public static Command getCommand(String key) {
         logger.trace("CommandContainer#getCommand queried with command : {}", key);
         if (!commandMap.containsKey(key)) {
             logger.error("Invalid command {} was queried", key);
-            return commandMap.get(Names.INVALID_COMMAND);
+            return commandMap.get(CommandNames.INVALID_COMMAND);
         }
         return commandMap.get(key);
     }

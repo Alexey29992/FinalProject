@@ -1,16 +1,22 @@
 package com.repairagency.web.tag;
 
+import com.repairagency.web.command.Command;
+import com.repairagency.web.controller.Controller;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.servlet.DispatcherType;
 import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.TagSupport;
 import java.io.IOException;
+
+/**
+ * RequestForwarder if a Tag that performs HTTP Request forwarding to {@link Controller}
+ * when processing any {@link Command} is expected.
+ */
 
 public class RequestForwarder extends TagSupport {
 

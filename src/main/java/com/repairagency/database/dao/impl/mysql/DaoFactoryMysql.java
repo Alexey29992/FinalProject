@@ -7,6 +7,11 @@ import com.repairagency.database.dao.*;
 
 import java.sql.Connection;
 
+/**
+ * MySQL realization of {@link DaoFactory} interface. Represents concrete factory
+ * to retrieve MySQL realizations of DAO objects
+ */
+
 public class DaoFactoryMysql implements DaoFactory {
 
     @Override

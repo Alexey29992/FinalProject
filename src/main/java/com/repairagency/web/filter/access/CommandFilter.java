@@ -2,7 +2,8 @@ package com.repairagency.web.filter.access;
 
 import com.repairagency.bean.User;
 import com.repairagency.exception.ErrorMessages;
-import com.repairagency.web.command.Names;
+import com.repairagency.web.command.Command;
+import com.repairagency.web.command.CommandNames;
 import com.repairagency.web.command.PagePath;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -14,6 +15,10 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.*;
 
+/**
+ * Filter that performs checking access to processing {@link Command}s
+ */
+
 public class CommandFilter implements Filter {
 
     private static final Logger logger = LogManager.getLogger();
@@ -21,42 +26,42 @@ public class CommandFilter implements Filter {
 
     static {
         List<String> managerCommands = Arrays.asList(
-                Names.GET_MANAGER_REQUESTS,
-                Names.TOP_UP_BALANCE,
-                Names.GET_USER,
-                Names.GET_REQUEST,
-                Names.SET_MASTER,
-                Names.SET_PRICE,
-                Names.SET_STATUS_MANAGER
+                CommandNames.GET_MANAGER_REQUESTS,
+                CommandNames.TOP_UP_BALANCE,
+                CommandNames.GET_USER,
+                CommandNames.GET_REQUEST,
+                CommandNames.SET_MASTER,
+                CommandNames.SET_PRICE,
+                CommandNames.SET_STATUS_MANAGER
         );
         List<String> adminCommands = Arrays.asList(
-                Names.GET_ADMIN_USERS,
-                Names.CREATE_USER,
-                Names.REMOVE_USER,
-                Names.REMOVE_REQUEST
+                CommandNames.GET_ADMIN_USERS,
+                CommandNames.CREATE_USER,
+                CommandNames.REMOVE_USER,
+                CommandNames.REMOVE_REQUEST
         );
         List<String> masterCommands = Arrays.asList(
-                Names.GET_MASTER_REQUESTS,
-                Names.GET_REQUEST,
-                Names.SET_STATUS_MASTER
+                CommandNames.GET_MASTER_REQUESTS,
+                CommandNames.GET_REQUEST,
+                CommandNames.SET_STATUS_MASTER
         );
         List<String> clientCommands = Arrays.asList(
-                Names.GET_MASTER_REQUESTS,
-                Names.GET_REQUEST,
-                Names.SET_STATUS_MASTER,
-                Names.CREATE_REQUEST,
-                Names.FEEDBACK,
-                Names.CHANGE_CLIENT_SETTINGS,
-                Names.GET_CLIENT_REQUESTS,
-                Names.GET_CLIENT_PAYMENT_RECORDS,
-                Names.MAKE_PAYMENT
+                CommandNames.GET_MASTER_REQUESTS,
+                CommandNames.GET_REQUEST,
+                CommandNames.SET_STATUS_MASTER,
+                CommandNames.CREATE_REQUEST,
+                CommandNames.FEEDBACK,
+                CommandNames.CHANGE_CLIENT_SETTINGS,
+                CommandNames.GET_CLIENT_REQUESTS,
+                CommandNames.GET_CLIENT_PAYMENT_RECORDS,
+                CommandNames.MAKE_PAYMENT
         );
         List<String> userCommands = Arrays.asList(
-                Names.CHANGE_PASSWORD,
-                Names.LOGOUT
+                CommandNames.CHANGE_PASSWORD,
+                CommandNames.LOGOUT
         );
         List<String> guestCommands = Arrays.asList(
-                Names.LOGIN
+                CommandNames.LOGIN
         );
         commandWhiteLists.put(User.Role.ADMIN.name(), adminCommands);
         commandWhiteLists.put(User.Role.MANAGER.name(), managerCommands);

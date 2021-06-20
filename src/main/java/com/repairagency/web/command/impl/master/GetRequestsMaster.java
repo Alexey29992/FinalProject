@@ -13,6 +13,10 @@ import org.apache.logging.log4j.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+/**
+ * Command of receiving list of requests via Master access page
+ */
+
 public class GetRequestsMaster extends GetRequestTable implements Command {
 
     private static final Logger logger = LogManager.getLogger();

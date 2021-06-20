@@ -1,5 +1,9 @@
 package com.repairagency.bean;
 
+/**
+ * Abstract class that holds common user data such as role, login, password
+ */
+
 public abstract class User extends AbstractBean {
 
     private Role role;

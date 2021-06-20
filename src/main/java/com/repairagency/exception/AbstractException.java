@@ -1,5 +1,9 @@
 package com.repairagency.exception;
 
+/**
+ * Base exception class that holds public message string.
+ */
+
 public abstract class AbstractException extends Exception {
 
     private final String publicMessage;

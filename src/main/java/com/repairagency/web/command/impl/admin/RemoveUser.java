@@ -11,6 +11,10 @@ import org.apache.logging.log4j.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+/**
+ *  Command of removing User via Admin access page
+ */
+
 public class RemoveUser implements Command {
 
     private static final Logger logger = LogManager.getLogger();

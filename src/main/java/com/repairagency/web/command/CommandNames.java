@@ -1,8 +1,12 @@
 package com.repairagency.web.command;
 
-public class Names {
+/**
+ * Command identifier constants
+ */
 
-    private Names(){
+public class CommandNames {
+
+    private CommandNames(){
     }
 
     public static final String INVALID_COMMAND = "invalid-command";

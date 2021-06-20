@@ -14,6 +14,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+/**
+ *  Command of processing payment for the request via Client access page
+ */
+
 public class MakePayment implements Command {
 
     private static final Logger logger = LogManager.getLogger();

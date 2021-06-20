@@ -4,6 +4,10 @@ import com.repairagency.bean.AbstractBean;
 
 import java.time.LocalDateTime;
 
+/**
+ * Represents payment in Client's payment history
+ */
+
 public class PaymentRecord extends AbstractBean {
 
     private int sum;

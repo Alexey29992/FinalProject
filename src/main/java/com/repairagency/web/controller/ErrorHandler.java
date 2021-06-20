@@ -1,6 +1,7 @@
 package com.repairagency.web.controller;
 
 import com.repairagency.exception.ErrorMessages;
+import com.repairagency.web.command.Command;
 import com.repairagency.web.command.PagePath;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -12,6 +13,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+
+/**
+ * ErrorHandler is a Servlet that processes errors. It is intended to process exceptions
+ * that were not caught in the {@link Command}s. This Servlet is configured to be invoked
+ * by Servlet Container in deployment descriptor (web.xml).
+ */
 
 @WebServlet("/ErrorHandler")
 public class ErrorHandler extends HttpServlet {

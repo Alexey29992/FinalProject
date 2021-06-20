@@ -1,5 +1,9 @@
 package com.repairagency.config;
 
+/**
+ * Configuration constants
+ */
+
 public class Config {
 
     private Config() {
@@ -16,6 +20,5 @@ public class Config {
     public static final String DEFAULT_TABLE_SORT = "id";
 
     public static final String ADMIN_LOGIN = "admin";
-    public static final String ADMIN_PASSWORD = "admin";
 
 }

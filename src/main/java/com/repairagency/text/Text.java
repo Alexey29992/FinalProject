@@ -1,5 +1,9 @@
 package com.repairagency.text;
 
+/**
+ * Public predefined messages constants
+ */
+
 public class Text {
 
     private Text() {

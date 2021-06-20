@@ -9,15 +9,20 @@ import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.TagSupport;
 import java.io.IOException;
 
+/**
+ * ActionProcessor is a Tag that used to show some predefined messages to user
+ * on the Home page that depends on the action that was performed
+ */
+
 public class ActionProcessor extends TagSupport {
 
     private static final Logger logger = LogManager.getLogger();
 
-    private String var;
+    private String variable;
     private int scope = 1;
 
-    public void setVar(String var) {
-        this.var = var;
+    public void setVar(String variable) {
+        this.variable = variable;
     }
 
     public void setScope(String scope) {
@@ -80,8 +85,8 @@ public class ActionProcessor extends TagSupport {
         }
         session.removeAttribute("action");
         try {
-            if (var != null) {
-                pageContext.setAttribute(var, result, scope);
+            if (variable != null) {
+                pageContext.setAttribute(variable, result, scope);
             } else {
                 pageContext.getOut().println(result);
             }
