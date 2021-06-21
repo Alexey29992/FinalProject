@@ -174,22 +174,22 @@ public class Util {
                 case "none":
                     break;
                 case "new":
-                    statusName = "NEW";
+                    statusName = Request.Status.NEW.name();
                     break;
                 case "wait-for-payment":
-                    statusName = "WAIT_FOR_PAYMENT";
+                    statusName = Request.Status.WAIT_FOR_PAYMENT.name();
                     break;
                 case "paid":
-                    statusName = "PAID";
+                    statusName = Request.Status.PAID.name();
                     break;
                 case "cancelled":
-                    statusName = "CANCELLED";
+                    statusName = Request.Status.CANCELLED.name();
                     break;
                 case "in-process":
-                    statusName = "IN_PROCESS";
+                    statusName = Request.Status.IN_PROCESS.name();
                     break;
                 case "done":
-                    statusName = "DONE";
+                    statusName = Request.Status.DONE.name();
                     break;
                 default:
                     logger.trace("Unexpected status parameter");
@@ -208,16 +208,16 @@ public class Util {
         if (statusAttr != null) {
             switch (statusAttr) {
                 case "new":
-                    statusName = "NEW";
+                    statusName = Request.Status.NEW.name();
                     break;
                 case "wait-for-payment":
-                    statusName = "WAIT_FOR_PAYMENT";
+                    statusName = Request.Status.WAIT_FOR_PAYMENT.name();
                     break;
                 case "paid":
-                    statusName = "PAID";
+                    statusName = Request.Status.PAID.name();
                     break;
                 case "cancelled":
-                    statusName = "CANCELLED";
+                    statusName = Request.Status.CANCELLED.name();
                     break;
                 default:
                     logger.trace("Unexpected manager status parameter");
@@ -238,10 +238,10 @@ public class Util {
                 case "none":
                     break;
                 case "in-process":
-                    statusName = "IN_PROCESS";
+                    statusName = Request.Status.IN_PROCESS.name();
                     break;
                 case "done":
-                    statusName = "DONE";
+                    statusName = Request.Status.DONE.name();
                     break;
                 default:
                     logger.trace("Unexpected master status parameter");
@@ -262,13 +262,13 @@ public class Util {
                 case "none":
                     break;
                 case "master":
-                    userRole = "MASTER";
+                    userRole = User.Role.MASTER.name();
                     break;
                 case "client":
-                    userRole = "CLIENT";
+                    userRole = User.Role.CLIENT.name();
                     break;
                 case "manager":
-                    userRole = "MANAGER";
+                    userRole = User.Role.MANAGER.name();
                     break;
                 default:
                     logger.trace("Unexpected user role parameter");
