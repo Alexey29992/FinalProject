@@ -1,5 +1,6 @@
 package com.repairagency.web.command.impl.manager;
 
+import com.repairagency.database.DBFields;
 import com.repairagency.exception.InvalidOperationException;
 import com.repairagency.util.Validator;
 import com.repairagency.web.command.Command;
@@ -43,15 +44,17 @@ public class GetRequestsManager extends GetRequestTable implements Command {
         logger.trace("filter-client : {}", clientFilterAttr);
         String statusName = Util.parseStatus(statusFilterAttr);
         if (statusName != null) {
-            data.setFilterFactor("status_name", statusName);
+            data.setFilterFactor(DBFields.STATUS_NAME, statusName);
         }
         if (masterFilterAttr != null && !masterFilterAttr.isEmpty()) {
             Validator.validateLogin(masterFilterAttr);
-            data.setFilterFactor("master.login", masterFilterAttr);
+            String filter = DBFields.TABLE_MASTERS + "." + DBFields.USER_LOGIN;
+            data.setFilterFactor(filter, masterFilterAttr);
         }
         if (clientFilterAttr != null && !clientFilterAttr.isEmpty()) {
             Validator.validateLogin(clientFilterAttr);
-            data.setFilterFactor("client.login", clientFilterAttr);
+            String filter = DBFields.TABLE_CLIENTS + "." + DBFields.USER_LOGIN;
+            data.setFilterFactor(filter, clientFilterAttr);
         }
     }
 

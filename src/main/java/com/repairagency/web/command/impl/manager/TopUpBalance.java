@@ -33,23 +33,16 @@ public class TopUpBalance implements Command {
         User user = (User) session.getAttribute("user");
         logger.info("Manager#{} replenishes Client#{} balance on {}",
                 user.getId(), clientIdAttr, amountAttr);
-        ServletContext appContext = req.getServletContext();
-        Map<Integer, Integer> updates = (Map<Integer, Integer>) appContext.getAttribute("user-balance-updates");
-        int clientId;
         try {
-             clientId = Integer.parseInt(clientIdAttr);
-        } catch (NumberFormatException ex) {
-            logger.error("Invalid client id", ex);
-            session.setAttribute("error", ErrorMessages.UNEXPECTED);
-            return PagePath.MANAGER_USER_INFO;
-        }
-        try {
+            int clientId = Integer.parseInt(clientIdAttr);
             int amount = Integer.parseInt(amountAttr);
             if (amount <= 0) {
                 session.setAttribute("error", ErrorMessages.LOWER_THAN_NULL);
                 return PagePath.MANAGER_USER_INFO;
             }
             int newBalance = EntityManager.topUpClientBalance(clientId, amount);
+            Map<Integer, Integer> updates = (Map<Integer, Integer>)
+                    req.getServletContext().getAttribute("user-balance-updates");
             updates.put(clientId, newBalance);
         } catch (DBException ex) {
             logger.error("Cannot top up balance", ex);

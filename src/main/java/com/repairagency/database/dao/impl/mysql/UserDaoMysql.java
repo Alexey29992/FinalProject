@@ -1,5 +1,6 @@
 package com.repairagency.database.dao.impl.mysql;
 
+import com.repairagency.database.DBFields;
 import com.repairagency.database.DBManager;
 import com.repairagency.bean.User;
 import com.repairagency.bean.user.Admin;
@@ -110,12 +111,12 @@ public class UserDaoMysql extends AbstractDao<User> {
     protected User getInstance(ResultSet resultSet)
             throws SQLException {
         logger.debug("Constructing user instance");
-        int id = resultSet.getInt("id");
-        String login = resultSet.getString("login");
-        String password = resultSet.getString("password");
-        User.Role role = User.Role.valueOf(resultSet.getString("role_name"));
-        String phone = resultSet.getString("ph_number");
-        int balance = resultSet.getInt("balance");
+        int id = resultSet.getInt(DBFields.ID);
+        String login = resultSet.getString(DBFields.USER_LOGIN);
+        String password = resultSet.getString(DBFields.USER_PASSWORD);
+        User.Role role = User.Role.valueOf(resultSet.getString(DBFields.ROLE_NAME));
+        String phone = resultSet.getString(DBFields.CLIENT_PHONE);
+        int balance = resultSet.getInt(DBFields.CLIENT_BALANCE);
         logger.trace("User role : {}", role);
         switch (role) {
             case CLIENT:

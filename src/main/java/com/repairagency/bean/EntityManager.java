@@ -2,8 +2,8 @@ package com.repairagency.bean;
 
 import com.repairagency.bean.data.PaymentRecord;
 import com.repairagency.bean.data.Request;
+import com.repairagency.database.DBFields;
 import com.repairagency.database.QueryGetData;
-import com.repairagency.text.Text;
 import com.repairagency.database.DBManager;
 import com.repairagency.database.dao.*;
 import com.repairagency.bean.user.Client;
@@ -131,7 +131,8 @@ public class EntityManager {
             throws DBException, InvalidOperationException {
         logger.debug("Creating new {} with login '{}'", role, login);
         QueryGetData queryData = new QueryGetData();
-        queryData.setFilterFactor("user.login", login);
+        String filter = DBFields.TABLE_USERS + "." + DBFields.USER_LOGIN;
+        queryData.setFilterFactor(filter, login);
         List<User> users = getUserList(queryData);
         if (!users.isEmpty()) {
             logger.debug("Can not register: login is already registered");
@@ -213,7 +214,7 @@ public class EntityManager {
     public static Map<Integer, String> getMasterLogins() throws DBException {
         Connection connection = startTransaction();
         QueryGetData queryData = new QueryGetData();
-        queryData.setFilterFactor("role_name", "MASTER");
+        queryData.setFilterFactor(DBFields.ROLE_NAME, "MASTER");
         List<User> masters = EntityManager.getUserList(queryData);
         Map<Integer, String> logins = masters.stream()
                 .collect(Collectors.toMap(User::getId, User::getLogin));
@@ -274,7 +275,7 @@ public class EntityManager {
         userDao.updateEntity(client);
 
         logger.trace("Creating new PaymentRecord for Client");
-        PaymentRecord paymentRecord = new PaymentRecord(amount, clientId, Text.PAYMENT_RECORD_ADD_MONEY);
+        PaymentRecord paymentRecord = new PaymentRecord(amount, clientId, PaymentRecord.PAYMENT_RECORD_ADD_MONEY);
         paymentRecordDao.addEntity(paymentRecord);
         completeTransaction(connection);
         return newBalance;
@@ -313,7 +314,7 @@ public class EntityManager {
 
         logger.trace("Creating new PaymentRecord for Client");
         PaymentRecord paymentRecord = new PaymentRecord(-request.getPrice(), clientId,
-                Text.PAYMENT_RECORD_PAY_MONEY);
+                PaymentRecord.PAYMENT_RECORD_PAY_MONEY);
         paymentRecordDao.addEntity(paymentRecord);
 
         int newBalance = client.getBalance() - request.getPrice();
@@ -338,7 +339,8 @@ public class EntityManager {
     private static User getUser(int id, Connection connection)
             throws DBException, InvalidOperationException {
         QueryGetData queryData = new QueryGetData();
-        queryData.setFilterFactor("user.id", String.valueOf(id));
+        String filter = DBFields.TABLE_USERS + "." + DBFields.ID;
+        queryData.setFilterFactor(filter, String.valueOf(id));
         List<User> list = getUserList(queryData, connection);
         if (list.isEmpty()) {
             throw new InvalidOperationException(ErrorMessages.NO_SUCH_USER);
@@ -359,7 +361,8 @@ public class EntityManager {
     private static User getUser(String login, Connection connection)
             throws DBException, InvalidOperationException {
         QueryGetData queryData = new QueryGetData();
-        queryData.setFilterFactor("user.login", login);
+        String filter = DBFields.TABLE_USERS + "." + DBFields.USER_LOGIN;
+        queryData.setFilterFactor(filter, login);
         List<User> list = getUserList(queryData, connection);
         if (list.isEmpty()) {
             throw new InvalidOperationException(ErrorMessages.NO_SUCH_USER);
@@ -380,7 +383,8 @@ public class EntityManager {
     private static Request getRequest(int id, Connection connection)
             throws DBException, InvalidOperationException {
         QueryGetData queryData = new QueryGetData();
-        queryData.setFilterFactor("request.id", String.valueOf(id));
+        String filter = DBFields.TABLE_REQUESTS + "." + DBFields.ID;
+        queryData.setFilterFactor(filter, String.valueOf(id));
         List<Request> list = getRequestList(queryData, connection);
         if (list.isEmpty()) {
             throw new InvalidOperationException(ErrorMessages.NO_SUCH_REQUEST);

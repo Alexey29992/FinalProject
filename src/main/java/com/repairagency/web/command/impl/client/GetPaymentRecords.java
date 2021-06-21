@@ -3,6 +3,7 @@ package com.repairagency.web.command.impl.client;
 import com.repairagency.bean.EntityManager;
 import com.repairagency.bean.User;
 import com.repairagency.bean.data.PaymentRecord;
+import com.repairagency.database.DBFields;
 import com.repairagency.database.QueryGetData;
 import com.repairagency.exception.DBException;
 import com.repairagency.web.command.Command;
@@ -34,7 +35,7 @@ public class GetPaymentRecords extends GetTable implements Command {
         QueryGetData queryData = new QueryGetData();
         parseTableParams(queryData, req);
         queryData.setSortFactor(sortFactor);
-        queryData.setFilterFactor("client_id", String.valueOf(client.getId()));
+        queryData.setFilterFactor(DBFields.PR_CLIENT_ID, String.valueOf(client.getId()));
         try {
             List<PaymentRecord> list = EntityManager.getPaymentRecordList(queryData);
             processTableParams(req, list);

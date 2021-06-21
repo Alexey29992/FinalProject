@@ -1,5 +1,6 @@
 package com.repairagency.web.command.impl.client;
 
+import com.repairagency.database.DBFields;
 import com.repairagency.exception.InvalidOperationException;
 import com.repairagency.web.command.Command;
 import com.repairagency.web.command.PagePath;
@@ -40,9 +41,9 @@ public class GetRequestsClient extends GetRequestTable implements Command {
         Util.parseStatus(statusFilterAttr);
         String statusFilter = Util.parseStatus(statusFilterAttr);
         if (statusFilter != null) {
-            data.setFilterFactor("status_name", statusFilter);
+            data.setFilterFactor(DBFields.STATUS_NAME, statusFilter);
         }
-        data.setFilterFactor("client_id", String.valueOf(user.getId()));
+        data.setFilterFactor(DBFields.REQUEST_CLIENT_ID, String.valueOf(user.getId()));
     }
 
 }

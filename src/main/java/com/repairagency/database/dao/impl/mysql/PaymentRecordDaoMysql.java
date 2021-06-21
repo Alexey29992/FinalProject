@@ -1,5 +1,6 @@
 package com.repairagency.database.dao.impl.mysql;
 
+import com.repairagency.database.DBFields;
 import com.repairagency.database.DBManager;
 import com.repairagency.bean.data.PaymentRecord;
 import com.repairagency.exception.DBException;
@@ -112,11 +113,11 @@ public class PaymentRecordDaoMysql extends AbstractDao<PaymentRecord> {
     @Override
     protected PaymentRecord getInstance(ResultSet resultSet) throws SQLException {
         PaymentRecord pr = new PaymentRecord();
-        pr.setId(resultSet.getInt("id"));
-        pr.setSum(resultSet.getInt("sum"));
-        pr.setClientId(resultSet.getInt("client_id"));
-        pr.setDate(resultSet.getTimestamp("date").toLocalDateTime());
-        pr.setDestination(resultSet.getString("destination"));
+        pr.setId(resultSet.getInt(DBFields.ID));
+        pr.setSum(resultSet.getInt(DBFields.PR_SUM));
+        pr.setClientId(resultSet.getInt(DBFields.PR_CLIENT_ID));
+        pr.setDate(resultSet.getTimestamp(DBFields.PR_DATE).toLocalDateTime());
+        pr.setDestination(resultSet.getString(DBFields.PR_DESTINATION));
         return pr;
     }
 

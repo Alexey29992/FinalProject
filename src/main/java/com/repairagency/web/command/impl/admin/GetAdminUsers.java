@@ -2,6 +2,7 @@ package com.repairagency.web.command.impl.admin;
 
 import com.repairagency.bean.EntityManager;
 import com.repairagency.bean.User;
+import com.repairagency.database.DBFields;
 import com.repairagency.database.QueryGetData;
 import com.repairagency.exception.DBException;
 import com.repairagency.web.command.Command;
@@ -34,7 +35,7 @@ public class GetAdminUsers extends GetTable implements Command {
         parseTableParams(queryData, req);
         queryData.setSortFactor(sortFactor);
         if (roleFilter != null) {
-            queryData.setFilterFactor("role_name", roleFilter);
+            queryData.setFilterFactor(DBFields.ROLE_NAME, roleFilter);
         }
         List<User> users;
         try {

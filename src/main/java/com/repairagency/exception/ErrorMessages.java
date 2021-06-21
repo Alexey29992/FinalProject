@@ -10,6 +10,7 @@ public class ErrorMessages {
 
     public static final String INVALID_INPUT = "error.invalid_input";
     public static final String INVALID_COMMAND = "error.invalid_command";
+    public static final String INVALID_ROLE = "error.invalid_role";
     public static final String UNEXPECTED = "error.unexpected";
     public static final String INSUFFICIENT_PERMISSIONS = "error.insufficient_permissions";
     public static final String URL_NOT_FOUND = "error.url_not_found";

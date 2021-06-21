@@ -1,5 +1,6 @@
 package com.repairagency.database.dao.impl.mysql;
 
+import com.repairagency.database.DBFields;
 import com.repairagency.database.DBManager;
 import com.repairagency.bean.data.Request;
 import com.repairagency.exception.DBException;
@@ -83,21 +84,21 @@ public class RequestDaoMysql extends AbstractDao<Request> {
     @Override
     protected Request getInstance(ResultSet resultSet) throws SQLException{
         Request req = new Request();
-        req.setId(resultSet.getInt("id"));
-        req.setClientId(resultSet.getInt("client_id"));
+        req.setId(resultSet.getInt(DBFields.ID));
+        req.setClientId(resultSet.getInt(DBFields.REQUEST_CLIENT_ID));
         req.setClientLogin(resultSet.getString("client_login"));
         req.setMasterLogin(resultSet.getString("master_login"));
-        req.setCreationDate(resultSet.getTimestamp("creation_date").toLocalDateTime());
-        req.setStatus(Request.Status.valueOf(resultSet.getString("status_name")));
-        req.setDescription(resultSet.getString("description"));
-        Timestamp completeDate = resultSet.getTimestamp("completion_date");
+        req.setCreationDate(resultSet.getTimestamp(DBFields.REQUEST_CREATION_DATE).toLocalDateTime());
+        req.setStatus(Request.Status.valueOf(resultSet.getString(DBFields.STATUS_NAME)));
+        req.setDescription(resultSet.getString(DBFields.REQUEST_DESCRIPTION));
+        Timestamp completeDate = resultSet.getTimestamp(DBFields.REQUEST_COMPLETION_DATE);
         if (completeDate != null) {
             req.setCompletionDate(completeDate.toLocalDateTime());
         }
-        req.setUserReview(resultSet.getString("user_review"));
-        req.setCancelReason(resultSet.getString("cancel_reason"));
-        req.setMasterId(resultSet.getInt("master_id"));
-        req.setPrice(resultSet.getInt("price"));
+        req.setUserReview(resultSet.getString(DBFields.REQUEST_USER_REVIEW));
+        req.setCancelReason(resultSet.getString(DBFields.REQUEST_CANCEL_REASON));
+        req.setMasterId(resultSet.getInt(DBFields.REQUEST_MASTER_ID));
+        req.setPrice(resultSet.getInt(DBFields.REQUEST_PRICE));
         return req;
     }
 

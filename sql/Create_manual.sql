@@ -37,7 +37,7 @@ CREATE TABLE IF NOT EXISTS master (
     id INT PRIMARY KEY,
     FOREIGN KEY (id)
         REFERENCES user (id)
-        ON UPDATE CASCADE
+        ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS request (

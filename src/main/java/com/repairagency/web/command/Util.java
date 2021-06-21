@@ -4,6 +4,7 @@ import com.repairagency.bean.User;
 import com.repairagency.bean.data.PaymentRecord;
 import com.repairagency.bean.data.Request;
 import com.repairagency.config.Config;
+import com.repairagency.database.DBFields;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -91,19 +92,19 @@ public class Util {
         if (sortFactorAttr != null) {
             switch (sortFactorAttr) {
                 case "id":
-                    sortFactor = "id";
+                    sortFactor = DBFields.ID;
                     break;
                 case "creation-date":
-                    sortFactor = "creation_date";
+                    sortFactor = DBFields.REQUEST_CREATION_DATE;
                     break;
                 case "status":
-                    sortFactor = "status_id";
+                    sortFactor = DBFields.REQUEST_STATUS_ID;
                     break;
                 case "price":
-                    sortFactor = "price";
+                    sortFactor = DBFields.REQUEST_PRICE;
                     break;
                 case "completion-date":
-                    sortFactor = "completion_date";
+                    sortFactor = DBFields.REQUEST_COMPLETION_DATE;
                     break;
                 default:
                     logger.trace("Unexpected request sort parameter");
@@ -122,13 +123,13 @@ public class Util {
         if (sortFactorAttr != null) {
             switch (sortFactorAttr) {
                 case "id":
-                    sortFactor = "id";
+                    sortFactor = DBFields.ID;
                     break;
                 case "login":
-                    sortFactor = "login";
+                    sortFactor = DBFields.USER_LOGIN;
                     break;
                 case "role":
-                    sortFactor = "role_id";
+                    sortFactor = DBFields.USER_ROLE_ID;
                     break;
                 default:
                     logger.trace("Unexpected user sort parameter");
@@ -147,13 +148,13 @@ public class Util {
         if (sortFactorAttr != null) {
             switch (sortFactorAttr) {
                 case "id":
-                    sortFactor = "id";
+                    sortFactor = DBFields.ID;
                     break;
                 case "date":
-                    sortFactor = "date";
+                    sortFactor = DBFields.PR_DATE;
                     break;
                 case "sum":
-                    sortFactor = "sum";
+                    sortFactor = DBFields.PR_SUM;
                     break;
                 default:
                     logger.trace("Unexpected payment record sort parameter");

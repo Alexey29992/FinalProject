@@ -1,6 +1,7 @@
 package com.repairagency.web.command.impl.master;
 
 import com.repairagency.bean.User;
+import com.repairagency.database.DBFields;
 import com.repairagency.database.QueryGetData;
 import com.repairagency.exception.InvalidOperationException;
 import com.repairagency.web.command.Command;
@@ -38,9 +39,9 @@ public class GetRequestsMaster extends GetRequestTable implements Command {
         User master = (User) req.getSession().getAttribute("user");
         String statusName = Util.parseStatus(statusFilterAttr);
         if (statusName != null) {
-            data.setFilterFactor("status_name", statusName);
+            data.setFilterFactor(DBFields.STATUS_NAME, statusName);
         }
-        data.setFilterFactor("master_id", String.valueOf(master.getId()));
+        data.setFilterFactor(DBFields.REQUEST_MASTER_ID, String.valueOf(master.getId()));
     }
 
 
