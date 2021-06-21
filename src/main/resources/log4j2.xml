@@ -2,18 +2,20 @@
 <Configuration status="WARN">
     <Appenders>
         <Console name="Console" target="SYSTEM_OUT">
-            <PatternLayout pattern="%d{dd-MM-yyyy HH:mm:ss} [%t] %-5level %logger{36} - %msg%n"/>
+            <PatternLayout pattern="%d{HH:mm:ss} [%t] %-5level %logger{36} - %msg%n"/>
         </Console>
-        <File name="FinalProjectLog" fileName="logs/app.log">
-            <PatternLayout>
-                <PatternLayout pattern="%d{HH:mm:ss} [%t] %-5level %logger{36} - %msg%n"/>
-            </PatternLayout>
+        <File name="TraceLogFile" fileName="logs/repair_agency_app_trace.log">
+            <PatternLayout pattern="%d{dd-MM-yyyy HH:mm:ss} [%t] %-5level %logger{36} - %msg%n"/>
+        </File>
+        <File name="InfoLogFile" fileName="logs/repair_agency_app_info.log">
+            <PatternLayout pattern="%d{dd-MM-yyyy HH:mm:ss} %-5level - %msg%n"/>
         </File>
     </Appenders>
     <Loggers>
         <Root level="TRACE">
             <AppenderRef ref="Console"/>
-            <AppenderRef ref="FinalProjectLog"/>
+            <AppenderRef ref="TraceLogFile"/>
+            <AppenderRef ref="InfoLogFile" level="INFO"/>
         </Root>
     </Loggers>
 </Configuration>
