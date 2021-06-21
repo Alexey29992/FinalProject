@@ -36,5 +36,10 @@ public abstract class AbstractRoleAccessFilter implements Filter {
         chain.doFilter(req, resp);
     }
 
+    /**
+     * Checks whether given {@link User.Role} matches accessed page.
+     * @param role Role of user that accesses page
+     * @return true if given role matches accessed page, false - if not
+     */
     protected abstract boolean isRoleAppropriate(User.Role role);
 }
