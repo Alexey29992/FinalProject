@@ -112,7 +112,7 @@
                             <form method="post" action="${pageContext.request.contextPath}/controller">
                                 <input type="hidden" name="command" value="remove-user">
                                 <label>
-                                    <button class="action-button" name="user-id" value="${row.id}">
+                                    <button class="action-button delete-button" name="user-id" value="${row.id}">
                                         <fmt:message key="button.delete"/>
                                     </button>
                                 </label>

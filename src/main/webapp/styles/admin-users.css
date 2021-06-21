@@ -75,6 +75,10 @@ table td:nth-child(7) {
     width: 21%;
 }
 
-.action-button:hover {
+.delete-button {
     background-color: red !important;
+}
+
+.delete-button:hover {
+    background-color: #ff5454 !important;
 }

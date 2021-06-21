@@ -54,6 +54,7 @@ public class CreateUser implements Command {
         } catch (DBException | InvalidOperationException ex) {
             logger.error("Cannot create user", ex);
             req.getSession().setAttribute("error", ex.getPublicMessage());
+            return PagePath.ADMIN_CREATE_USER;
         }
         return PagePath.HOME;
     }

@@ -130,11 +130,14 @@ public class EntityManager {
     public static User newUser(String login, String password, User.Role role)
             throws DBException, InvalidOperationException {
         logger.debug("Creating new {} with login '{}'", role, login);
-        User user = getUser(login);
-        if (user != null) {
+        QueryGetData queryData = new QueryGetData();
+        queryData.setFilterFactor("user.login", login);
+        List<User> users = getUserList(queryData);
+        if (!users.isEmpty()) {
             logger.debug("Can not register: login is already registered");
             throw new InvalidOperationException(ErrorMessages.USER_CREATE_LOGIN_REGISTERED);
         }
+        User user;
         switch (role) {
             case CLIENT:
                 user = new Client(login, password);
