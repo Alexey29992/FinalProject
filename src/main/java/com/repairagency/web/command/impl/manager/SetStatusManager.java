@@ -58,6 +58,9 @@ public class SetStatusManager implements Command {
                 request.setCancelReason(reason);
                 request.setCompletionDate(LocalDateTime.now());
             }
+            if (status.equals(Request.Status.DONE)) {
+                request.setCompletionDate(LocalDateTime.now());
+            }
             EntityManager.updateRequest(request);
         } catch (DBException ex) {
             logger.error("Cannot set status", ex);

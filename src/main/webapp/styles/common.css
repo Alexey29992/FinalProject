@@ -25,9 +25,32 @@ body {
     margin: 0;
     position: fixed;
     width: 100%;
-    top: 154px;
+    top: 252px;
     bottom: 0;
     overflow-y:scroll;
+}
+
+.head {
+    visibility: hidden;
+    white-space: nowrap;
+    text-align: center;
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+@media (min-width: 1100px) {
+    .head {
+        visibility: initial;
+    }
+    body {
+        top: 154px;
+    }
+}
+
+@media (min-width: 640px) and (max-width: 1100px) {
+    body {
+        top: 203px;
+    }
 }
 
 button {
@@ -52,20 +75,6 @@ button:active, button:focus{
     background:#0fae8d;
 }
 
-.head {
-    visibility: hidden;
-    white-space: nowrap;
-    text-align: center;
-    margin-top: 30px;
-    margin-bottom: 30px;
-}
-
-@media (min-width: 800px) {
-    .head {
-        visibility: initial;
-    }
-}
-
 .medium-text {
     font-size: 18px;
 }
@@ -85,30 +94,4 @@ button:active, button:focus{
     position: absolute;
     top: 20px;
     left: 30px;
-}
-
-.blue-button {
-    border: initial;
-    display: inline-block;
-    position: relative;
-    margin: 10px;
-    padding: 0 20px;
-    text-align: center;
-    text-decoration: none;
-    font: bold 12px/25px Arial, sans-serif;
-    text-shadow: 1px 1px 1px rgba(255,255,255, .22);
-    border-radius: 30px;
-    box-shadow: 1px 1px 1px rgba(0,0,0, .29), inset 1px 1px 1px rgba(255,255,255, .44);
-    transition: all 0.15s ease;
-    color: #19667d;
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#70c9e3), color-stop(100%,#39a0be));
-}
-
-.blue-button:hover {
-    background: -webkit-gradient(linear, left bottom, left top, color-stop(0%,#70c9e3), color-stop(100%,#39a0be));
-    color: white;
-}
-
-.btn-left {
-    text-align: left;
 }

@@ -61,7 +61,11 @@
                 </tr>
                 <tr>
                     <td><fmt:message key="request.price"/>:</td>
-                    <td>${req.price != 0 ? 'req.price' : ''}</td>
+                    <td>
+                        <c:if test="${req.price != 0}">
+                            ${req.price}$
+                        </c:if>
+                    </td>
                 </tr>
                 <tr>
                     <td><fmt:message key="request.creation_date"/>:</td>
