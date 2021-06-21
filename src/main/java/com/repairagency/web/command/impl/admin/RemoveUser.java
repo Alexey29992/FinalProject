@@ -22,6 +22,7 @@ public class RemoveUser implements Command {
         logger.debug("Executing command : remove-user");
         String userIdAttr = req.getParameter("user-id");
         logger.trace("user-id : {}", userIdAttr);
+        logger.info("Admin removes User#{}", userIdAttr);
         try {
             int id = Integer.parseInt(userIdAttr);
             EntityManager.removeUser(id);

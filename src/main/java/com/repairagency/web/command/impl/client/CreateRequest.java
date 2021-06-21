@@ -24,6 +24,7 @@ public class CreateRequest implements Command {
         String descriptionAttr = req.getParameter("description");
         logger.trace("Description : {}", descriptionAttr);
         User user = (User) req.getSession().getAttribute("user");
+        logger.info("Client#{} creates new Request", user.getId());
         try {
             String description = Validator.escapeHTMLSpecial(descriptionAttr);
             EntityManager.newRequest(description, user.getId());

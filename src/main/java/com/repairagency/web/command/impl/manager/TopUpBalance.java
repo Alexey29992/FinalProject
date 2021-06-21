@@ -1,6 +1,7 @@
 package com.repairagency.web.command.impl.manager;
 
 import com.repairagency.bean.EntityManager;
+import com.repairagency.bean.User;
 import com.repairagency.exception.DBException;
 import com.repairagency.exception.ErrorMessages;
 import com.repairagency.exception.InvalidOperationException;
@@ -11,6 +12,7 @@ import org.apache.logging.log4j.Logger;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.Map;
 
 /**
@@ -25,35 +27,39 @@ public class TopUpBalance implements Command {
         logger.debug("Executing command : top-up-balance");
         String amountAttr =  req.getParameter("amount");
         logger.trace("Amount : {}", amountAttr);
-        String idAttr = req.getParameter("client-id");
-        logger.trace("Client#{}", idAttr);
+        String clientIdAttr = req.getParameter("client-id");
+        logger.trace("Client#{}", clientIdAttr);
+        HttpSession session = req.getSession();
+        User user = (User) session.getAttribute("user");
+        logger.info("Manager#{} replenishes Client#{} balance on {}",
+                user.getId(), clientIdAttr, amountAttr);
         ServletContext appContext = req.getServletContext();
         Map<Integer, Integer> updates = (Map<Integer, Integer>) appContext.getAttribute("user-balance-updates");
         int clientId;
         try {
-             clientId = Integer.parseInt(idAttr);
+             clientId = Integer.parseInt(clientIdAttr);
         } catch (NumberFormatException ex) {
             logger.error("Invalid client id", ex);
-            req.getSession().setAttribute("error", ErrorMessages.UNEXPECTED);
+            session.setAttribute("error", ErrorMessages.UNEXPECTED);
             return PagePath.MANAGER_USER_INFO;
         }
         try {
             int amount = Integer.parseInt(amountAttr);
             if (amount <= 0) {
-                req.getSession().setAttribute("error", ErrorMessages.LOWER_THAN_NULL);
+                session.setAttribute("error", ErrorMessages.LOWER_THAN_NULL);
                 return PagePath.MANAGER_USER_INFO;
             }
             int newBalance = EntityManager.topUpClientBalance(clientId, amount);
             updates.put(clientId, newBalance);
         } catch (DBException ex) {
             logger.error("Cannot top up balance", ex);
-            req.getSession().setAttribute("error", ex.getPublicMessage());
+            session.setAttribute("error", ex.getPublicMessage());
         } catch (NumberFormatException ex) {
             logger.error("Invalid money amount", ex);
-            req.getSession().setAttribute("error", ErrorMessages.INVALID_INPUT);
+            session.setAttribute("error", ErrorMessages.INVALID_INPUT);
         } catch (InvalidOperationException ex) {
             logger.error("Invalid client id", ex);
-            req.getSession().setAttribute("error", ErrorMessages.UNEXPECTED);
+            session.setAttribute("error", ErrorMessages.UNEXPECTED);
         }
         return PagePath.MANAGER_USER_INFO;
     }

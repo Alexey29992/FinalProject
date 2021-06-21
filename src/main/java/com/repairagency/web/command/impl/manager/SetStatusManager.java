@@ -29,12 +29,14 @@ public class SetStatusManager implements Command {
         logger.debug("Executing command : set-status-manager");
         String statusAttr = req.getParameter("status");
         logger.trace("Status : {}", statusAttr);
-        String requestIdAttr = req.getParameter("request-id");
-        logger.trace("Request id : {}", requestIdAttr);
+        String reqIdAttr = req.getParameter("request-id");
+        logger.trace("Request id : {}", reqIdAttr);
         String reasonAttr = req.getParameter("cancel-reason");
         logger.trace("Cancel reason : {}", reasonAttr);
         HttpSession session = req.getSession();
         User user = (User) session.getAttribute("user");
+        logger.info("Manager#{} sets Status of Request#{} to {}",
+                user.getId(), reqIdAttr, statusAttr);
         String statusStr;
         if (user.getRole().equals(User.Role.ADMIN)) {
             statusStr = Util.parseStatus(statusAttr);
@@ -47,7 +49,7 @@ public class SetStatusManager implements Command {
             return PagePath.MANAGER_REQUEST_INFO;
         }
         try {
-            int requestId = Integer.parseInt(requestIdAttr);
+            int requestId = Integer.parseInt(reqIdAttr);
             Request request = EntityManager.getRequest(requestId);
             Request.Status status = Request.Status.valueOf(statusStr);
             request.setStatus(status);

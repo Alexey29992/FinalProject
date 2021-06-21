@@ -25,6 +25,7 @@ public class ChangeClientSettings implements Command {
         String phNumber = req.getParameter("ph-number");
         HttpSession session = req.getSession();
         Client client = (Client) session.getAttribute("user");
+        logger.info("Client#{} changes his phone number", client.getId());
         try {
             Validator.escapeHTMLSpecial(phNumber);
             client.setPhNumber(phNumber);

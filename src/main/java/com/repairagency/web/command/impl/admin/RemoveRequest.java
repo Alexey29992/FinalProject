@@ -22,6 +22,7 @@ public class RemoveRequest implements Command {
         logger.debug("Executing command : remove-request");
         String reqIdAttr = req.getParameter("request-id");
         logger.trace("request-id : {}", reqIdAttr);
+        logger.info("Admin removes Request#{}", reqIdAttr);
         try {
             int id = Integer.parseInt(reqIdAttr);
             EntityManager.removeRequest(id);

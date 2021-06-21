@@ -32,10 +32,10 @@ public class Login implements Command {
         logger.trace("login : {}", login);
         String password = req.getParameter("password");
         logger.trace("password : {}", password);
+        logger.info("Registering/Entering account with login '{}'", login);
         User user = null;
         try {
             Validator.validateLogin(login);
-            login = Validator.escapeHTMLSpecial(login);
             Validator.validatePassword(password);
             password = PasswordHash.getHash(password);
             if ("sign-up".equals(type)) {
@@ -51,12 +51,6 @@ public class Login implements Command {
                     return PagePath.LOGIN;
                 }
             }
-            if (user == null) {
-                logger.trace("Cannot log in");
-                session.setAttribute("error", ErrorMessages.UNEXPECTED);
-                return PagePath.ERROR;
-            }
-            logger.trace("Logged as (role) : {}", user.getRole());
             session.setAttribute("user", user);
             session.setAttribute("action", type);
             return PagePath.HOME;

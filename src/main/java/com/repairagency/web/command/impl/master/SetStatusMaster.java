@@ -1,6 +1,7 @@
 package com.repairagency.web.command.impl.master;
 
 import com.repairagency.bean.EntityManager;
+import com.repairagency.bean.User;
 import com.repairagency.bean.data.Request;
 import com.repairagency.exception.DBException;
 import com.repairagency.exception.ErrorMessages;
@@ -12,6 +13,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.time.LocalDateTime;
 
 /**
@@ -26,16 +28,20 @@ public class SetStatusMaster implements Command {
         logger.debug("Executing command : set-status-master");
         String statusAttr = req.getParameter("status");
         logger.trace("Status : {}", statusAttr);
-        String requestIdAttr = req.getParameter("request-id");
-        logger.trace("Request id : {}", requestIdAttr);
+        String reqIdAttr = req.getParameter("request-id");
+        logger.trace("Request id : {}", reqIdAttr);
         String statusStr = Util.parseStatusMaster(statusAttr);
+        HttpSession session = req.getSession();
+        User user = (User) session.getAttribute("user");
+        logger.info("Master#{} sets Status of Request#{} to {}",
+                user.getId(), reqIdAttr, statusAttr);
         if (statusStr == null) {
             logger.error("Invalid status");
-            req.getSession().setAttribute("error", ErrorMessages.INVALID_INPUT);
+            session.setAttribute("error", ErrorMessages.INVALID_INPUT);
             return PagePath.MASTER_REQUEST_INFO;
         }
         try {
-            int requestId = Integer.parseInt(requestIdAttr);
+            int requestId = Integer.parseInt(reqIdAttr);
             Request request = EntityManager.getRequest(requestId);
             Request.Status status = Request.Status.valueOf(statusStr);
             request.setStatus(status);
@@ -45,13 +51,13 @@ public class SetStatusMaster implements Command {
             EntityManager.updateRequest(request);
         } catch (DBException ex) {
             logger.error("Cannot set status", ex);
-            req.getSession().setAttribute("error", ex.getPublicMessage());
+            session.setAttribute("error", ex.getPublicMessage());
         } catch (NumberFormatException ex) {
             logger.error("Invalid request id", ex);
-            req.getSession().setAttribute("error", ErrorMessages.UNEXPECTED);
+            session.setAttribute("error", ErrorMessages.UNEXPECTED);
         } catch (InvalidOperationException ex) {
             logger.error("Invalid request", ex);
-            req.getSession().setAttribute("error", ErrorMessages.UNEXPECTED);
+            session.setAttribute("error", ErrorMessages.UNEXPECTED);
         }
         return PagePath.MASTER_REQUEST_INFO;
     }

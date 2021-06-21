@@ -1,5 +1,6 @@
 package com.repairagency.web.command.impl.common;
 
+import com.repairagency.bean.User;
 import com.repairagency.web.command.Command;
 import com.repairagency.web.command.PagePath;
 import org.apache.logging.log4j.LogManager;
@@ -10,7 +11,7 @@ import javax.servlet.http.HttpSession;
 import java.util.Enumeration;
 
 /**
- *  Command of logging out
+ * Command of logging out
  */
 public class Logout implements Command {
 
@@ -20,6 +21,8 @@ public class Logout implements Command {
     public String execute(HttpServletRequest req) {
         logger.debug("Executing command : logout");
         HttpSession session = req.getSession();
+        User user = (User) session.getAttribute("user");
+        logger.info("User#{} logging out", user.getId());
         Enumeration<String> attributeNames = session.getAttributeNames();
         while (attributeNames.hasMoreElements()) {
             String element = attributeNames.nextElement();

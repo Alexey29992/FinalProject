@@ -23,12 +23,13 @@ public class MakePayment implements Command {
     @Override
     public String execute(HttpServletRequest req) {
         logger.debug("Executing command : make-payment");
-        String idAttr =  req.getParameter("request-id");
-        logger.trace("Request#{}", idAttr);
+        String reqIdAttr =  req.getParameter("request-id");
+        logger.trace("Request#{}", reqIdAttr);
         HttpSession session = req.getSession();
         Client client = (Client) session.getAttribute("user");
+        logger.info("Client#{} makes payment for Request#{}", client.getId(), reqIdAttr);
         try {
-            int requestId = Integer.parseInt(idAttr);
+            int requestId = Integer.parseInt(reqIdAttr);
             int newBalance = EntityManager.makePayment(client.getId(), requestId);
             client.setBalance(newBalance);
             req.getSession().setAttribute("action", "payment-success");

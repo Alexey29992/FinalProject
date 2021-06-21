@@ -29,6 +29,7 @@ public class ChangePassword implements Command {
         String newPass = req.getParameter("new-password");
         HttpSession session = req.getSession();
         User user = (User) session.getAttribute("user");
+        logger.info("User#{} changes his password", user.getId());
         oldPass = PasswordHash.getHash(oldPass);
         if (user.getPassword().equals(oldPass)) {
             try {

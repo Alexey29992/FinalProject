@@ -32,6 +32,7 @@ public class CreateUser implements Command {
         logger.trace("password : {}", passwordAttr);
         String roleAttr = req.getParameter("role");
         logger.trace("role : {}", roleAttr);
+        logger.info("Admin creates new '{}' with login '{}'", roleAttr, loginAttr);
         String roleStr = Util.parseUserRole(roleAttr);
         if (roleStr == null) {
             logger.error("Cannot create user. Invalid role");

@@ -24,10 +24,10 @@ public class GetRequest implements Command {
     @Override
     public String execute(HttpServletRequest req) {
         logger.debug("Executing command : get-request-edit");
-        String requestIdAttr = req.getParameter("request-id");
-        logger.trace("Request id : {}", requestIdAttr);
+        String reqIdAttr = req.getParameter("request-id");
+        logger.trace("Request id : {}", reqIdAttr);
         try {
-            int requestId = Integer.parseInt(requestIdAttr);
+            int requestId = Integer.parseInt(reqIdAttr);
             Request request = EntityManager.getRequest(requestId);
             req.setAttribute("currentRequest", request);
             req.getSession().setAttribute("requestId", request.getId());
