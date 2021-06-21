@@ -1,7 +1,6 @@
 package com.repairagency.web.command;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 /**
  * Command interface. Command is built by Command Pattern and represents
@@ -10,9 +9,13 @@ import javax.servlet.http.HttpServletResponse;
  * and a set of attributes that will be used to form a response for user.
  * List of available Commands is held be {@link CommandContainer}
  */
-
 public interface Command {
 
-    String execute(HttpServletRequest req, HttpServletResponse resp);
+    /**
+     * Executes command.
+     * @param req request with required for execution data
+     * @return address of JSP page or Servlet to make response
+     */
+    String execute(HttpServletRequest req);
 
 }

@@ -17,7 +17,6 @@ import java.io.IOException;
  * RequestForwarder if a Tag that performs HTTP Request forwarding to {@link Controller}
  * when processing any {@link Command} is expected.
  */
-
 public class RequestForwarder extends TagSupport {
 
     private static final Logger logger = LogManager.getLogger();

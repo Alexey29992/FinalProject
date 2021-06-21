@@ -13,19 +13,17 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 /**
  *  Command of changing password for all roles
  */
-
 public class ChangePassword implements Command {
 
     private static final Logger logger = LogManager.getLogger();
 
     @Override
-    public String execute(HttpServletRequest req, HttpServletResponse resp) {
+    public String execute(HttpServletRequest req) {
         logger.debug("Executing command : change-password");
         String oldPass = req.getParameter("old-password");
         String newPass = req.getParameter("new-password");

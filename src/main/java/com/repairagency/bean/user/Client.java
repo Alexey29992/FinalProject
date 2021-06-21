@@ -5,7 +5,6 @@ import com.repairagency.bean.User;
 /**
  * Bean that represents Client Role
  */
-
 public class Client extends User {
 
     private int balance;

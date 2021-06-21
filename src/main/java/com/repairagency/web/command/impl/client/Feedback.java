@@ -12,18 +12,16 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 /**
  *  Command of posting feedback for done Request via Client access page
  */
-
 public class Feedback implements Command {
 
     private static final Logger logger = LogManager.getLogger();
 
     @Override
-    public String execute(HttpServletRequest req, HttpServletResponse resp) {
+    public String execute(HttpServletRequest req) {
         logger.debug("Executing command : feedback");
         String idAttr =  req.getParameter("request-id");
         logger.trace(idAttr);

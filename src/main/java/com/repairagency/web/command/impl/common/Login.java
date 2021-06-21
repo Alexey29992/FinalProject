@@ -13,19 +13,17 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 /**
  * Command of sign in or sign up for guests
  */
-
 public class Login implements Command {
 
     private static final Logger logger = LogManager.getLogger();
 
     @Override
-    public String execute(HttpServletRequest req, HttpServletResponse resp) {
+    public String execute(HttpServletRequest req) {
         logger.debug("Executing command : login");
         HttpSession session = req.getSession();
         String type = req.getParameter("type");
@@ -42,11 +40,16 @@ public class Login implements Command {
             password = PasswordHash.getHash(password);
             if ("sign-up".equals(type)) {
                 logger.trace("Attempt to sign up");
-                user = EntityManager.signUp(login, password);
+                user = EntityManager.newUser(login, password, User.Role.CLIENT);
             }
             if ("sign-in".equals(type)) {
                 logger.trace("Attempt to sign in");
-                user = EntityManager.signIn(login, password);
+                user = EntityManager.getUser(login);
+                if (!user.getPassword().equals(password)) {
+                    logger.trace("Can not enter: password not correct");
+                    req.getSession().setAttribute("error", ErrorMessages.PASSWORD_INCORRECT);
+                    return PagePath.LOGIN;
+                }
             }
             if (user == null) {
                 logger.trace("Cannot log in");

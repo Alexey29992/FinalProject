@@ -13,7 +13,6 @@ import java.io.IOException;
  * ActionProcessor is a Tag that used to show some predefined messages to user
  * on the Home page that depends on the action that was performed
  */
-
 public class ActionProcessor extends TagSupport {
 
     private static final Logger logger = LogManager.getLogger();

@@ -17,7 +17,6 @@ import java.util.List;
  * Abstract class that encapsulates common functionality to receive list of requests.
  * Commands that intended to get request list should be inherited from this class
  */
-
 public abstract class GetRequestTable extends GetTable {
 
     private static final Logger logger = LogManager.getLogger();

@@ -9,21 +9,31 @@ import java.util.Set;
 /**
  * Objects of this class represents generators of GET query strings for MySQL database.
  * Instance of this class should be created with prepared {@link QueryGetData} and basic
- * query string for appropriate DAO. Then desired query can be received by {@link #generateQuery()}.<p>
- * All input of {@link QueryGetData} should be validated to prevent SQL-injections
+ * query string for appropriate DAO. Then desired query can be received by {@link #generateQuery()}.
+ * <p>All input of {@link QueryGetData} should be validated to prevent SQL-injections
  */
-
 public class QueryGetGenerator {
 
     private final QueryGetData data;
     protected String queryBase;
     protected StringBuilder query;
 
+    /**
+     * Creates QueryGetGenerator object with given parameters.
+     * After creating instance calling {@link #generateQuery()} is expected.
+     * @param queryBase base part of SQL query specific to concrete DAO object
+     * @param data additional data specific to current SQL query
+     */
     public QueryGetGenerator(String queryBase, QueryGetData data) {
         this.queryBase = queryBase;
         this.data = data;
     }
 
+    /**
+     * Generates complete SQL query from given in constructor data.
+     * Resulted query is ready to be executed.
+     * @return SQL query string generated according to given data
+     */
     public String generateQuery() {
         query = new StringBuilder(queryBase);
         if (!data.getFilterFactors().isEmpty()) {

@@ -19,7 +19,6 @@ import java.io.IOException;
  * that were not caught in the {@link Command}s. This Servlet is configured to be invoked
  * by Servlet Container in deployment descriptor (web.xml).
  */
-
 @WebServlet("/ErrorHandler")
 public class ErrorHandler extends HttpServlet {
 

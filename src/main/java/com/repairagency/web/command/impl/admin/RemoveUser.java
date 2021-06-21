@@ -9,18 +9,16 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 /**
  *  Command of removing User via Admin access page
  */
-
 public class RemoveUser implements Command {
 
     private static final Logger logger = LogManager.getLogger();
 
     @Override
-    public String execute(HttpServletRequest req, HttpServletResponse resp) {
+    public String execute(HttpServletRequest req) {
         logger.debug("Executing command : remove-user");
         String userIdAttr = req.getParameter("user-id");
         logger.trace("user-id : {}", userIdAttr);

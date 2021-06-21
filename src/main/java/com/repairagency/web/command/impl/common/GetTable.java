@@ -13,7 +13,6 @@ import java.util.List;
  * for creating table. All Commands that intended to receive list of instances
  * should be inherited from this class.
  */
-
 public abstract class GetTable {
 
     private static final Logger logger = LogManager.getLogger();

@@ -3,7 +3,6 @@ package com.repairagency.config;
 /**
  * Configuration constants
  */
-
 public class Config {
 
     private Config() {

@@ -12,19 +12,17 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDateTime;
 
 /**
  *  Command of setting Request Status via Master access page
  */
-
 public class SetStatusMaster implements Command {
 
     private static final Logger logger = LogManager.getLogger();
 
     @Override
-    public String execute(HttpServletRequest req, HttpServletResponse resp) {
+    public String execute(HttpServletRequest req) {
         logger.debug("Executing command : set-status-master");
         String statusAttr = req.getParameter("status");
         logger.trace("Status : {}", statusAttr);

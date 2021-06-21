@@ -14,20 +14,18 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.time.LocalDateTime;
 
 /**
  * Command of setting Status of the Request via Manager and Admin access page
  */
-
 public class SetStatusManager implements Command {
 
     private static final Logger logger = LogManager.getLogger();
 
     @Override
-    public String execute(HttpServletRequest req, HttpServletResponse resp) {
+    public String execute(HttpServletRequest req) {
         logger.debug("Executing command : set-status-manager");
         String statusAttr = req.getParameter("status");
         logger.trace("Status : {}", statusAttr);

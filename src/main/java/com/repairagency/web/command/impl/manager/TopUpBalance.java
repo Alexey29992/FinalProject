@@ -11,19 +11,17 @@ import org.apache.logging.log4j.Logger;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 
 /**
  * Command of replenishment Client's balance via Manager and Admin access page
  */
-
 public class TopUpBalance implements Command {
 
     private static final Logger logger = LogManager.getLogger();
 
     @Override
-    public String execute(HttpServletRequest req, HttpServletResponse resp) {
+    public String execute(HttpServletRequest req) {
         logger.debug("Executing command : top-up-balance");
         String amountAttr =  req.getParameter("amount");
         logger.trace("Amount : {}", amountAttr);

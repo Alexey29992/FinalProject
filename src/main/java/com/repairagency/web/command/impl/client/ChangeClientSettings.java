@@ -10,19 +10,17 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 /**
  *  Command of changing client specific settings (i.e. phone number) via Client access page
  */
-
 public class ChangeClientSettings implements Command {
 
     private static final Logger logger = LogManager.getLogger();
 
     @Override
-    public String execute(HttpServletRequest req, HttpServletResponse resp) {
+    public String execute(HttpServletRequest req) {
         logger.debug("Executing command : change-client-settings");
         String phNumber = req.getParameter("ph-number");
         HttpSession session = req.getSession();

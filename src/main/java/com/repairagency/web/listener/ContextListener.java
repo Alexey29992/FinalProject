@@ -15,7 +15,6 @@ import java.util.HashMap;
 /**
  * Context Event Listener that initializes all required instances on Application startup
  */
-
 @WebListener
 public class ContextListener implements ServletContextListener {
 
@@ -26,7 +25,7 @@ public class ContextListener implements ServletContextListener {
         logger.debug("Initializing context");
         ServletContext context = sce.getServletContext();
         DBManager.initDataSource();
-        DBManager.defaultDaoFactory();
+        DBManager.initDaoFactory();
         try {
             context.setAttribute("masterMap", EntityManager.getMasterLogins());
         } catch (DBException ex) {

@@ -13,7 +13,6 @@ import java.time.format.DateTimeFormatter;
  * Tag that intended to format LocalDateTime according to given pattern.
  * It is needed because standard fmt:formatDate tag does not support LocalDateTime
  */
-
 public class DateFormatter extends SimpleTagSupport {
 
     private static final Logger logger = LogManager.getLogger();

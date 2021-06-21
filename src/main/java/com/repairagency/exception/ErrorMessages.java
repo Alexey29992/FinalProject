@@ -3,7 +3,6 @@ package com.repairagency.exception;
 /**
  * Set of constants that holds keys for appropriate messages of errors in resource bundles
  */
-
 public class ErrorMessages {
 
     private ErrorMessages() {
@@ -20,7 +19,6 @@ public class ErrorMessages {
     public static final String USER_CREATE_INVALID_ROLE = "error.user_create_invalid_role";
     public static final String USER_CREATE_LOGIN_REGISTERED = "error.user_create_login_registered";
     public static final String PASSWORD_INCORRECT = "error.password_incorrect";
-    public static final String LOGIN_NOT_FOUND = "error.login_not_found";
     public static final String PASSWORD_INVALID_LENGTH = "error.password_invalid_length";
     public static final String LOGIN_INVALID_LENGTH = "error.login_invalid_length";
     public static final String FORBIDDEN_INPUT_CHARS = "error.forbidden_input_chars";

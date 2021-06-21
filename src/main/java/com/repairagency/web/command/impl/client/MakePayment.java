@@ -11,19 +11,17 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 /**
  *  Command of processing payment for the request via Client access page
  */
-
 public class MakePayment implements Command {
 
     private static final Logger logger = LogManager.getLogger();
 
     @Override
-    public String execute(HttpServletRequest req, HttpServletResponse resp) {
+    public String execute(HttpServletRequest req) {
         logger.debug("Executing command : make-payment");
         String idAttr =  req.getParameter("request-id");
         logger.trace("Request#{}", idAttr);
@@ -31,7 +29,7 @@ public class MakePayment implements Command {
         Client client = (Client) session.getAttribute("user");
         try {
             int requestId = Integer.parseInt(idAttr);
-            int newBalance = EntityManager.makePayment(client, requestId);
+            int newBalance = EntityManager.makePayment(client.getId(), requestId);
             client.setBalance(newBalance);
             req.getSession().setAttribute("action", "payment-success");
             return PagePath.HOME;

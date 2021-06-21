@@ -18,7 +18,6 @@ import java.util.*;
 /**
  * Filter that performs checking access to processing {@link Command}s
  */
-
 public class CommandFilter implements Filter {
 
     private static final Logger logger = LogManager.getLogger();

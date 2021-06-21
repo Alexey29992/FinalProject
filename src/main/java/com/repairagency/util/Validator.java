@@ -19,15 +19,24 @@ public class Validator {
 
     private static final Logger logger = LogManager.getLogger();
 
+    /**
+     * This pattern matches any sequence of Unicode Letters (p{L}), digits and an underscore symbols ('_')
+     */
     private static final Pattern allowedCharsPattern = Pattern.compile("^[\\p{L}0-9_]+$");
 
     private Validator() {
     }
 
-    public static void validatePayment(Client client, Request request, int price)
+    /**
+     * Validates whether {@link Client} can process payment for the {@link Request} or not.
+     * @param client Client that pays for the Request
+     * @param request Request for which Client pays
+     * @throws InvalidOperationException if Client can't pay for this request
+     */
+    public static void validatePayment(Client client, Request request)
             throws InvalidOperationException {
         logger.debug("Validating payment for Request#{}", request.getId());
-        if (client.getBalance() < price) {
+        if (client.getBalance() < request.getPrice()) {
             logger.error("Negative balance is not allowed");
             throw new InvalidOperationException(ErrorMessages.USER_UNABLE_PAY_MONEY);
         }
@@ -37,6 +46,11 @@ public class Validator {
         }
     }
 
+    /**
+     * Validates the given login string. Checks the login for allowed length and characters.
+     * @param login login string to be validated
+     * @throws InvalidOperationException if given login is not valid
+     */
     public static void validateLogin(String login)
             throws InvalidOperationException {
         logger.debug("Validating Login {}", login);
@@ -48,6 +62,12 @@ public class Validator {
         validateCharacters(login);
     }
 
+    /**
+     * Validates the given password string. Checks the password for allowed length and characters.
+     * This method should be invoked before password is hashed.
+     * @param password password string to be validated
+     * @throws InvalidOperationException if given password is not valid
+     */
     public static void validatePassword(String password)
             throws InvalidOperationException {
         logger.debug("Validating password");
@@ -59,6 +79,11 @@ public class Validator {
         validateCharacters(password);
     }
 
+    /**
+     * Validates given input string for restricted characters.
+     * @param input string to be validated
+     * @throws InvalidOperationException if given string contains illegal characters
+     */
     public static void validateCharacters(String input)
             throws InvalidOperationException {
         logger.debug("Validating chars");
@@ -68,6 +93,15 @@ public class Validator {
         }
     }
 
+    /**
+     * Replaces next HTML characters by their escape sequences:
+     * <pre>{@code '&' --> '&amp'
+     * '<' --> '&lt'
+     * '>' --> '&gt'}</pre>
+     * It is required to display them on the HTML page properly.
+     * @param input string to be escaped
+     * @return escaped input string
+     */
     public static String escapeHTMLSpecial(String input) {
         return input.replace("&", "&amp")
                 .replace("<", "&lt")

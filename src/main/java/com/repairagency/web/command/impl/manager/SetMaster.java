@@ -11,18 +11,16 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 /**
  *  Command of assigning Master to the Request via Manager and Admin access page
  */
-
 public class SetMaster implements Command {
 
     private static final Logger logger = LogManager.getLogger();
 
     @Override
-    public String execute(HttpServletRequest req, HttpServletResponse resp) {
+    public String execute(HttpServletRequest req) {
         logger.debug("Executing command : set-master");
         String masterIdAttr = req.getParameter("master-id");
         logger.trace("Master id : {}", masterIdAttr);

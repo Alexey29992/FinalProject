@@ -17,7 +17,6 @@ import java.io.IOException;
  * refer to {@link Command} execution. After receiving HTTP request Controller invokes
  * an appropriate Command and forwards to page with address returned by this Command
  */
-
 @WebServlet("/controller")
 public class Controller extends HttpServlet {
 
@@ -29,7 +28,7 @@ public class Controller extends HttpServlet {
         logger.debug("Controller receives 'get' request");
         String command = req.getParameter(COMMAND);
         logger.trace("{} : {}", COMMAND, command);
-        String address = CommandContainer.getCommand(command).execute(req, resp);
+        String address = CommandContainer.getCommand(command).execute(req);
         logger.trace("Forward to : {}", address);
         req.getRequestDispatcher(address).forward(req, resp);
     }
@@ -39,7 +38,7 @@ public class Controller extends HttpServlet {
         logger.debug("Controller receives 'post' request");
         String command = req.getParameter(COMMAND);
         logger.trace("{} : {}", COMMAND, command);
-        String address = CommandContainer.getCommand(command).execute(req, resp);
+        String address = CommandContainer.getCommand(command).execute(req);
         address = req.getContextPath() + address;
         logger.trace("Send redirect to : {}", address);
         resp.sendRedirect(address);

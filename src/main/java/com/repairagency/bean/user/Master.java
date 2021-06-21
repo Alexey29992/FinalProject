@@ -5,7 +5,6 @@ import com.repairagency.bean.User;
 /**
  * Bean that represents Master Role
  */
-
 public class Master extends User {
 
     public Master(String login, String password) {

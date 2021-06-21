@@ -11,18 +11,16 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 /**
  *  Command of receiving list of requests via Client access page
  */
-
 public class GetRequestsClient extends GetRequestTable implements Command {
 
     private static final Logger logger = LogManager.getLogger();
 
     @Override
-    public String execute(HttpServletRequest req, HttpServletResponse resp) {
+    public String execute(HttpServletRequest req) {
         logger.debug("Executing command : get-client-requests");
         try {
             return getRequestTable(req, PagePath.CLIENT_REQUESTS);

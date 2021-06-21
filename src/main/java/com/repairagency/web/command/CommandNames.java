@@ -3,7 +3,6 @@ package com.repairagency.web.command;
 /**
  * Command identifier constants
  */
-
 public class CommandNames {
 
     private CommandNames(){

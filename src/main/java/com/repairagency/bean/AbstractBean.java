@@ -7,7 +7,6 @@ import java.util.Objects;
  * AbstractBean is an abstract base class for creating other
  * concrete beans. All beans have identifier data
  */
-
 public abstract class AbstractBean implements Serializable {
 
     private int id;

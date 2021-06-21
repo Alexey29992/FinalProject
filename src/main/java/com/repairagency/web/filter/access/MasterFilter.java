@@ -5,7 +5,6 @@ import com.repairagency.bean.User;
 /**
  * Filter that performs checking access to Master pages
  */
-
 public class MasterFilter extends AbstractRoleAccessFilter {
 
     private static final User.Role accessibleRole = User.Role.MASTER;

@@ -15,7 +15,6 @@ import java.io.IOException;
 /**
  * Base class for all Filters that intended to check registered user access to current page
  */
-
 public abstract class AbstractRoleAccessFilter implements Filter {
 
     private static final Logger logger = LogManager.getLogger();

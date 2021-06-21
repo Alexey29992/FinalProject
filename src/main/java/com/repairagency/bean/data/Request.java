@@ -7,7 +7,6 @@ import java.time.LocalDateTime;
 /**
  * Represents Client's repair request
  */
-
 public class Request extends AbstractBean {
 
     private int clientId;

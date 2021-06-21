@@ -13,21 +13,18 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
 /**
  *  Command of receiving list of payment records via Client access page
  */
-
-
 public class GetPaymentRecords extends GetTable implements Command {
 
     private static final Logger logger = LogManager.getLogger();
 
     @Override
-    public String execute(HttpServletRequest req, HttpServletResponse resp) {
+    public String execute(HttpServletRequest req) {
         logger.debug("Executing command : get-payment-records");
         String sortFactorAttr = req.getParameter("sort-factor");
         logger.trace("sort-factor : {}", sortFactorAttr);

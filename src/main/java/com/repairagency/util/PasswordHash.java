@@ -10,7 +10,6 @@ import java.security.NoSuchAlgorithmException;
 /**
  * Utility class that is used to hash the password with SHA-256 algorithm
  */
-
 public class PasswordHash {
 
     private static final Logger logger = LogManager.getLogger();
@@ -19,6 +18,13 @@ public class PasswordHash {
     private PasswordHash() {
     }
 
+    /**
+     * Receives hexadecimal hash string of given input.
+     * This method is intended to hashing user passwords.
+     * It uses defined in {@link #ALGORITHM} hash function.
+     * @param password user's password to be hashed
+     * @return hexadecimal hash string of the given input
+     */
     public static String getHash(String password) {
         try {
             MessageDigest digest = MessageDigest.getInstance(ALGORITHM);

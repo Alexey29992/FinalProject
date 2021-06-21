@@ -5,7 +5,6 @@ import com.repairagency.bean.User;
 /**
  * Filter that performs checking access to Admin pages
  */
-
 public class AdminFilter extends AbstractRoleAccessFilter {
 
     private static final User.Role accessibleRole = User.Role.ADMIN;

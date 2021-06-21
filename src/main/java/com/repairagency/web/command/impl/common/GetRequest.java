@@ -13,18 +13,16 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 /**
  *  Command of receiving single request info for Admin, Manager and Master roles
  */
-
 public class GetRequest implements Command {
 
     private static final Logger logger = LogManager.getLogger();
 
     @Override
-    public String execute(HttpServletRequest req, HttpServletResponse resp) {
+    public String execute(HttpServletRequest req) {
         logger.debug("Executing command : get-request-edit");
         String requestIdAttr = req.getParameter("request-id");
         logger.trace("Request id : {}", requestIdAttr);

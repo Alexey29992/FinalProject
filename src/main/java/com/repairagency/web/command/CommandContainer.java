@@ -20,7 +20,6 @@ import java.util.Map;
  * {@link Command}s and a method to get the desired {@link Command} by its identifier.
  * In case of unknown identifier was provided CommandContainer will return Invalid Command handler
  */
-
 public class CommandContainer {
 
     private CommandContainer() {
@@ -56,6 +55,12 @@ public class CommandContainer {
         commandMap.put(CommandNames.REMOVE_REQUEST, new RemoveRequest());
     }
 
+    /**
+     * Receives {@link Command} with given key.
+     * @param key key of desired Command
+     * @return Command object that mapped to given key
+     * or 'invalid-command' Command if given key can't be resolved
+     */
     public static Command getCommand(String key) {
         logger.trace("CommandContainer#getCommand queried with command : {}", key);
         if (!commandMap.containsKey(key)) {

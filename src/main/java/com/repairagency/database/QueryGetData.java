@@ -7,7 +7,6 @@ import java.util.Map;
  * Data container that holds data required to create GET query for DAO.
  * Objects of this class intended for use in QueryGetGenerator of any implementation of DAO
  */
-
 public class QueryGetData {
 
     private final Map<String, String> filterFactors = new HashMap<>();

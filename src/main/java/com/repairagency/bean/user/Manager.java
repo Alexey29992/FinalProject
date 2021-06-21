@@ -5,7 +5,6 @@ import com.repairagency.bean.User;
 /**
  * Bean that represents Manager Role
  */
-
 public class Manager extends User {
 
     public Manager(String login, String password) {
