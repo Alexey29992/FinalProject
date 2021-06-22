@@ -9,7 +9,6 @@ import com.repairagency.exception.DBException;
 import com.repairagency.web.command.Command;
 import com.repairagency.web.command.PagePath;
 import com.repairagency.web.command.Util;
-import com.repairagency.web.command.impl.common.GetTable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -20,7 +19,7 @@ import java.util.List;
 /**
  *  Command of receiving list of payment records via Client access page
  */
-public class GetPaymentRecords extends GetTable implements Command {
+public class GetPaymentRecords implements Command {
 
     private static final Logger logger = LogManager.getLogger();
 
@@ -33,12 +32,12 @@ public class GetPaymentRecords extends GetTable implements Command {
         HttpSession session = req.getSession();
         User client = (User) session.getAttribute("user");
         QueryGetData queryData = new QueryGetData();
-        parseTableParams(queryData, req);
+        int[] pageData = Util.parseTableParams(queryData, req);
         queryData.setSortFactor(sortFactor);
         queryData.setFilterFactor(DBFields.PR_CLIENT_ID, String.valueOf(client.getId()));
         try {
             List<PaymentRecord> list = EntityManager.getPaymentRecordList(queryData);
-            processTableParams(req, list);
+            Util.setPageParams(req, list, pageData);
             req.setAttribute("paymentRecords", list);
             return PagePath.CLIENT_PAYMENT_HISTORY;
         } catch (DBException ex) {

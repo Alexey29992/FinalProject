@@ -17,7 +17,7 @@ import java.util.List;
  * Abstract class that encapsulates common functionality to receive list of requests.
  * Commands that intended to get request list should be inherited from this class
  */
-public abstract class GetRequestTable extends GetTable {
+public abstract class GetRequestTable {
 
     private static final Logger logger = LogManager.getLogger();
 
@@ -27,7 +27,7 @@ public abstract class GetRequestTable extends GetTable {
         String sortFactorAttr = req.getParameter("sort-factor");
         logger.trace("sort-factor : {}", sortFactorAttr);
         QueryGetData queryData = new QueryGetData();
-        parseTableParams(queryData, req);
+        int[] pageData = Util.parseTableParams(queryData, req);
         String sortFactor = Util.parseSortRequest(sortFactorAttr);
         queryData.setSortFactor(sortFactor);
         setFilters(req, queryData);
@@ -39,7 +39,7 @@ public abstract class GetRequestTable extends GetTable {
             req.getSession().setAttribute("error", ex.getPublicMessage());
             return PagePath.ERROR;
         }
-        processTableParams(req, requests);
+        Util.setPageParams(req, requests, pageData);
         req.setAttribute("requests", requests);
         return address;
     }

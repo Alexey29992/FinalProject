@@ -8,7 +8,6 @@ import com.repairagency.exception.DBException;
 import com.repairagency.web.command.Command;
 import com.repairagency.web.command.PagePath;
 import com.repairagency.web.command.Util;
-import com.repairagency.web.command.impl.common.GetTable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -18,7 +17,7 @@ import java.util.List;
 /**
  *  Command of receiving list of registered users via Admin access page
  */
-public class GetAdminUsers extends GetTable implements Command {
+public class GetAdminUsers implements Command {
 
     private static final Logger logger = LogManager.getLogger();
 
@@ -32,7 +31,7 @@ public class GetAdminUsers extends GetTable implements Command {
         logger.trace("filter-role : {}", roleFilterAttr);
         String roleFilter = Util.parseUserRole(roleFilterAttr);
         QueryGetData queryData = new QueryGetData();
-        parseTableParams(queryData, req);
+        int[] pageData = Util.parseTableParams(queryData, req);
         queryData.setSortFactor(sortFactor);
         if (roleFilter != null) {
             queryData.setFilterFactor(DBFields.ROLE_NAME, roleFilter);
@@ -45,7 +44,7 @@ public class GetAdminUsers extends GetTable implements Command {
             req.getSession().setAttribute("error", ex.getPublicMessage());
             return PagePath.ERROR;
         }
-        processTableParams(req, users);
+        Util.setPageParams(req, users, pageData);
         req.setAttribute("users", users);
         return PagePath.ADMIN_USERS;
     }

@@ -1,6 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<c:set var="size" value="${pageContext.request.getParameter('size')}"/>
+<c:set var="size" value="${param['size']}"/>
 <label>
     <button onclick="setSize(5)" ${size eq '5' ? 'disabled' : ''}>
         5

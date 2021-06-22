@@ -5,11 +5,14 @@ import com.repairagency.bean.data.PaymentRecord;
 import com.repairagency.bean.data.Request;
 import com.repairagency.config.Config;
 import com.repairagency.database.DBFields;
+import com.repairagency.database.QueryGetData;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -22,65 +25,6 @@ public class Util {
     }
 
     private static final Logger logger = LogManager.getLogger();
-
-    /**
-     * Parses table sort order.
-     * @param sortOrderAttr string that contains order attribute
-     * @return parsed sort order or default one if parsing failed
-     */
-    public static String parseOrder(String sortOrderAttr) {
-        String order = Config.DEFAULT_TABLE_ORDER;
-        if (sortOrderAttr != null) {
-            switch (sortOrderAttr) {
-                case "desc":
-                    order = "DESC";
-                    break;
-                case "asc":
-                    order = "ASC";
-                    break;
-                default:
-                    logger.trace("Unexpected 'sorting order' parameter");
-            }
-        }
-        return order;
-    }
-
-    private static final Set<String> sizes = new HashSet<>(Arrays.asList("5", "10", "20", "40"));
-
-    /**
-     * Parses table page size.
-     * @param sizeAttr string that contains size attribute
-     * @return parsed table size or default one if parsing failed
-     */
-    public static int parseSize(String sizeAttr) {
-        int size = Config.DEFAULT_TABLE_SIZE;
-        if (sizes.contains(sizeAttr)) {
-            size = Integer.parseInt(sizeAttr);
-        } else {
-            logger.trace("Unexpected 'size' parameter");
-        }
-        return size;
-    }
-
-    /**
-     * Parses table page number
-     * @param pageAttr string that contains page attribute
-     * @return parsed page or default one if parsing failed
-     */
-    public static int parsePage(String pageAttr) {
-        int newPage = Config.DEFAULT_TABLE_PAGE;
-        if (pageAttr != null) {
-            try {
-                newPage = Integer.parseInt(pageAttr);
-            } catch (NumberFormatException ex) {
-                logger.trace("Unexpected 'page' parameter");
-            }
-        }
-        if (newPage < 0) {
-            newPage = Config.DEFAULT_TABLE_PAGE;
-        }
-        return newPage;
-    }
 
     /**
      * Parses sort column for table of {@link Request}s
@@ -303,6 +247,124 @@ public class Util {
                 return address.append(PagePath.ERROR).toString();
         }
         return address.append(suffix).toString();
+    }
+
+    /**
+     * Parses common for all tables parameters, such as sort order, page size and
+     * page number. Internally sets chunk size of data in queryData parameter as
+     * [real_size + 1] to allow {@link #setPageParams(HttpServletRequest, List, int[])}
+     * determine whether this is the last page of table or not.
+     * @param queryData {@link QueryGetData} object in which parsed parameters will be written
+     * @param req request that contains table parameters
+     * @return array of two ints: int[0] - parsed size, int[1] - parsed page.
+     * This array is used in {@link #setPageParams(HttpServletRequest, List, int[])}
+     */
+    public static int[] parseTableParams(QueryGetData queryData, HttpServletRequest req) {
+        String sortOrderAttr = req.getParameter("sort-order");
+        logger.trace("sort-order : {}", sortOrderAttr);
+        String sizeAttr = req.getParameter("size");
+        logger.trace("size : {}", sizeAttr);
+        String pageAttr = req.getParameter("page");
+        logger.trace("page : {}", pageAttr);
+
+        String sortOrder = Util.parseOrder(sortOrderAttr);
+        int size = Util.parseSize(sizeAttr);
+        int page = Util.parsePage(pageAttr);
+
+        queryData.setSortOrder(sortOrder);
+        queryData.setLimitFactor(size + 1);
+        queryData.setOffsetFactor(page * size);
+        int[] result = new int[2];
+        result[0] = size;
+        result[1] = page;
+        return result;
+    }
+
+    /**
+     * Bounds table page parameters (page, hasNextPage, hasPrevPage)
+     * as attributes to {@link HttpServletRequest} object.
+     * Internally removes last member of input data list if it exists on [size + 1]
+     * position as it is needed only to determine presence of the next page.
+     * @param req request object to set table parameters
+     * @param data {@link List} of data that will be displayed at the page
+     * @param pageData array of two ints:
+     *                 int[0] - page size parameter,
+     *                 int[1] - page number parameter
+     */
+    public static void setPageParams(HttpServletRequest req, List<?> data, int[] pageData) {
+        boolean hasNextPage = false;
+        boolean hasPrevPage = false;
+        int size = pageData[0];
+        int page = pageData[1];
+        if (data.size() == size + 1) {
+            data.remove(size);
+            hasNextPage = true;
+        }
+        if (page > 0) {
+            hasPrevPage = true;
+        }
+        req.setAttribute("page", page);
+        req.setAttribute("hasNextPage", hasNextPage);
+        req.setAttribute("hasPrevPage", hasPrevPage);
+    }
+
+    /**
+     * Parses table sort order.
+     * @param sortOrderAttr string that contains order attribute
+     * @return parsed sort order or default one if parsing failed
+     */
+    private static String parseOrder(String sortOrderAttr) {
+        String order = Config.DEFAULT_TABLE_ORDER;
+        if (sortOrderAttr != null) {
+            switch (sortOrderAttr) {
+                case "desc":
+                    order = "DESC";
+                    break;
+                case "asc":
+                    order = "ASC";
+                    break;
+                default:
+                    logger.trace("Unexpected 'sorting order' parameter");
+            }
+        }
+        return order;
+    }
+
+    private static final Set<String> sizes = new HashSet<>(Arrays.asList("5", "10", "20", "40"));
+
+    /**
+     * Parses table page size.
+     * @param sizeAttr string that contains size attribute
+     * @return parsed table size or default one if parsing failed
+     */
+    private static int parseSize(String sizeAttr) {
+        int size = Config.DEFAULT_TABLE_SIZE;
+        if (sizes.contains(sizeAttr)) {
+            size = Integer.parseInt(sizeAttr);
+        } else {
+            logger.trace("Unexpected 'size' parameter");
+        }
+        return size;
+    }
+
+    /**
+     * Parses table page number
+     * @param pageAttr string that contains page attribute
+     * @return parsed page or default one if parsing failed
+     */
+    private static int parsePage(String pageAttr) {
+        int newPage = Config.DEFAULT_TABLE_PAGE;
+        if (pageAttr != null) {
+            try {
+                newPage = Integer.parseInt(pageAttr);
+            } catch (NumberFormatException ex) {
+                logger.trace("Unexpected 'page' parameter");
+            }
+        }
+        if (newPage < 0) {
+            newPage = Config.DEFAULT_TABLE_PAGE;
+        }
+        return newPage;
     }
 
 }
